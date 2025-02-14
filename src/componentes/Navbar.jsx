@@ -7,15 +7,11 @@ import HomeIcon from '@mui/icons-material/Home';
 const Navbar = () => {
     return (
         <AppBar position='fixed' sx={{ width: '100%', backgroundColor: "#000000" }}>
-            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {/* Box 1: Logo y buscador */}
                 <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
                     <IconButton edge="start" color="inherit" aria-label='Logo'>
-                        <HomeIcon sx={{ fontSize: '30' }} />{/* Aquí pones el icono de tu logo */}
-                    </IconButton>
-                    {/* Logo */}
-                    <IconButton edge="start" color="inherit" aria-label='Logo'>
-                        <HomeIcon sx={{ fontSize: '30' }} />{/* Aquí pones el icono de tu logo */}
+                        <HomeIcon sx={{ fontSize: '30px' }} /> {/* Aquí pones el icono de tu logo */}
                     </IconButton>
 
                     {/* Buscador */}
@@ -23,30 +19,27 @@ const Navbar = () => {
                         <TextField
                             variant='filled'
                             size='small'
-                            fullWidth
                             placeholder='Buscar'
                             sx={{
                                 backgroundColor: '#2C2C2C',  // Gris oscuro
                                 borderRadius: '20px', // Bordes redondeados
                                 width: '500px', // Ancho del campo de texto
-                                '& .MuiOutlinedInput-root': {
+                                '& .MuiFilledInput-root': {
+                                    height: '40px', // Altura definida
                                     color: '#B0B0B0', // Texto gris claro
-                                    '& fieldset': {
-                                        border: 'none',  // Sin borde en el campo de texto
-                                    },
                                 },
                                 '& .MuiInputBase-input': {
-                                    color: '#B0B0B0',  // Texto gris claro
+                                    padding: '10px 14px',  // Relleno interno
                                 },
                             }}
                             InputProps={{
                                 startAdornment: (
-                                    <InputAdornment position="start">
+                                    <InputAdornment position="center" sx={{ display: 'flex', alignItems: 'center' }}>
                                         <SearchIcon sx={{ color: '#B0B0B0' }} />
                                     </InputAdornment>
                                 ),
                                 endAdornment: (
-                                    <InputAdornment position="end">
+                                    <InputAdornment position="center" sx={{ display: 'flex', alignItems: 'center' }}>
                                         <ExploreIcon sx={{ color: '#B0B0B0' }} />
                                     </InputAdornment>
                                 ),
@@ -59,7 +52,7 @@ const Navbar = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', color: '#aeaeae' }}>
                     <Button color="inherit" sx={{ mr: 2 }}>Instalar app</Button>
                     <Button color="inherit" sx={{ mr: 2 }}>Registrarse</Button>
-                    <Button color="inherit" sx={{ mr: 2, backgroundColor: 'white', color: '#000000'}}>Iniciar sesión</Button>
+                    <Button color="inherit" sx={{ mr: 2, backgroundColor: 'white', color: '#000000', paddingX: 3, borderRadius: 10 }}>Iniciar sesión</Button>
                 </Box>
             </Toolbar>
         </AppBar>

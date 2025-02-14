@@ -4,19 +4,18 @@ import { Box } from "@mui/material";
 import Sidebar from "./componentes/Sidebar";
 import Navbar from "./componentes/Navbar";
 import Player from './componentes/Player';
+import Contenido from "./componentes/Contenido"
 
 function App() {
   return (
-    <>
-    <Navbar />
-    <Box sx={{ display: "flex", pt: '64px' }}> {/* Añadimos padding-top para que no se solape con el navbar */}
-      <Sidebar />
-      <Box sx={{ flexGrow: 1, p: 3 }}>
-        <h1>Bienvenido a tu Spotify Clone</h1>
+    <Box sx={{ minHeight: "100vh",minWidth: '100vw' ,backgroundColor: "black", color: "white" }}>
+      <Navbar />
+      <Box sx={{ display: "flex", pt: '64px'}}> {/* Añadimos padding-top para evitar solapamiento con el navbar */}
+        <Sidebar />
+        <Contenido/>
       </Box>
+      <Player />
     </Box>
-    <Player />
-  </>
   );
 }
 
