@@ -17,7 +17,7 @@ const Sidebar = () => {
                     backgroundColor: '#121212', 
                     color: '#aeaeae', 
                     borderRadius: '6px', 
-                    height: 800, 
+                    height: 820, 
                     overflow: 'hidden', 
                     marginLeft: 1,
                 },
