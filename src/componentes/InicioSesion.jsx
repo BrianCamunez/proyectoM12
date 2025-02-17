@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { Link } from 'react-router-dom'
 
-const RegistroComponente = () => {
+const InicioSesion = () => {
     const [DatosFormulario, setDatosFormulario] = useState({
         correo: '',
-        usuario: '',
         password: '',
     });
 
@@ -36,38 +35,37 @@ const RegistroComponente = () => {
                 padding: "20px",
             }}
         >
-            {/* Imagen superior */}
-            <Box
-                component="img"
-                src="/src/images/LogoProyecto.jpeg" 
-                alt="Logo"
-                sx={{
-                    width: "100px", // Ajusta el tamaño según sea necesario
-                    height: "auto",
-                    marginBottom: "30px",
-                }}
-            />
-            
-            <Typography variant="h5" fontSize={30} fontWeight={'bold'} sx={{ marginBottom: 2 }}>
-                Regístrate para empezar a escuchar contenido
-            </Typography>
 
+            {/* Caja con fondo gris que envuelve el contenido */}
             <Box
-                component="form"
-                onSubmit={manejarSubmit}
                 sx={{
-                    width: "20vw", // 20% del ancho de la pantalla
-                    maxWidth: "400px", // Limitar a 400px máximo
+                    backgroundColor: "#121212", // Fondo gris para el formulario
+                    padding: "40px",
+                    borderRadius: "10px",
+                    width: "100%",
+                    maxWidth: "400px", // El formulario tiene un maximo ancho
+                    boxShadow: 3, // Agregar sombra para mejor efecto visual
                     display: "flex",
                     flexDirection: "column",
                     gap: 2,
-                    backgroundColor: "black", // Fondo negro para el formulario
-                    padding: "20px",
-                    borderRadius: "8px",
-                    boxShadow: 2,
                     alignItems: "center", // Centrado de los campos
                 }}
             >
+                {/* Imagen superior */}
+                <Box
+                    component="img"
+                    src="/src/images/LogoProyecto.jpeg"
+                    alt="Logo"
+                    sx={{
+                        width: "100px", // Ajusta el tamaño según sea necesario
+                        height: "auto",
+                        marginBottom: "30px",
+                    }}
+                />
+
+                <Typography variant="h5" fontSize={30} fontWeight={'bold'} sx={{ marginBottom: 2 }}>
+                    Inicia sesión en NoiseHub
+                </Typography>
                 {/* Campo de correo */}
                 <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
                     <Typography sx={{ color: "white", marginBottom: 1 }}>Correo electrónico</Typography>
@@ -78,34 +76,6 @@ const RegistroComponente = () => {
                         type="email"
                         name="correo"
                         value={DatosFormulario.correo}
-                        onChange={manejarInputs}
-                        InputLabelProps={{
-                            style: { color: "white", fontSize: "14px" },
-                        }}
-                        sx={{
-                            backgroundColor: "black", // Fondo negro
-                            color: "white", // Texto blanco
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": {
-                                    borderColor: "white", // Borde blanco
-                                },
-                                "&:hover fieldset": {
-                                    borderColor: "white", // Borde blanco al pasar el mouse
-                                },
-                            },
-                        }}
-                    />
-                </Box>
-
-                {/* Campo de usuario */}
-                <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                    <Typography sx={{ color: "white", marginBottom: 1 }}>Usuario</Typography>
-                    <TextField
-                        variant="outlined"
-                        fullWidth
-                        required
-                        name="usuario"
-                        value={DatosFormulario.usuario}
                         onChange={manejarInputs}
                         InputLabelProps={{
                             style: { color: "white", fontSize: "14px" },
@@ -154,7 +124,7 @@ const RegistroComponente = () => {
                     />
                 </Box>
 
-                {/* Botón de registro */}
+                {/* Botón de inicio sesión */}
                 <Button
                     type="submit"
                     variant="contained"
@@ -167,19 +137,19 @@ const RegistroComponente = () => {
                         textTransform: 'capitalize',
                         backgroundColor: "#E91E63",
                         "&:hover": {
-                            backgroundColor: "#E91E50",
+                            backgroundColor: "#E81D50",
                         },
                     }}
                 >
-                    Registrarse
+                    Iniciar sesión
                 </Button>
                 <Box
                     sx={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 2 }}>
                     <Typography variant="body2" sx={{ color: "white" }}>
-                    ¿Ya tienes una cuenta?
+                        ¿No tienes cuenta?
                     </Typography>
                     <Link
-                        to="/inicioSesion"
+                        to="/registro"
                         sx={{
                             color: "white !important", // Color blanco para el texto
                             textDecoration: "none !important", // Eliminar la subrayado del texto
@@ -187,12 +157,13 @@ const RegistroComponente = () => {
                             cursor: "pointer", // Cambiar el cursor para indicar que es un enlace
                         }}
                     >
-                         Inicia sesión aquí.
+                        Suscríbete a NoiseHub
                     </Link>
                 </Box>
+
             </Box>
         </Box>
     );
 }
 
-export default RegistroComponente;
+export default InicioSesion;

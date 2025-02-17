@@ -103,25 +103,29 @@ const Navbar = () => {
                 {/* Box 2: Login y registro */}
                 <Box sx={{ display: "flex", alignItems: "center", color: "#aeaeae" }}>
                     <Button color="inherit" sx={{ mr: 2 }}>
-                        <Typography variant="body3" sx={{ textTransform: 'capitalize', display: 'flex', alignItems: 'center',fontWeight: 'bold' }}><DownloadIcon sx={{ fontSize: 20}}/>Instalar app</Typography>
+                        <Typography variant="body3" sx={{ textTransform: 'capitalize', display: 'flex', alignItems: 'center', fontWeight: 'bold' }}><DownloadIcon sx={{ fontSize: 20 }} />Instalar app</Typography>
                     </Button>
-                    <Button color="inherit" sx={{ mr: 2, textTransform: 'capitalize', fontWeight: 'bold' } }>
-                        Registrarse
-                    </Button>
-                    <Button
-                        color="inherit"
-                        sx={{
-                            mr: 2,
-                            backgroundColor: "white",
-                            color: "#000000",
-                            paddingX: 3,
-                            borderRadius: 10,
-                            textTransform: 'capitalize', fontWeight: 'bold',
-                            paddingY: '12px'
-                        }}
-                    >
-                        Iniciar sesión
-                    </Button>
+                    <Link to="/registro" style={{ textDecoration: 'none', color: "#aeaeae" }}>
+                        <Button color="inherit" sx={{ mr: 2, textTransform: 'capitalize', fontWeight: 'bold' }}>
+                            Registrarse
+                        </Button>
+                    </Link>
+                    <Link to='/inicioSesion'>
+                        <Button
+                            color="inherit"
+                            sx={{
+                                mr: 2,
+                                backgroundColor: "white",
+                                color: "#000000",
+                                paddingX: 3,
+                                borderRadius: 10,
+                                textTransform: 'capitalize', fontWeight: 'bold',
+                                paddingY: '12px'
+                            }}
+                        >
+                            Iniciar sesión
+                        </Button>
+                    </Link>
                 </Box>
             </Toolbar>
         </AppBar>
