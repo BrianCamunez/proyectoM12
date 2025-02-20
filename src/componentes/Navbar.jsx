@@ -5,6 +5,7 @@ import ExploreIcon from "@mui/icons-material/Explore";
 import HomeIcon from "@mui/icons-material/Home";
 import DownloadIcon from '@mui/icons-material/Download';
 import { Link } from 'react-router-dom'
+import { Scale } from "@mui/icons-material";
 
 const Navbar = () => {
     return (
@@ -89,24 +90,21 @@ const Navbar = () => {
 
                 <Box sx={{ display: 'flex', alignItems: "center", color: "#aeaeae" }}>
                     <Button color="inherit">
-                        <Typography variant="body3" fontWeight={'bold'} sx={{ textTransform: 'capitalize' }}>Premium</Typography>
+                        <Typography variant="body3" fontWeight={'bold'} sx={{ textTransform: 'capitalize',  transition: 'transform 0.3s ease', '&:hover': {transform: 'scale(1.1)'} }}>Asistencia</Typography>
                     </Button>
                     <Button color="inherit">
-                        <Typography variant="body3" fontWeight={'bold'} sx={{ textTransform: 'capitalize' }}>Asistencia</Typography>
-                    </Button>
-                    <Button color="inherit">
-                        <Typography variant="body3" fontWeight={'bold'} sx={{ textTransform: 'capitalize' }}>Descargar</Typography>
+                        <Typography variant="body3" fontWeight={'bold'} sx={{ textTransform: 'capitalize',  transition: 'transform 0.3s ease', '&:hover': {transform: 'scale(1.1)'} }}>Descargar</Typography>
                     </Button>
                     <Typography>|</Typography>
                 </Box>
 
                 {/* Box 2: Login y registro */}
                 <Box sx={{ display: "flex", alignItems: "center", color: "#aeaeae" }}>
-                    <Button color="inherit" sx={{ mr: 2 }}>
+                    <Button color="inherit" sx={{ mr: 2,  transition: 'transform 0.3s ease', '&:hover': {transform: 'scale(1.1)'} }}>
                         <Typography variant="body3" sx={{ textTransform: 'capitalize', display: 'flex', alignItems: 'center', fontWeight: 'bold' }}><DownloadIcon sx={{ fontSize: 20 }} />Instalar app</Typography>
                     </Button>
                     <Link to="/registro" style={{ textDecoration: 'none', color: "#aeaeae" }}>
-                        <Button color="inherit" sx={{ mr: 2, textTransform: 'capitalize', fontWeight: 'bold' }}>
+                        <Button color="inherit" sx={{ mr: 2, textTransform: 'capitalize', fontWeight: 'bold', transition: 'transform 0.3s ease, color 0.3s ease', '&:hover': {transform: 'scale(1.1)', color: '#fff'} }}>
                             Registrarse
                         </Button>
                     </Link>
@@ -120,7 +118,11 @@ const Navbar = () => {
                                 paddingX: 3,
                                 borderRadius: 10,
                                 textTransform: 'capitalize', fontWeight: 'bold',
-                                paddingY: '12px'
+                                paddingY: '12px',
+                                transition: 'transform 0.3s ease',
+                                '&:hover':{
+                                    transform: 'scale(1.1)'
+                                }
                             }}
                         >
                             Iniciar sesión

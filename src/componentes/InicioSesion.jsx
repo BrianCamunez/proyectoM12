@@ -52,16 +52,19 @@ const InicioSesion = () => {
                 }}
             >
                 {/* Imagen superior */}
-                <Box
-                    component="img"
-                    src="/src/images/LogoProyecto.jpeg"
-                    alt="Logo"
-                    sx={{
-                        width: "100px", // Ajusta el tamaño según sea necesario
-                        height: "auto",
-                        marginBottom: "30px",
-                    }}
-                />
+                <Link to="/">
+                    <Box
+                        component="img"
+                        src="/src/images/LogoProyecto.jpeg"
+                        alt="Logo"
+                        sx={{
+                            width: "100px", // Ajusta el tamaño según sea necesario
+                            height: "auto",
+                            marginBottom: "30px",
+                            borderRadius: 20
+                        }}
+                    />
+                </Link>
 
                 <Typography variant="h5" fontSize={30} fontWeight={'bold'} sx={{ marginBottom: 2 }}>
                     Inicia sesión en NoiseHub
@@ -150,12 +153,13 @@ const InicioSesion = () => {
                     </Typography>
                     <Link
                         to="/registro"
-                        sx={{
-                            color: "white !important", // Color blanco para el texto
-                            textDecoration: "none !important", // Eliminar la subrayado del texto
-                            "&:hover": { color: "#E91E63" }, // Color de texto al pasar el ratón
+                        style={{
+                            color: "white", // Color blanco para el texto
+                            textDecoration: "none", // Eliminar la subrayado del texto
                             cursor: "pointer", // Cambiar el cursor para indicar que es un enlace
                         }}
+                        onMouseOver={(e) => (e.target.style.color = "#E91E63")} // Color al pasar el ratón
+                        onMouseOut={(e) => (e.target.style.color = "white")} // Restablecer el color
                     >
                         Suscríbete a NoiseHub
                     </Link>

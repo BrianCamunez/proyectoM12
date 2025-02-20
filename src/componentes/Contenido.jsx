@@ -12,26 +12,25 @@ const Contenido = () => {
                 backgroundColor: "#121212",
                 borderRadius: 2,
                 minHeight: '100vh', // Ocupa toda la altura disponible
-                paddingBottom: '60px',
                 overflowY: 'auto', // Permite scroll si el contenido es más grande que la altura
                 "&::-webkit-scrollbar": {
-                    width: "8px", // El tamaño del scroll
+                    width: "15px", // El tamaño del scroll
+                    height: "50px"
                 },
                 "&::-webkit-scrollbar-track": {
-                    background: "#2a2a2a", // Color de la pista del scroll
-                    borderRadius: "10px",
+                    borderRadius: "5px",
                 },
                 "&::-webkit-scrollbar-thumb": {
-                    background: "#767612", // Color del pulgar del scroll
+                    background: "#2c2c2c", // Color del pulgar del scroll
                     borderRadius: "10px",
                     border: "2px solid #161246", // Color del borde del pulgar
                 },
                 "&::-webkit-scrollbar-thumb:hover": {
-                    background: "#561234", // Color al pasar el ratón sobre el pulgar
+                    background: "#aaaaaa", // Color al pasar el ratón sobre el pulgar
                 },
             }}
         >
-            <Box paddingX={2}>
+            <Box paddingX={2} marginBottom={20}>
                 <Box display="flex" justifyContent="space-between">
                     <Typography variant="h6">Artistas populares</Typography>
                     <Typography variant="p">Mostrar todos</Typography>
