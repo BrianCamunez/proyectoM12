@@ -178,13 +178,12 @@ const ContenidoPlaylist = () => {
         >
             <Box marginBottom={10} sx={{ paddingTop: 0 }}>
                 <Box position={"relative"}>
-                    <Box display={"flex"} width={"100%"} padding={3} height={"500px"} sx={{ background: "linear-gradient(to bottom, #64B5F6 50%, #121212)" }}>
+                    <Box display={"flex"} width={"100%"} padding={3} height={"500px"} sx={{ background: "linear-gradient(to bottom,rgb(233, 134, 211) 10%, #121212)" }}>
                         <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="imagen de la playlist" sx={{ width: "250px", height: "250px" }} />
                         <Box sx={{ marginLeft: 2 }}>
-                            <Typography variant="h6" sx={{ fontSize: "12px" }}>Lista</Typography>
+                            <Typography variant="h6" sx={{ fontSize: "12px" }}>Cancion</Typography>
                             <Typography variant="h2" fontWeight="bold" paddingY={1}>Nombre de la playlist</Typography>
-                            <Typography variant="h6" sx={{ fontSize: "12px" }}>Con Feid, Arcángel, KAROL G y más</Typography>
-                            <Typography variant="h6" sx={{ fontSize: "12px" }}>guardada 848.054 veces•50 canciones, 2 h 45 min aproximadamente</Typography>
+                            <Typography variant="h6" sx={{ fontSize: "12px", alignItems: "center", justifyContent: "center", alignContent: "center" }}><Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="Imagen cantante" sx={{ width: "30px", height: "30px", borderRadius: "50%" }} /> Bad Bunny•DeBí TiRaR MáS FOToS•2025•2:36•246.410.919</Typography>
                         </Box>
                     </Box>
                     <Box width={"100%"} padding={3} sx={{ backgroundColor: "rgba(0,0,0,0)" }} position={"absolute"} top={"300px"}>
@@ -196,117 +195,16 @@ const ContenidoPlaylist = () => {
                                 <AddCircleOutlineIcon sx={{ width: "40px", height: "40px", paddingX: "20px", color: "#aeaeae" }} />
                                 <MoreHorizIcon sx={{ width: "40px", height: "40px", color: "#aeaeae" }} />
                             </Box>
-                            <Box display={"flex"} alignItems={"center"} justifyContent={"center"} marginRight="50px">
-                                <Typography variant="h6" sx={{ fontSize: "12px", paddingRight: "5px", color:"#aeaeae", fontWeight:"bold" }}>Lista</Typography>
-                                <FormatListBulletedIcon sx={{ width: "20px", height: "20px", color: "#aeaeae", marginBottom: "5px" }} />
+                        </Box>
+                        <Box alignItems={"center"} justifyContent={"space-between"} marginTop={2}>
+                            <Box backgroundColor={"rgb(89, 163, 206)"} padding={2} borderRadius={2} alignItems={"center"} width={"550px"}>
+                                <Typography variant="p" sx={{ color: "#fff" }}>Inicia sesión para ver la letra y escuchar la canción al completo</Typography>
+                                <Box display="flex" alignItems={"center"} justifyContent={"right"}>
+                                    <Typography variant="p" sx={{ color: "#fff" }}>Iniciar sesión</Typography>
+                                    <Typography variant="p" sx={{ color: "#fff" }}>Registrarse</Typography>
+                                </Box> 
                             </Box>
                         </Box>
-                        <Box sx={{ flexGrow: 1, paddingTop: 3 }}>
-                            <Grid container paddingRight={6}>
-                                {/* Columna de 1 */}
-                                <Grid item xs={12} sm={1} sx={{ borderBottom: "1px solid rgba(174, 174, 174, 0.2)" }} paddingBottom={"5px"}>
-                                    <Box>
-                                        <Typography sx={{ color: "#aeaeae", fontSize: "15px", textAlign: "center" }}>#</Typography>
-                                    </Box>
-                                </Grid>
-
-                                {/* Columna de 4 */}
-                                <Grid item xs={12} sm={4} sx={{ borderBottom: "1px solid rgba(174, 174, 174, 0.2)" }}>
-                                    <Box>
-                                        <Typography sx={{ color: "#aeaeae", fontSize: "15px" }}>Titulo</Typography>
-                                    </Box>
-                                </Grid>
-
-                                {/* Columna de 3 */}
-                                <Grid item xs={12} sm={3} sx={{ borderBottom: "1px solid rgba(174, 174, 174, 0.2)" }}>
-                                    <Box>
-                                        <Typography sx={{ color: "#aeaeae", fontSize: "15px" }}>Album</Typography>
-                                    </Box>
-                                </Grid>
-
-                                {/* Columna de 3 */}
-                                <Grid item xs={12} sm={3} sx={{ borderBottom: "1px solid rgba(174, 174, 174, 0.2)" }}>
-                                    <Box>
-                                        <Typography sx={{ color: "#aeaeae", fontSize: "15px" }}>Fecha que se añadio</Typography>
-                                    </Box>
-                                </Grid>
-
-                                {/* Columna de 1 */}
-                                <Grid item xs={12} sm={1} textAlign={"center"} sx={{ borderBottom: "1px solid rgba(174, 174, 174, 0.2)" }}>
-                                    <AccessTimeIcon sx={{ color: "#aeaeae", fontSize: "18px", textAlign: "center" }} />
-                                </Grid>
-                            </Grid>
-                            {canciones.map((song, index) => (
-                                <Grid
-                                    key={song.id}
-                                    container
-                                    paddingRight={6}
-                                    alignItems="center"
-                                    sx={{
-                                        paddingY: 1,
-                                        "&:hover": {
-                                            backgroundColor: "#2c2c2c",
-                                            transition: "0.3s",
-                                            // Cambiar color del texto a blanco en el hover
-                                            "& .numero-cancion, & .nombre-cancion, & .album-cancion": {
-                                                color: "white", // Cambia el color de las letras
-                                            },
-
-                                            "& .duracion-cancion, & .fecha-cancion, & .numero-cancion-icono": {
-                                                opacity: 1,
-                                                transition: "opacity 0.3s ease-in-out",
-                                            },
-
-                                            "& .numero-cancion":{
-                                                opacity: 0,
-                                            }
-
-                                        },
-
-                                    }}
-                                >
-                                    {/* Número */}
-                                    <Grid item xs={12} sm={1} display="flex" alignItems="center" justifyContent="center">
-                                        <Typography className="numero-cancion" sx={{ color: "white", fontSize: "15px", textAlign: "center" }}>{index + 1}</Typography>
-                                        <PlayArrowIcon className="numero-cancion-icono" sx={{ color: "#fff", fontSize: "18px", position:"absolute", right: "1395px", opacity: 0}} />
-                                    </Grid>
-
-                                    {/* Título y Artista */}
-                                    <Grid item xs={12} sm={4} display="flex" alignItems="center">
-                                        <Box
-                                            component="img"
-                                            src={song.image}
-                                            alt={song.title}
-                                            sx={{ width: 50, height: 50, borderRadius: 1, marginRight: 2 }}
-                                        />
-                                        <Box>
-                                            <Link to="/cancion" style={{ textDecoration: "none" }}>
-                                                <Typography sx={{ color: "white", fontSize: "15px" }}>{song.title}</Typography>
-                                            </Link>
-                                            <Typography className="nombre-cancion" sx={{ color: "#aeaeae", fontSize: "13px"}}>{song.artist}</Typography>
-                                        </Box>
-                                    </Grid>
-
-                                    {/* Álbum */}
-                                    <Grid item xs={12} sm={3} className="album-cancion">
-                                        <Typography className="album-cancion" sx={{ color: "#aeaeae", fontSize: "15px" }}>{song.album}</Typography>
-                                    </Grid>
-
-                                    {/* Fecha */}
-                                    <Grid item xs={12} sm={3} alignItems={"center"} display={"flex"} className="fecha-cancion">
-                                        <Typography sx={{ color: "#aeaeae", fontSize: "15px" }}>{song.addedDate}</Typography>
-                                        <AddCircleOutlineIcon className="fecha-cancion" sx={{ color: "#aeaeae", fontSize: "18px", position:"absolute", right: "165px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
-                                    </Grid>
-
-                                    {/* Duración */}
-                                    <Grid item xs={12} sm={1} textAlign={"center"} alignItems={"center"} justifyContent={"center"} display={"flex"}>
-                                        <Typography sx={{ color: "#aeaeae", fontSize: "15px" }}>{song.duration}</Typography>
-                                        <MoreHorizIcon className="duracion-cancion" sx={{ color: "#aeaeae", fontSize: "18px", position:"absolute", right: "85px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
-                                    </Grid>
-                                </Grid>
-                            ))}
-                        </Box>
-
                     </Box>
                 </Box>
             </Box>
