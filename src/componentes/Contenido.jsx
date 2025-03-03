@@ -1,5 +1,7 @@
 import React from "react";
 import { Box, Typography, Card, CardContent, CardMedia } from "@mui/material";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Link } from 'react-router-dom'
 
 const Contenido = () => {
     return (
@@ -44,35 +46,75 @@ const Contenido = () => {
                     }}
                 >
                     {[...Array(6)].map((_, index) => (
-                        <Card
-                            key={index}
-                            sx={{
-                                backgroundColor: "transparent",
-                                borderRadius: 2,
-                                padding: 2,
-                                boxShadow: "none",
-                            }}
-                        >
-                            <CardMedia
-                                component="img"
-                                image={`https://definicion.com/wp-content/uploads/2022/09/imagen.jpg`} // Cambia las imágenes si lo prefieres
-                                alt={`Artista ${index + 1}`}
+                        <Link to={`/playlist`} key={index} style={{ textDecoration: "none" }}>
+                            <Card
                                 sx={{
-                                    borderRadius: "50%",
-                                    width: "200px",
-                                    height: "200px",
-                                    margin: "0 auto",
+                                    backgroundColor: "transparent",
+                                    borderRadius: 2,
+                                    padding: 2,
+                                    boxShadow: "none",
+                                    position: "relative",
+                                    "&:hover": {
+                                        backgroundColor: "#1c1c1c",
+                                        transition: "all 0.3s",
+                                    },
+                                    "&:hover .hover-content": {
+                                        opacity: 1,
+                                        transform: "translateY(0)",
+                                    },
                                 }}
-                            />
-                            <CardContent>
-                                <Typography variant="body1" color="white">
-                                    {`Artista ${index + 1}`}
-                                </Typography>
-                                <Typography variant="body1" color="white">
-                                    Artista
-                                </Typography>
-                            </CardContent>
-                        </Card>
+                            >
+                                <CardMedia
+                                    component="img"
+                                    image={`https://definicion.com/wp-content/uploads/2022/09/imagen.jpg`}
+                                    alt={`Artista ${index + 1}`}
+                                    sx={{
+                                        borderRadius: "50%",
+                                        width: "200px",
+                                        height: "200px",
+                                        margin: "0 auto",
+                                    }}
+                                />
+                                <CardContent>
+                                    <Typography variant="body1" color="white">
+                                        {`Artista ${index + 1}`}
+                                    </Typography>
+                                    <Typography variant="body1" color="white">
+                                        Artista
+                                    </Typography>
+                                </CardContent>
+
+                                <Box
+                                    className="hover-content"
+                                    sx={{
+                                        position: "absolute",
+                                        bottom: "100px",
+                                        left: 150,
+                                        right: 0,
+                                        padding: 2,
+                                        backgroundColor: "#E91E63",
+                                        borderRadius: "50%",
+                                        width: "25px",
+                                        height: "25px",
+                                        color: "black",
+                                        alignContent: "center",
+                                        alignItems: "center",
+                                        display: "flex",
+                                        opacity: 0,
+                                        transform: "translateY(10px)",
+                                        transition: "all 0.3s ease-in-out",
+                                        "&:hover": {
+                                            backgroundColor: "#ff4081",
+                                            color: "black",
+                                            scale: 1.1,
+                                            transition: "all 0.3s",
+                                        },
+                                    }}
+                                >
+                                    <PlayArrowIcon fontSize="large" />
+                                </Box>
+                            </Card>
+                        </Link>
                     ))}
                 </Box>
                 <Typography variant="h5">Álbumes y sencillos populares</Typography>
