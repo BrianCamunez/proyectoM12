@@ -10,7 +10,7 @@ import InicioSesion from "./componentes/InicioSesion"
 import ContenidoPlaylist from "./componentes/ContenidoPlaylist"
 import ContenidoCancion from "./componentes/ContenidoCancion"
 import NavbarMobile from "./componentes/NavbarMobile"
-import PlaylistPreferidasMobile from "./componentes/PlaylistPreferidasMobile"
+import ContenidoMobile from "./componentes/ContenidoMobile"
 
 function App() {
   const theme = useTheme()
@@ -27,10 +27,10 @@ function App() {
             element={
               <>
                 {isMdUp ? <Navbar/> : <NavbarMobile/>}
-                <Box sx={{ display: "flex", pt: { xs: 0, md: "64px" }, height: "calc(100vh - 64px)", overflow: "hidden" }}>
+                <Box sx={{ display: "flex", pt: { xs: 0, md: "64px" }, height: {xs:"100%", md: "calc(100vh - 64px)"}, overflow: "hidden" }}>
                   {isMdUp && <Sidebar />}
                   <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
-                  {isMdUp ? <Contenido/> : <PlaylistPreferidasMobile/>}
+                  {isMdUp ? <Contenido/> : <ContenidoMobile/>}
                   </Box>
                 </Box>
                 <Player />
