@@ -3,15 +3,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Sidebar from "./componentes/Sidebar"
 import Navbar from "./componentes/Navbar"
 import Player from "./componentes/Player"
-import Contenido from "./componentes/Contenido"
+import Contenido from "./componentes/PaginaHome"
 import Contenido2 from "./componentes/Contenido2"
 import RegistroComponente from "./componentes/RegistroComponente"
 import InicioSesion from "./componentes/InicioSesion"
 import ContenidoPlaylist from "./componentes/ContenidoPlaylist"
 import ContenidoCancion from "./componentes/ContenidoCancion"
-import NavbarMobile from "./componentes/NavbarMobile"
+import NavbarMobile from "./componentes/componentesMobile/NavbarMobile"
 import ContenidoMobile from "./componentes/ContenidoMobile"
-import ReproductorMobile from "./componentes/ReproductorMobile"
+
 
 function App() {
   const theme = useTheme()
@@ -27,14 +27,7 @@ function App() {
             path="/"
             element={
               <>
-                {isMdUp ? <Navbar/> : <NavbarMobile/>}
-                <Box sx={{ display: "flex", pt: { xs: 0, md: "64px" }, height: {xs:"100%", md: "calc(100vh - 64px)"}, overflow: "hidden" }}>
-                  {isMdUp && <Sidebar />}
-                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
-                  {isMdUp ? <Contenido/> : <ContenidoMobile/>}
-                  </Box>
-                </Box>
-                {isMdUp && <Player/>}
+                {isMdUp ? <Contenido /> : <ContenidoMobile />}
               </>
             }
           />
