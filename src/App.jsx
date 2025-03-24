@@ -9,6 +9,7 @@ import ContenidoPlaylist from "./componentes/ContenidoPlaylist"
 import ContenidoCancion from "./componentes/ContenidoCancion"
 import ContenidoMobile from "./componentes/ContenidoMobile"
 import PaginaExplorar from "./componentes/PaginaExplorar"
+import ContenidoCancionMobile from "./componentes/componentesMobile/ContenidoCancionMobile"
 
 
 function App() {
@@ -55,13 +56,7 @@ function App() {
             path="/cancion"
             element={
               <>
-                <Navbar />
-                <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
-                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
-                    <ContenidoCancion />
-                  </Box>
-                </Box>
-                <Player />
+                {isMdUp ? <ContenidoCancion /> : <ContenidoCancionMobile />}
               </>
             }
           />
