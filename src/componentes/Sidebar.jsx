@@ -10,6 +10,7 @@ const Sidebar = () => {
             sx={{
                 width: 240,
                 flexShrink: 0,
+                zIndex: 5,
                 '& .MuiDrawer-paper': {
                     width: 450,
                     boxSizing: 'border-box',
@@ -17,7 +18,7 @@ const Sidebar = () => {
                     backgroundColor: '#121212',
                     color: '#aeaeae',
                     borderRadius: '6px',
-                    height: 820,
+                    height: "85vh",
                     overflow: 'hidden',
                     marginLeft: 1,
                 },

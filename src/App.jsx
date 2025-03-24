@@ -1,21 +1,24 @@
-import React from 'react';
-import { Box } from "@mui/material";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from "./componentes/Sidebar";
-import Navbar from "./componentes/Navbar";
-import Player from './componentes/Player';
-import Contenido from "./componentes/Contenido";
-import Contenido2 from "./componentes/Contenido2";
-import RegistroComponente from './componentes/RegistroComponente';
-import InicioSesion from './componentes/InicioSesion';
-import ContenidoPlaylist from './componentes/ContenidoPlaylist';
-import ContenidoCancion from './componentes/ContenidoCancion';
+import { Box, useMediaQuery, useTheme } from "@mui/material"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Sidebar from "./componentes/Sidebar"
+import Navbar from "./componentes/Navbar"
+import Player from "./componentes/Player"
+import Contenido from "./componentes/Contenido"
+import Contenido2 from "./componentes/Contenido2"
+import RegistroComponente from "./componentes/RegistroComponente"
+import InicioSesion from "./componentes/InicioSesion"
+import ContenidoPlaylist from "./componentes/ContenidoPlaylist"
+import ContenidoCancion from "./componentes/ContenidoCancion"
+import NavbarMobile from "./componentes/NavbarMobile"
+import PlaylistPreferidasMobile from "./componentes/PlaylistPreferidasMobile"
 
 function App() {
+  const theme = useTheme()
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"))
+
   return (
     <Router>
-      <Box sx={{ minHeight: "100vh", minWidth: '100vw', backgroundColor: "black", color: "white", overflow: "hidden" }}>
-        {/* Definimos las rutas y ocultamos el Header, Sidebar y Player solo cuando estamos en '/registro' */}
+      <Box sx={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "black", color: "white", overflow: "hidden" }}>
         <Routes>
           <Route path="/registro" element={<RegistroComponente />} />
           <Route path="/inicioSesion" element={<InicioSesion />} />
@@ -23,58 +26,67 @@ function App() {
             path="/"
             element={
               <>
-                <Navbar />  {/* Navbar visible en todas las rutas excepto '/registro' */}
-                <Box sx={{ display: "flex", pt: '64px', height: 'calc(100vh - 64px)', overflow: "hidden" }}>
-                  <Sidebar />  {/* Sidebar visible en todas las rutas excepto '/registro' */}
-                  <Contenido />
+                {isMdUp ? <Navbar/> : <NavbarMobile/>}
+                <Box sx={{ display: "flex", pt: { xs: 0, md: "64px" }, height: "calc(100vh - 64px)", overflow: "hidden" }}>
+                  {isMdUp && <Sidebar />}
+                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
+                  {isMdUp ? <Contenido/> : <PlaylistPreferidasMobile/>}
+                  </Box>
                 </Box>
-                <Player />  {/* Player visible en todas las rutas excepto '/registro' */}
+                <Player />
               </>
             }
           />
-            <Route
+          <Route
             path="/contenido2"
             element={
               <>
-                <Navbar />  {/* Navbar visible en todas las rutas excepto '/registro' */}
-                <Box sx={{ display: "flex", pt: '64px', height: 'calc(100vh - 64px)', overflow: "hidden" }}>
-                  <Sidebar />  {/* Sidebar visible en todas las rutas excepto '/registro' */}
-                  <Contenido2 />
+                <Navbar />
+                <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
+                  {isMdUp && <Sidebar />}
+                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
+                    <Contenido2 />
+                  </Box>
                 </Box>
-                <Player />  {/* Player visible en todas las rutas excepto '/registro' */}
+                <Player />
               </>
             }
           />
-           <Route
+          <Route
             path="/playlist"
             element={
               <>
-                <Navbar />  {/* Navbar visible en todas las rutas excepto '/registro' */}
-                <Box sx={{ display: "flex", pt: '64px', height: 'calc(100vh - 64px)', overflow: "hidden" }}>
-                  <Sidebar />  {/* Sidebar visible en todas las rutas excepto '/registro' */}
-                  <ContenidoPlaylist />
+                <Navbar />
+                <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
+                  {isMdUp && <Sidebar />}
+                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
+                    <ContenidoPlaylist />
+                  </Box>
                 </Box>
-                <Player />  {/* Player visible en todas las rutas excepto '/registro' */}
+                <Player />
               </>
             }
           />
-           <Route
+          <Route
             path="/cancion"
             element={
               <>
-                <Navbar />  {/* Navbar visible en todas las rutas excepto '/registro' */}
-                <Box sx={{ display: "flex", pt: '64px', height: 'calc(100vh - 64px)', overflow: "hidden" }}>
-                  <Sidebar />  {/* Sidebar visible en todas las rutas excepto '/registro' */}
-                  <ContenidoCancion />
+                <Navbar />
+                <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
+                  {isMdUp && <Sidebar />}
+                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
+                    <ContenidoCancion />
+                  </Box>
                 </Box>
-                <Player />  {/* Player visible en todas las rutas excepto '/registro' */}
+                <Player />
               </>
             }
           />
         </Routes>
       </Box>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App
+

@@ -1,153 +1,14 @@
 import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid, Button } from "@mui/material";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { Link } from "react-router-dom";
+import { blue, green } from "@mui/material/colors";
 
 const ContenidoPlaylist = () => {
-
-    const canciones = [
-        {
-            id: 1,
-            title: "Blinding Lights",
-            artist: "The Weeknd",
-            album: "After Hours",
-            image: "https://upload.wikimedia.org/wikipedia/en/e/e6/The_Weeknd_-_Blinding_Lights.png",
-            addedDate: "2024-03-01",
-            duration: "3:20",
-        },
-        {
-            id: 2,
-            title: "Shape of You",
-            artist: "Ed Sheeran",
-            album: "÷ (Divide)",
-            image: "https://upload.wikimedia.org/wikipedia/en/4/45/Shape_of_You_%28Official_Single_Cover%29_by_Ed_Sheeran.png",
-            addedDate: "2024-02-28",
-            duration: "3:53",
-        },
-        {
-            id: 3,
-            title: "Levitating",
-            artist: "Dua Lipa",
-            album: "Future Nostalgia",
-            image: "https://upload.wikimedia.org/wikipedia/en/2/22/Dua_Lipa_-_Levitating.png",
-            addedDate: "2024-02-25",
-            duration: "3:23",
-        },
-        {
-            id: 4,
-            title: "Bad Guy",
-            artist: "Billie Eilish",
-            album: "When We All Fall Asleep, Where Do We Go?",
-            image: "https://upload.wikimedia.org/wikipedia/en/e/e6/Billie_Eilish_-_Bad_Guy.png",
-            addedDate: "2024-02-20",
-            duration: "3:14",
-        },
-        {
-            id: 5,
-            title: "Peaches",
-            artist: "Justin Bieber",
-            album: "Justice",
-            image: "https://upload.wikimedia.org/wikipedia/en/b/bb/Justin_Bieber_-_Peaches.png",
-            addedDate: "2024-02-15",
-            duration: "3:18",
-        },
-        {
-            id: 6,
-            title: "Blinding Lights",
-            artist: "The Weeknd",
-            album: "After Hours",
-            image: "https://upload.wikimedia.org/wikipedia/en/e/e6/The_Weeknd_-_Blinding_Lights.png",
-            addedDate: "2024-03-01",
-            duration: "3:20",
-        },
-        {
-            id: 7,
-            title: "Shape of You",
-            artist: "Ed Sheeran",
-            album: "÷ (Divide)",
-            image: "https://upload.wikimedia.org/wikipedia/en/4/45/Shape_of_You_%28Official_Single_Cover%29_by_Ed_Sheeran.png",
-            addedDate: "2024-02-28",
-            duration: "3:53",
-        },
-        {
-            id: 8,
-            title: "Levitating",
-            artist: "Dua Lipa",
-            album: "Future Nostalgia",
-            image: "https://upload.wikimedia.org/wikipedia/en/2/22/Dua_Lipa_-_Levitating.png",
-            addedDate: "2024-02-25",
-            duration: "3:23",
-        },
-        {
-            id: 9,
-            title: "Bad Guy",
-            artist: "Billie Eilish",
-            album: "When We All Fall Asleep, Where Do We Go?",
-            image: "https://upload.wikimedia.org/wikipedia/en/e/e6/Billie_Eilish_-_Bad_Guy.png",
-            addedDate: "2024-02-20",
-            duration: "3:14",
-        },
-        {
-            id: 10,
-            title: "Peaches",
-            artist: "Justin Bieber",
-            album: "Justice",
-            image: "https://upload.wikimedia.org/wikipedia/en/b/bb/Justin_Bieber_-_Peaches.png",
-            addedDate: "2024-02-15",
-            duration: "3:18",
-        },
-        {
-            id: 11,
-            title: "Blinding Lights",
-            artist: "The Weeknd",
-            album: "After Hours",
-            image: "https://upload.wikimedia.org/wikipedia/en/e/e6/The_Weeknd_-_Blinding_Lights.png",
-            addedDate: "2024-03-01",
-            duration: "3:20",
-        },
-        {
-            id: 12,
-            title: "Shape of You",
-            artist: "Ed Sheeran",
-            album: "÷ (Divide)",
-            image: "https://upload.wikimedia.org/wikipedia/en/4/45/Shape_of_You_%28Official_Single_Cover%29_by_Ed_Sheeran.png",
-            addedDate: "2024-02-28",
-            duration: "3:53",
-        },
-        {
-            id: 13,
-            title: "Levitating",
-            artist: "Dua Lipa",
-            album: "Future Nostalgia",
-            image: "https://upload.wikimedia.org/wikipedia/en/2/22/Dua_Lipa_-_Levitating.png",
-            addedDate: "2024-02-25",
-            duration: "3:23",
-        },
-        {
-            id: 14,
-            title: "Bad Guy",
-            artist: "Billie Eilish",
-            album: "When We All Fall Asleep, Where Do We Go?",
-            image: "https://upload.wikimedia.org/wikipedia/en/e/e6/Billie_Eilish_-_Bad_Guy.png",
-            addedDate: "2024-02-20",
-            duration: "3:14",
-        },
-        {
-            id: 15,
-            title: "Peaches",
-            artist: "Justin Bieber",
-            album: "Justice",
-            image: "https://upload.wikimedia.org/wikipedia/en/b/bb/Justin_Bieber_-_Peaches.png",
-            addedDate: "2024-02-15",
-            duration: "3:18",
-        },
-    ];
-
-
     return (
         <Box
             sx={{
@@ -186,7 +47,7 @@ const ContenidoPlaylist = () => {
                             <Typography variant="h6" sx={{ fontSize: "12px", alignItems: "center", justifyContent: "center", alignContent: "center" }}><Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="Imagen cantante" sx={{ width: "30px", height: "30px", borderRadius: "50%" }} /> Bad Bunny•DeBí TiRaR MáS FOToS•2025•2:36•246.410.919</Typography>
                         </Box>
                     </Box>
-                    <Box width={"100%"} padding={3} sx={{ backgroundColor: "rgba(0,0,0,0)" }} position={"absolute"} top={"300px"}>
+                    <Box width={"100%"} padding={3} sx={{ backgroundColor: "rgba(0,0,0,0)" }} position={"absolute"} top={"300px"} paddingBottom={15}>
                         <Box display="flex" alignItems={"center"} justifyContent={"space-between"}>
                             <Box display="flex" alignItems={"center"}>
                                 <Box sx={{ width: "60px", height: "60px", backgroundColor: "#E91E63", borderRadius: "50%", color: "#000", alignItems: "center", justifyContent: "center", display: "flex" }}>
@@ -196,13 +57,226 @@ const ContenidoPlaylist = () => {
                                 <MoreHorizIcon sx={{ width: "40px", height: "40px", color: "#aeaeae" }} />
                             </Box>
                         </Box>
-                        <Box alignItems={"center"} justifyContent={"space-between"} marginTop={2}>
-                            <Box backgroundColor={"rgb(89, 163, 206)"} padding={2} borderRadius={2} alignItems={"center"} width={"550px"}>
-                                <Typography variant="p" sx={{ color: "#fff" }}>Inicia sesión para ver la letra y escuchar la canción al completo</Typography>
-                                <Box display="flex" alignItems={"center"} justifyContent={"right"}>
-                                    <Typography variant="p" sx={{ color: "#fff" }}>Iniciar sesión</Typography>
-                                    <Typography variant="p" sx={{ color: "#fff" }}>Registrarse</Typography>
-                                </Box> 
+                        <Box alignItems={"center"} marginTop={2} display={"flex"}>
+                            <Box backgroundColor={"#2e77d0"} padding={2} borderRadius={2} alignItems={"center"} width={"550px"}>
+                                <Typography variant="p" sx={{ color: "#fff", fontWeight: 'bold' }}>Inicia sesión para ver la letra y escuchar la canción al completo</Typography>
+                                <Box display="flex" alignItems={"center"} justifyContent={"right"} paddingTop={1} gap={1}>
+                                    <Button><Typography variant="p" sx={{ color: "#fff" }} fontWeight={'bold'}>Iniciar sesión</Typography></Button>
+                                    <Button><Typography variant="p" sx={{ color: "#000", backgroundColor: "white", paddingX: 3, paddingY: '10px', borderRadius: 10 }} fontWeight={'bold'}>Registrarse</Typography></Button>
+                                </Box>
+                            </Box>
+                            <Box paddingLeft={30} display={'flex'}>
+                                <Box component='img' src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="Imagen artista" sx={{ width: '100px', height: '100px', borderRadius: '50%' }}></Box>
+                                <Box display={"flex"} flexDirection={'column'} justifyContent={"center"} paddingLeft={1}>
+                                    <Typography fontWeight={'bold'}>Artista</Typography>
+                                    <Typography fontWeight={'bold'}>Artista X</Typography>
+                                </Box>
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Typography>Recomendaciones</Typography>
+                            <Typography>Basadas en esta canción</Typography>
+                            <Box sx={{ flexGrow: 1, paddingTop: 2 }} marginRight={6}>
+                                <Grid container marginRight={"0px"} width={"100%"} sx={{
+                                    padding: 1,
+                                    "&:hover": {
+                                        backgroundColor: "#2c2c2c",
+                                        transition: "0.3s",
+                                        // Cambiar color del texto a blanco en el hover
+                                        "& .numero-cancion, & .nombre-cancion, & .album-cancion": {
+                                            color: "white", // Cambia el color de las letras
+                                        },
+
+                                        "& .duracion-cancion, & .fecha-cancion, & .numero-cancion-icono": {
+                                            opacity: 1,
+                                            transition: "opacity 0.3s ease-in-out",
+                                        },
+
+                                        "& .numero-cancion": {
+                                            opacity: 0,
+                                        }
+
+                                    },
+
+                                }}>
+                                    <Grid item xs={12} sm={4}>
+                                        <Box display={"flex"}>
+                                            <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="cancion" sx={{ width: '50px', height: '50px', borderRadius: 2 }}></Box>
+                                            <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} paddingLeft={1}>
+                                                <Typography fontSize={"16px"}>CAFé CON RON</Typography>
+                                                <Typography fontSize={"14px"}>Bad bunny, Los Pleneros de la Cresta</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} textAlign={"end"} alignContent={"center"}>
+                                        <Typography justifyContent={"center"}>100.000.000</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} display={"flex"} justifyContent={"end"} gap={3} alignItems={"center"}>
+                                        <AddCircleOutlineIcon className="fecha-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                        <Typography>3:48</Typography>
+                                        <MoreHorizIcon className="duracion-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                    </Grid>
+                                </Grid>
+                                <Grid container marginRight={"0px"} width={"100%"} sx={{
+                                    padding: 1,
+                                    "&:hover": {
+                                        backgroundColor: "#2c2c2c",
+                                        transition: "0.3s",
+                                        // Cambiar color del texto a blanco en el hover
+                                        "& .numero-cancion, & .nombre-cancion, & .album-cancion": {
+                                            color: "white", // Cambia el color de las letras
+                                        },
+
+                                        "& .duracion-cancion, & .fecha-cancion, & .numero-cancion-icono": {
+                                            opacity: 1,
+                                            transition: "opacity 0.3s ease-in-out",
+                                        },
+
+                                        "& .numero-cancion": {
+                                            opacity: 0,
+                                        }
+
+                                    },
+
+                                }}>
+                                    <Grid item xs={12} sm={4}>
+                                        <Box display={"flex"}>
+                                            <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="cancion" sx={{ width: '50px', height: '50px', borderRadius: 2 }}></Box>
+                                            <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} paddingLeft={1}>
+                                                <Typography fontSize={"16px"}>CAFé CON RON</Typography>
+                                                <Typography fontSize={"14px"}>Bad bunny, Los Pleneros de la Cresta</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} textAlign={"end"} alignContent={"center"}>
+                                        <Typography justifyContent={"center"}>100.000.000</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} display={"flex"} justifyContent={"end"} gap={3} alignItems={"center"}>
+                                        <AddCircleOutlineIcon className="fecha-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                        <Typography>3:48</Typography>
+                                        <MoreHorizIcon className="duracion-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                    </Grid>
+                                </Grid>
+                                <Grid container marginRight={"0px"} width={"100%"} sx={{
+                                    padding: 1,
+                                    "&:hover": {
+                                        backgroundColor: "#2c2c2c",
+                                        transition: "0.3s",
+                                        // Cambiar color del texto a blanco en el hover
+                                        "& .numero-cancion, & .nombre-cancion, & .album-cancion": {
+                                            color: "white", // Cambia el color de las letras
+                                        },
+
+                                        "& .duracion-cancion, & .fecha-cancion, & .numero-cancion-icono": {
+                                            opacity: 1,
+                                            transition: "opacity 0.3s ease-in-out",
+                                        },
+
+                                        "& .numero-cancion": {
+                                            opacity: 0,
+                                        }
+
+                                    },
+
+                                }}>
+                                    <Grid item xs={12} sm={4}>
+                                        <Box display={"flex"}>
+                                            <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="cancion" sx={{ width: '50px', height: '50px', borderRadius: 2 }}></Box>
+                                            <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} paddingLeft={1}>
+                                                <Typography fontSize={"16px"}>CAFé CON RON</Typography>
+                                                <Typography fontSize={"14px"}>Bad bunny, Los Pleneros de la Cresta</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} textAlign={"end"} alignContent={"center"}>
+                                        <Typography justifyContent={"center"}>100.000.000</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} display={"flex"} justifyContent={"end"} gap={3} alignItems={"center"}>
+                                        <AddCircleOutlineIcon className="fecha-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                        <Typography>3:48</Typography>
+                                        <MoreHorizIcon className="duracion-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                    </Grid>
+                                </Grid>
+                                <Grid container marginRight={"0px"} width={"100%"} sx={{
+                                    padding: 1,
+                                    "&:hover": {
+                                        backgroundColor: "#2c2c2c",
+                                        transition: "0.3s",
+                                        // Cambiar color del texto a blanco en el hover
+                                        "& .numero-cancion, & .nombre-cancion, & .album-cancion": {
+                                            color: "white", // Cambia el color de las letras
+                                        },
+
+                                        "& .duracion-cancion, & .fecha-cancion, & .numero-cancion-icono": {
+                                            opacity: 1,
+                                            transition: "opacity 0.3s ease-in-out",
+                                        },
+
+                                        "& .numero-cancion": {
+                                            opacity: 0,
+                                        }
+
+                                    },
+
+                                }}>
+                                    <Grid item xs={12} sm={4}>
+                                        <Box display={"flex"}>
+                                            <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="cancion" sx={{ width: '50px', height: '50px', borderRadius: 2 }}></Box>
+                                            <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} paddingLeft={1}>
+                                                <Typography fontSize={"16px"}>CAFé CON RON</Typography>
+                                                <Typography fontSize={"14px"}>Bad bunny, Los Pleneros de la Cresta</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} textAlign={"end"} alignContent={"center"}>
+                                        <Typography justifyContent={"center"}>100.000.000</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} display={"flex"} justifyContent={"end"} gap={3} alignItems={"center"}>
+                                        <AddCircleOutlineIcon className="fecha-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                        <Typography>3:48</Typography>
+                                        <MoreHorizIcon className="duracion-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                    </Grid>
+                                </Grid>
+                                <Grid container marginRight={"0px"} width={"100%"} sx={{
+                                    padding: 1,
+                                    "&:hover": {
+                                        backgroundColor: "#2c2c2c",
+                                        transition: "0.3s",
+                                        // Cambiar color del texto a blanco en el hover
+                                        "& .numero-cancion, & .nombre-cancion, & .album-cancion": {
+                                            color: "white", // Cambia el color de las letras
+                                        },
+
+                                        "& .duracion-cancion, & .fecha-cancion, & .numero-cancion-icono": {
+                                            opacity: 1,
+                                            transition: "opacity 0.3s ease-in-out",
+                                        },
+
+                                        "& .numero-cancion": {
+                                            opacity: 0,
+                                        }
+
+                                    },
+
+                                }}>
+                                    <Grid item xs={12} sm={4}>
+                                        <Box display={"flex"}>
+                                            <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="cancion" sx={{ width: '50px', height: '50px', borderRadius: 2 }}></Box>
+                                            <Box display={"flex"} flexDirection={"column"} justifyContent={"center"} paddingLeft={1}>
+                                                <Typography fontSize={"16px"}>CAFé CON RON</Typography>
+                                                <Typography fontSize={"14px"}>Bad bunny, Los Pleneros de la Cresta</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} textAlign={"end"} alignContent={"center"}>
+                                        <Typography justifyContent={"center"}>100.000.000</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={4} display={"flex"} justifyContent={"end"} gap={3} alignItems={"center"}>
+                                        <AddCircleOutlineIcon className="fecha-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                        <Typography>3:48</Typography>
+                                        <MoreHorizIcon className="duracion-cancion" sx={{ color: "#aeaeae", fontSize: "18px", opacity: 0, transition: "opacity 0.3s ease-in-out", }} />
+                                    </Grid>
+                                </Grid>
                             </Box>
                         </Box>
                     </Box>
