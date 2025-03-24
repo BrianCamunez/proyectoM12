@@ -1,16 +1,14 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Sidebar from "./componentes/Sidebar"
 import Navbar from "./componentes/Navbar"
 import Player from "./componentes/Player"
-import Contenido from "./componentes/PaginaHome"
-import Contenido2 from "./componentes/Contenido2"
+import PaginaHome from "./componentes/PaginaHome"
 import RegistroComponente from "./componentes/RegistroComponente"
 import InicioSesion from "./componentes/InicioSesion"
 import ContenidoPlaylist from "./componentes/ContenidoPlaylist"
 import ContenidoCancion from "./componentes/ContenidoCancion"
-import NavbarMobile from "./componentes/componentesMobile/NavbarMobile"
 import ContenidoMobile from "./componentes/ContenidoMobile"
+import PaginaExplorar from "./componentes/PaginaExplorar"
 
 
 function App() {
@@ -27,7 +25,7 @@ function App() {
             path="/"
             element={
               <>
-                {isMdUp ? <Contenido /> : <ContenidoMobile />}
+                {isMdUp ? <PaginaHome /> : <ContenidoMobile />}
               </>
             }
           />
@@ -35,14 +33,7 @@ function App() {
             path="/contenido2"
             element={
               <>
-                <Navbar />
-                <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
-                  {isMdUp && <Sidebar />}
-                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
-                    <Contenido2 />
-                  </Box>
-                </Box>
-                <Player />
+                {isMdUp ? <PaginaExplorar /> : <ContenidoMobile />}
               </>
             }
           />
@@ -52,7 +43,6 @@ function App() {
               <>
                 <Navbar />
                 <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
-                  {isMdUp && <Sidebar />}
                   <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
                     <ContenidoPlaylist />
                   </Box>
@@ -67,7 +57,6 @@ function App() {
               <>
                 <Navbar />
                 <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
-                  {isMdUp && <Sidebar />}
                   <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
                     <ContenidoCancion />
                   </Box>

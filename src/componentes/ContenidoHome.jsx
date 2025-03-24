@@ -17,9 +17,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import { Link } from 'react-router-dom'
 
-const ContenidoTemporal = () => {
+const ContenidoHome = () => {
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#000", width: "100%", marginRight: 1}}>
+    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#000", width: "100%", marginRight: 1 }}>
       {/* Sidebar Section */}
       <Box sx={{ width: 350, flexShrink: 0 }}>
         <Drawer
@@ -33,7 +33,7 @@ const ContenidoTemporal = () => {
               backgroundColor: "#121212",
               color: "#aeaeae",
               borderRadius: "6px",
-              height: "87vh",
+              height: "85.5vh",
               overflow: "hidden",
               marginLeft: 1,
               position: "relative",
@@ -102,23 +102,23 @@ const ContenidoTemporal = () => {
           marginRight: 1,
           backgroundColor: "#121212",
           borderRadius: 2,
-          height: "85vh",
+          height: "83.2vh",
           marginTop: "70px",
           overflowY: "auto",
           "&::-webkit-scrollbar": {
-            width: "15px",
-            height: "50px",
+            width: "8px", // El tamaño del scroll
           },
           "&::-webkit-scrollbar-track": {
-            borderRadius: "5px",
+            background: "#2a2a2a", // Color de la pista del scroll
+            borderRadius: "10px",
           },
           "&::-webkit-scrollbar-thumb": {
-            background: "#2c2c2c",
+            background: "#767612", // Color del pulgar del scroll
             borderRadius: "10px",
-            border: "2px solid #161246",
+            border: "2px solid #161246", // Color del borde del pulgar
           },
           "&::-webkit-scrollbar-thumb:hover": {
-            background: "#aaaaaa",
+            background: "#561234", // Color al pasar el ratón sobre el pulgar
           },
         }}
       >
@@ -301,5 +301,5 @@ const ContenidoTemporal = () => {
   )
 }
 
-export default ContenidoTemporal
+export default ContenidoHome
 

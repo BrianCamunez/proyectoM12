@@ -1,15 +1,15 @@
 import { Box } from "@mui/material"
 import Navbar from "./Navbar"
-import ContenidoTemporal from "./ContenidoHome"
 import Player from "./Player"
+import ContenidoExplorar from "./ContenidoExplorar"
 
-const PaginaHome = () => {
+const PaginaExplorar = () => {
   return (
     <>
       <Navbar />
       <Box sx={{ display: "flex", height: { xs: "100%", md: "calc(100vh - 64px)" }, overflow: "hidden" }}>
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
-          <ContenidoTemporal />
+          <ContenidoExplorar />
         </Box>
       </Box>
       <Player/>
@@ -17,5 +17,5 @@ const PaginaHome = () => {
   )
 }
 
-export default PaginaHome
+export default PaginaExplorar
 
