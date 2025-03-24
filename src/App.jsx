@@ -11,6 +11,7 @@ import ContenidoPlaylist from "./componentes/ContenidoPlaylist"
 import ContenidoCancion from "./componentes/ContenidoCancion"
 import NavbarMobile from "./componentes/NavbarMobile"
 import ContenidoMobile from "./componentes/ContenidoMobile"
+import ReproductorMobile from "./componentes/ReproductorMobile"
 
 function App() {
   const theme = useTheme()
@@ -33,7 +34,7 @@ function App() {
                   {isMdUp ? <Contenido/> : <ContenidoMobile/>}
                   </Box>
                 </Box>
-                <Player />
+                {isMdUp && <Player/>}
               </>
             }
           />
