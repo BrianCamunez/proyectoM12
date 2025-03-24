@@ -18,7 +18,7 @@ const PlaylistPreferidasMobile = () => {
                                         <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"40px"} height={"40px"} borderRadius={2} />
                                     </Box>
                                     <Box mx={2} sx={{height: "40px", padding: 0, fontSize: "12px"}} display={"flex"} alignItems={"center"}>
-                                        Can
+                                        <Link to="/cancion">Can</Link>
                                     </Box>
                                 </Box>
                             </Button>
