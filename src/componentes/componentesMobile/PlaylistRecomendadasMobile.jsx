@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const PlaylistRecomendadasMobile = () => {
     const items = Array.from({ length: 6 }); // Crear 6 elementos para la galería
@@ -7,7 +8,7 @@ const PlaylistRecomendadasMobile = () => {
     return (
         <Box sx={{ width: "100%" }}>
             <Typography marginX={2} py={3}>Hecho para X</Typography>
-            
+
             <Box
                 sx={{
                     display: "flex",  // Alinea los elementos en fila
@@ -24,17 +25,19 @@ const PlaylistRecomendadasMobile = () => {
             >
                 {items.map((_, index) => (
                     <Box key={index} sx={{ flexShrink: 0 }}>
-                        <Box
-                            component="img"
-                            src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg"
-                            sx={{
-                                width: "100%",  // Las imágenes ocupan todo el ancho disponible
-                                height: "150px",  // Mantienen la relación de aspecto
-                                maxWidth: "150px",  // Ancho máximo para las imágenes
-                                borderRadius: 2,
-                            }}
-                        />
-                        <Box sx={{width: "100%", maxWidth: "150px"}}>Tres artistas y poner y mas</Box>
+                        <Link to="/playlistMobile">
+                            <Box
+                                component="img"
+                                src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg"
+                                sx={{
+                                    width: "100%",  // Las imágenes ocupan todo el ancho disponible
+                                    height: "150px",  // Mantienen la relación de aspecto
+                                    maxWidth: "150px",  // Ancho máximo para las imágenes
+                                    borderRadius: 2,
+                                }}
+                            />
+                        </Link>
+                        <Box sx={{ width: "100%", maxWidth: "150px" }}>Tres artistas y poner y mas</Box>
                     </Box>
                 ))}
             </Box>

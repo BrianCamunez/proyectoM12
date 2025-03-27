@@ -40,11 +40,15 @@ const ContenidoPlaylistMobile = () => {
                     {items.map((_, index) => (
                         <Box key={index} display={"flex"} py={1} justifyContent={"space-between"} alignItems={"center"}>
                             <Box display={"flex"} alignItems={"center"}>
-                                <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"40px"} height={"40px"} borderRadius={2} />
-                                <Box ml={1}>
-                                    <Box>RuLe</Box>
-                                    <Box><ArrowCircleDownIcon sx={{ fontSize: '16px' }} /> Ado</Box>
-                                </Box>
+                                <Link to="/cancion">
+                                    <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"40px"} height={"40px"} borderRadius={2} />
+                                </Link>
+                                <Link to="/cantanteMobile">
+                                    <Box ml={1}>
+                                        <Box>RuLe</Box>
+                                        <Box><ArrowCircleDownIcon sx={{ fontSize: '16px' }} /> Ado</Box>
+                                    </Box>
+                                </Link>
                             </Box>
                             <Box>
                                 <CheckCircleIcon sx={{ paddingRight: 2, fontSize: "16px" }} />
@@ -58,9 +62,9 @@ const ContenidoPlaylistMobile = () => {
                     <Box sx={{ flexGrow: 1, paddingTop: 1 }}>
                         <Grid container width={"100%"} paddingX={2} spacing={2}>
                             {items.map((_, index) => (
-                                <Grid item xs={4} key={index}  justifyContent={"center"} my={1}>
-                                    <Button sx={{ textTransform: "none",  padding: 0, width: "100%" }}>
-                                       <Box component="img"  src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"100%"} height={"auto"}/>
+                                <Grid item xs={4} key={index} justifyContent={"center"} my={1}>
+                                    <Button sx={{ textTransform: "none", padding: 0, width: "100%" }}>
+                                        <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"100%"} height={"auto"} />
                                     </Button>
                                     <Box my={1}>Crunchyroll Anime Awards Winners</Box>
                                     <Box>The best of anime, ...</Box>

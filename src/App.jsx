@@ -11,6 +11,7 @@ import ContenidoMobile from "./componentes/ContenidoMobile"
 import PaginaExplorar from "./componentes/PaginaExplorar"
 import ContenidoCancionMobile from "./componentes/componentesMobile/ContenidoCancionMobile"
 import ContenidoPlaylistMobile from "./componentes/componentesMobile/ContenidoPlaylistMobile"
+import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCantanteMobile"
 
 function App() {
   const theme = useTheme()
@@ -56,10 +57,12 @@ function App() {
             path="/cancion"
             element={
               <>
-                {isMdUp ? <ContenidoCancion /> : <ContenidoPlaylistMobile />}
+                {isMdUp ? <ContenidoCancion /> : <ContenidoCancionMobile />}
               </>
             }
-          />
+          />zx
+          <Route path="/playlistMobile" element={<ContenidoPlaylistMobile/>}/>
+          <Route path="/cantanteMobile" element={<ContenidoCantanteMobile/>}/>
         </Routes>
       </Box>
     </Router>
