@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography, Grid, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const PlaylistPreferidasMobile = () => {
 
@@ -19,6 +19,7 @@ const PlaylistPreferidasMobile = () => {
                                     </Box>
                                     <Box mx={2} sx={{height: "40px", padding: 0, fontSize: "12px"}} display={"flex"} alignItems={"center"}>
                                         <Link to="/playlistMobile">Can</Link>
+                                        <a href="/playlistMobile">caytr</a>
                                     </Box>
                                 </Box>
                             </Button>

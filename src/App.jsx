@@ -1,73 +1,91 @@
-import { Box, useMediaQuery, useTheme } from "@mui/material"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Navbar from "./componentes/Navbar"
-import Player from "./componentes/Player"
-import PaginaHome from "./componentes/PaginaHome"
-import RegistroComponente from "./componentes/RegistroComponente"
-import InicioSesion from "./componentes/InicioSesion"
-import ContenidoPlaylist from "./componentes/ContenidoPlaylist"
-import ContenidoCancion from "./componentes/ContenidoCancion"
-import ContenidoMobile from "./componentes/ContenidoMobile"
-import PaginaExplorar from "./componentes/PaginaExplorar"
-import ContenidoCancionMobile from "./componentes/componentesMobile/ContenidoCancionMobile"
-import ContenidoPlaylistMobile from "./componentes/componentesMobile/ContenidoPlaylistMobile"
-import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCantanteMobile"
+import React, { useState, useEffect } from "react";
+import { Box, useMediaQuery, useTheme, Slide } from "@mui/material";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./componentes/Navbar";
+import Player from "./componentes/Player";
+import PaginaHome from "./componentes/PaginaHome";
+import RegistroComponente from "./componentes/RegistroComponente";
+import InicioSesion from "./componentes/InicioSesion";
+import ContenidoPlaylist from "./componentes/ContenidoPlaylist";
+import ContenidoCancion from "./componentes/ContenidoCancion";
+import ContenidoMobile from "./componentes/ContenidoMobile";
+import PaginaExplorar from "./componentes/PaginaExplorar";
+import ContenidoCancionMobile from "./componentes/componentesMobile/ContenidoCancionMobile";
+import ContenidoPlaylistMobile from "./componentes/componentesMobile/ContenidoPlaylistMobile";
+import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCantanteMobile";
 
 function App() {
-  const theme = useTheme()
-  const isMdUp = useMediaQuery(theme.breakpoints.up("md"))
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+
+  const location = useLocation(); // Captura la ubicación actual
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
-    <Router>
-      <Box sx={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "black", color: "white", overflow: "hidden" }}>
-        <Routes>
-          <Route path="/registro" element={<RegistroComponente />} />
-          <Route path="/inicioSesion" element={<InicioSesion />} />
-          <Route
-            path="/"
-            element={
-              <>
+    <Box sx={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "black", color: "white", overflow: "hidden" }}>
+      <Routes location={location}>
+        <Route path="/registro" element={<RegistroComponente />} />
+        <Route path="/inicioSesion" element={<InicioSesion />} />
+        <Route
+          path="/"
+          element={
+            <Slide direction="right" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
+              <div style={{ width: "100%", height: "100%" }}>
                 {isMdUp ? <PaginaHome /> : <ContenidoMobile />}
-              </>
-            }
-          />
-          <Route
-            path="/contenido2"
-            element={
-              <>
+              </div>
+            </Slide>
+          }
+        />
+        <Route
+          path="/contenido2"
+          element={
+            <Slide direction="right" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
+              <div style={{ width: "100%", height: "100%" }}>
                 {isMdUp ? <PaginaExplorar /> : <ContenidoMobile />}
-              </>
-            }
-          />
-          <Route
-            path="/playlist"
-            element={
-              <>
-                <Navbar />
-                <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
-                  <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
-                    <ContenidoPlaylist />
-                  </Box>
+              </div>
+            </Slide>
+          }
+        />
+        <Route
+          path="/playlist"
+          element={
+            <>
+              <Navbar />
+              <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
+                <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
+                  <ContenidoPlaylist />
                 </Box>
-                <Player />
-              </>
-            }
-          />
-          <Route
-            path="/cancion"
-            element={
-              <>
-                {isMdUp ? <ContenidoCancion /> : <ContenidoCancionMobile />}
-              </>
-            }
-          />zx
-          <Route path="/playlistMobile" element={<ContenidoPlaylistMobile/>}/>
-          <Route path="/cantanteMobile" element={<ContenidoCantanteMobile/>}/>
-        </Routes>
-      </Box>
-    </Router>
-  )
+              </Box>
+              <Player />
+            </>
+          }
+        />
+        <Route
+          path="/cancion"
+          element={
+            <>
+              {isMdUp ? <ContenidoCancion /> : <ContenidoCancionMobile />}
+            </>
+          }
+        />
+        <Route
+          path="/playlistMobile"
+          element={
+            <Slide direction="down" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
+              <div style={{ width: "100%", height: "100%" }}>
+                <ContenidoPlaylistMobile />
+              </div>
+            </Slide>
+          }
+        />
+        <Route path="/cantanteMobile" element={<ContenidoCantanteMobile />} />
+      </Routes>
+    </Box>
+  );
 }
 
-export default App
-
+export default App;
