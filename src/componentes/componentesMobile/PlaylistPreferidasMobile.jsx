@@ -6,6 +6,12 @@ const PlaylistPreferidasMobile = () => {
 
     const items = Array.from({ length: 8 });
 
+    const navigate = useNavigate();
+
+    const redirigir = () => {
+            navigate('/playlistMobile');
+      };
+
     return (
         <>
             <Box sx={{ flexGrow: 1, paddingTop: 1 }}>
@@ -18,8 +24,8 @@ const PlaylistPreferidasMobile = () => {
                                         <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"40px"} height={"40px"} borderRadius={2} />
                                     </Box>
                                     <Box mx={2} sx={{height: "40px", padding: 0, fontSize: "12px"}} display={"flex"} alignItems={"center"}>
-                                        <Link to="/playlistMobile">Can</Link>
-                                        <a href="/playlistMobile">caytr</a>
+                                        <Box sx={{textDecoration: "none", color: "white"}} onClick={redirigir}>Cancion</Box>
+                                        <a href="/playlistMobile">aaaaaaaaaaaa</a>
                                     </Box>
                                 </Box>
                             </Button>
