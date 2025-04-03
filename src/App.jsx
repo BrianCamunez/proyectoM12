@@ -13,28 +13,19 @@ import PaginaExplorar from "./componentes/PaginaExplorar";
 import ContenidoCancionMobile from "./componentes/componentesMobile/ContenidoCancionMobile";
 import ContenidoPlaylistMobile from "./componentes/componentesMobile/ContenidoPlaylistMobile";
 import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCantanteMobile";
+import ContenidoBibliotecaMobile from "./componentes/componentesMobile/ContenidoBibliotecaMobile";
 
 function App() {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
-  const location = useLocation(); // Captura la ubicación actual
-  
-  const [showComponent, setShowComponent] = useState(true); // Mantenemos true por defecto
-  const [transitionKey, setTransitionKey] = useState(0);
+  const location = useLocation();
+
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Cada vez que la ubicación cambie, reinicia la animación
-    setTransitionKey(prevKey => prevKey + 1); // Cambia la clave para forzar un nuevo ciclo de animación
-
-    // Después de un pequeño retraso, iniciamos la animación
-    setShowComponent(false);
-    const timer = setTimeout(() => {
-      setShowComponent(true); // Esto inicia la animación de entrada
-    }, 600); // Retraso de 100ms para permitir que el cambio de estado sea procesado
-
-    return () => clearTimeout(timer); // Limpiar el timeout cuando el efecto termine
-  }, [location]);
+    setIsMounted(true);
+  }, []);
 
 
   return (
@@ -45,17 +36,17 @@ function App() {
         <Route
           path="/"
           element={
-            <Slide direction="right" in={showComponent} mountOnEnter unmountOnExit timeout={300}>
+            // <Slide direction="right" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
               <div style={{ width: "100%", height: "100%" }}>
                 {isMdUp ? <PaginaHome /> : <ContenidoMobile />}
               </div>
-            </Slide>
+            // </Slide>
           }
         />
         <Route
           path="/contenido2"
           element={
-            <Slide direction="right" in={showComponent} mountOnEnter unmountOnExit timeout={300}>
+            <Slide direction="right" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
               <div style={{ width: "100%", height: "100%" }}>
                 {isMdUp ? <PaginaExplorar /> : <ContenidoMobile />}
               </div>
@@ -87,7 +78,7 @@ function App() {
         <Route
           path="/playlistMobile"
           element={
-            <Slide direction="right" in={showComponent} mountOnEnter unmountOnExit timeout={300}>
+            <Slide direction="left" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
               <div style={{ width: "100%", height: "100%" }}>
                 <ContenidoPlaylistMobile />
               </div>
@@ -95,6 +86,7 @@ function App() {
           }
         />
         <Route path="/cantanteMobile" element={<ContenidoCantanteMobile />} />
+        <Route path="/biblioteca" element={<ContenidoBibliotecaMobile />} />
       </Routes>
     </Box>
   );
