@@ -6,6 +6,8 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ContenidoBibliotecaListaMobile from "./ContenidoBibliotecaListaMobile";
 import ContenidoBibliotecaGridMobile from "./ContenidoBibliotecaGridMobile";
+import ReproductorMobile from "./ReproductorMobile";
+import MenuAbajoMobile from "./MenuAbajoMobile";
 
 const ContenidoBibliotecaMobile = () => {
 
@@ -28,9 +30,9 @@ const ContenidoBibliotecaMobile = () => {
                     </Box>
                     <Box>
                         {tipoVision === "lista" ? (
-                            <GridViewIcon sx={{ color: "white", cursor: "pointer" }} onClick={cambiarVista}/>
+                            <GridViewIcon sx={{ color: "white", cursor: "pointer" }} onClick={cambiarVista} />
                         ) : (
-                            <FormatListBulletedIcon sx={{color: "white", cursor: "pointer" }} onClick={cambiarVista}/>
+                            <FormatListBulletedIcon sx={{ color: "white", cursor: "pointer" }} onClick={cambiarVista} />
                         )}
                     </Box>
                 </Box>
@@ -38,6 +40,8 @@ const ContenidoBibliotecaMobile = () => {
                     {tipoVision === "lista" ? <ContenidoBibliotecaListaMobile /> : <ContenidoBibliotecaGridMobile />}
                 </Box>
             </Box>
+            <ReproductorMobile />
+            <MenuAbajoMobile />
         </>
     );
 };

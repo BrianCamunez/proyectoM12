@@ -14,6 +14,7 @@ import ContenidoCancionMobile from "./componentes/componentesMobile/ContenidoCan
 import ContenidoPlaylistMobile from "./componentes/componentesMobile/ContenidoPlaylistMobile";
 import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCantanteMobile";
 import ContenidoBibliotecaMobile from "./componentes/componentesMobile/ContenidoBibliotecaMobile";
+import ContenidoExplorarMobile from "./componentes/componentesMobile/ContenidoExplorarMobile";
 
 function App() {
   const theme = useTheme();
@@ -36,11 +37,11 @@ function App() {
         <Route
           path="/"
           element={
-            // <Slide direction="right" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
+            <Slide direction="right" in={true} mountOnEnter  timeout={300}>
               <div style={{ width: "100%", height: "100%" }}>
                 {isMdUp ? <PaginaHome /> : <ContenidoMobile />}
               </div>
-            // </Slide>
+             </Slide>
           }
         />
         <Route
@@ -78,7 +79,7 @@ function App() {
         <Route
           path="/playlistMobile"
           element={
-            <Slide direction="left" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
+            <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={600}>
               <div style={{ width: "100%", height: "100%" }}>
                 <ContenidoPlaylistMobile />
               </div>
@@ -86,7 +87,18 @@ function App() {
           }
         />
         <Route path="/cantanteMobile" element={<ContenidoCantanteMobile />} />
-        <Route path="/biblioteca" element={<ContenidoBibliotecaMobile />} />
+        {/* <Route path="/biblioteca" element={<ContenidoBibliotecaMobile />} /> */}
+        <Route
+          path="/biblioteca"
+          element={
+            <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={600}>
+              <div style={{ width: "100%", height: "100%" }}>
+              <ContenidoBibliotecaMobile />
+              </div>
+            </Slide>
+          }
+        />
+         <Route path="/explorarMobile" element={<ContenidoExplorarMobile />} />
       </Routes>
     </Box>
   );

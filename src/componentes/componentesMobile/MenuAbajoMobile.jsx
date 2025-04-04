@@ -8,17 +8,19 @@ import { Link } from "react-router-dom";
 const MenuAbajoMobile = () => {
     return (
         <>
-            <Box display={"flex"} width={"100%"} justifyContent={"space-around"} bottom={0} position={"absolute"} paddingY={1} sx={{ backgroundColor: "black" }}>
+            <Box display={"flex"} width={"100%"} justifyContent={"space-around"} bottom={0} position={"absolute"} paddingY={1} sx={{ backgroundColor: "black", opacity: 0.97 }}>
                 <Link to="/">
                     <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} sx={{ textDecoration: "none", color: "white" }}>
                         <HomeIcon />
                         <Box>Inicio</Box>
                     </Box>
                 </Link>
-                <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"}>
-                    <SearchIcon />
-                    <Box>Buscar</Box>
-                </Box>
+                <Link to="/explorarMobile">
+                    <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} sx={{ textDecoration: "none", color: "white" }}>
+                        <SearchIcon />
+                        <Box>Buscar</Box>
+                    </Box>
+                </Link>
                 <Link to="/biblioteca">
                     <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} sx={{ textDecoration: "none", color: "white" }}>
                         <BookmarkIcon />

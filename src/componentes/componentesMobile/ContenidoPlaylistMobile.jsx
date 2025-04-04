@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Button } from "@mui/material";
+import { Box, Grid, Button, IconButton } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
@@ -7,6 +7,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { useNavigate } from 'react-router-dom';
 
 import { Link } from "react-router-dom";
 import ReproductorMobile from "./ReproductorMobile";
@@ -16,13 +18,17 @@ const ContenidoPlaylistMobile = () => {
 
     const items = Array.from({ length: 6 });
 
+    const navigate = useNavigate();
+
+    const handleBackClick = () => {
+        navigate(-1); // retrocede una página en el historial
+    };
+
     return (
         <>
             <Box display={"flex"} flexDirection={"column"}>
                 <Box>
-                    <Link to="/">
-                    <Button sx={{ textTransform: "none", padding: 1, width: "100%" }}>Volver</Button>
-                    </Link>
+                    <ArrowBackIosIcon onClick={handleBackClick} sx={{ padding: 2, fontSize: "25px", color: "white", position: "absolute",  marginLeft: 1, marginTop: 1 }} />
                     <Box pt={3} mx={2}>
                         <Box justifyContent={"center"} alignContent={"center"} display={"flex"}>
                             <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"300px"} height={"300px"} />
