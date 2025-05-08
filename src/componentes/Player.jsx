@@ -11,6 +11,7 @@ const Player = () => {
         <BottomNavigation sx={{position: 'fixed', bottom: 0, width: '100%', backgroundColor: "black", zIndex: 10 }}>
             <BottomNavigationAction icon={<SkipPreviousIcon sx={{color: "white"}}/>}/>
             <BottomNavigationAction icon={reproduciendo ? <PauseIcon sx={{color: "white"}}/> : <PlayArrowIcon sx={{color: "white"}}/>} onClick={() => setReproduciendo(!reproduciendo)}/>
+            
             <BottomNavigationAction icon={<SkipNextIcon sx={{color: "white"}}/>}/> 
         </BottomNavigation>
     )
