@@ -37,7 +37,7 @@ const NavbarMobile = () => {
             <Box display={"flex"} gap={1} margin={1} mt={2} justifyContent={"left"} alignContent={"center"} py={1}>
                 <Box
                     component="img"
-                    src={avatarUrl || "https://definicion.com/wp-content/uploads/2022/09/imagen.jpg"}
+                    src={avatarUrl}
                     alt="Imagen Perfil"
                     sx={{ width: "30px", height: "30px", borderRadius: "50%" }}
                 />
