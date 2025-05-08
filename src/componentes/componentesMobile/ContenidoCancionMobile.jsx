@@ -13,14 +13,21 @@ import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import ViewStreamIcon from '@mui/icons-material/ViewStream';
+import { useNavigate } from 'react-router-dom';
 
 const ContenidoCancionMobile = () => {
+
+    const navigate = useNavigate();
+
+    const handleBackClick = () => {
+        navigate(-1); // retrocede una página en el historial
+    };
 
     return (
         <>
             <Box marginX={2}>
                 <Box display={"flex"} justifyContent={"space-between"} paddingTop={2}>
-                    <KeyboardArrowDownIcon />
+                    <KeyboardArrowDownIcon  onClick={handleBackClick}/>
                     <Box>Reproduciendo canciones recomendadas</Box>
                     <MoreHorizIcon />
                 </Box>

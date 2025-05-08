@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from "@mui/material";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const RegistroComponente = () => {
     const [DatosFormulario, setDatosFormulario] = useState({
@@ -10,16 +10,15 @@ const RegistroComponente = () => {
     });
 
     const manejarInputs = (eventos) => {
-        const { nombre, valor } = eventos.target;
+        const { name, value } = eventos.target;
         setDatosFormulario({
             ...DatosFormulario,
-            [nombre]: valor,
+            [name]: value,
         });
     };
 
     const manejarSubmit = (evento) => {
         evento.preventDefault();
-        // Aquí puedes manejar el envío de los datos del formulario
         console.log('Formulario enviado:', DatosFormulario);
     };
 
@@ -31,26 +30,30 @@ const RegistroComponente = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 minHeight: "100vh",
-                backgroundColor: "black", // Fondo negro
-                color: "white", // Texto blanco
+                backgroundColor: "black",
+                color: "white",
                 padding: "20px",
             }}
         >
-            {/* Imagen superior */}
             <Link to="/">
                 <Box
                     component="img"
                     src="/src/images/LogoProyecto.jpeg"
                     alt="Logo"
                     sx={{
-                        width: "100px", // Ajusta el tamaño según sea necesario
+                        width: { xs: "80px", sm: "100px" },
                         height: "auto",
                         marginBottom: "30px",
                     }}
                 />
             </Link>
 
-            <Typography variant="h5" fontSize={30} fontWeight={'bold'} sx={{ marginBottom: 2 }}>
+            <Typography
+                variant="h5"
+                fontSize={{ xs: 24, sm: 30 }}
+                fontWeight={'bold'}
+                sx={{ marginBottom: 2 }}
+            >
                 Regístrate para empezar a escuchar contenido
             </Typography>
 
@@ -58,19 +61,18 @@ const RegistroComponente = () => {
                 component="form"
                 onSubmit={manejarSubmit}
                 sx={{
-                    width: "20vw", // 20% del ancho de la pantalla
-                    maxWidth: "400px", // Limitar a 400px máximo
+                    width: { xs: "90vw", sm: "60vw", md: "40vw", lg: "20vw" },
+                    maxWidth: "400px",
                     display: "flex",
                     flexDirection: "column",
                     gap: 2,
-                    backgroundColor: "black", // Fondo negro para el formulario
+                    backgroundColor: "black",
                     padding: "20px",
                     borderRadius: "8px",
                     boxShadow: 2,
-                    alignItems: "center", // Centrado de los campos
+                    alignItems: "center",
                 }}
             >
-                {/* Campo de correo */}
                 <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
                     <Typography sx={{ color: "white", marginBottom: 1 }}>Correo electrónico</Typography>
                     <TextField
@@ -85,21 +87,20 @@ const RegistroComponente = () => {
                             style: { color: "white", fontSize: "14px" },
                         }}
                         sx={{
-                            backgroundColor: "black", // Fondo negro
-                            color: "white", // Texto blanco
+                            backgroundColor: "black",
+                            color: "white",
                             "& .MuiOutlinedInput-root": {
                                 "& fieldset": {
-                                    borderColor: "white", // Borde blanco
+                                    borderColor: "white",
                                 },
                                 "&:hover fieldset": {
-                                    borderColor: "white", // Borde blanco al pasar el mouse
+                                    borderColor: "white",
                                 },
                             },
                         }}
                     />
                 </Box>
 
-                {/* Campo de usuario */}
                 <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
                     <Typography sx={{ color: "white", marginBottom: 1 }}>Usuario</Typography>
                     <TextField
@@ -113,21 +114,20 @@ const RegistroComponente = () => {
                             style: { color: "white", fontSize: "14px" },
                         }}
                         sx={{
-                            backgroundColor: "black", // Fondo negro
-                            color: "white", // Texto blanco
+                            backgroundColor: "black",
+                            color: "white",
                             "& .MuiOutlinedInput-root": {
                                 "& fieldset": {
-                                    borderColor: "white", // Borde blanco
+                                    borderColor: "white",
                                 },
                                 "&:hover fieldset": {
-                                    borderColor: "white", // Borde blanco al pasar el mouse
+                                    borderColor: "white",
                                 },
                             },
                         }}
                     />
                 </Box>
 
-                {/* Campo de contraseña */}
                 <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
                     <Typography sx={{ color: "white", marginBottom: 1 }}>Contraseña</Typography>
                     <TextField
@@ -142,21 +142,20 @@ const RegistroComponente = () => {
                             style: { color: "white", fontSize: "14px" },
                         }}
                         sx={{
-                            backgroundColor: "black", // Fondo negro
-                            color: "white", // Texto blanco
+                            backgroundColor: "black",
+                            color: "white",
                             "& .MuiOutlinedInput-root": {
                                 "& fieldset": {
-                                    borderColor: "white", // Borde blanco
+                                    borderColor: "white",
                                 },
                                 "&:hover fieldset": {
-                                    borderColor: "white", // Borde blanco al pasar el mouse
+                                    borderColor: "white",
                                 },
                             },
                         }}
                     />
                 </Box>
 
-                {/* Botón de registro */}
                 <Button
                     type="submit"
                     variant="contained"
@@ -177,18 +176,18 @@ const RegistroComponente = () => {
                 </Button>
                 <Box
                     sx={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 2 }}>
-                    <Typography variant="body2" sx={{ color: "white" }}>
+                    <Typography variant="body2" sx={{ color: "white", marginRight: 1 }}>
                         ¿Ya tienes una cuenta?
                     </Typography>
                     <Link
                         to="/inicioSesion"
                         style={{
-                            color: "white", // Color blanco para el texto
-                            textDecoration: "none", // Eliminar la subrayado del texto
-                            cursor: "pointer", // Cambiar el cursor para indicar que es un enlace
+                            color: "white",
+                            textDecoration: "none",
+                            cursor: "pointer",
                         }}
-                        onMouseOver={(e) => (e.target.style.color = "#E91E63")} // Color al pasar el ratón
-                        onMouseOut={(e) => (e.target.style.color = "white")} // Restablecer el color
+                        onMouseOver={(e) => (e.target.style.color = "#E91E63")}
+                        onMouseOut={(e) => (e.target.style.color = "white")}
                     >
                         Inicia sesión aquí.
                     </Link>
