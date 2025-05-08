@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
+import { supabase } from '../supabase/supabase';
 
 const RegistroComponente = () => {
     const [DatosFormulario, setDatosFormulario] = useState({
         correo: '',
+        nombre: '',
         usuario: '',
         password: '',
     });
+    const [mensaje, setMensaje] = useState('');
 
     const manejarInputs = (eventos) => {
         const { name, value } = eventos.target;
@@ -17,9 +20,45 @@ const RegistroComponente = () => {
         });
     };
 
+    const registrarUsuario = async () => {
+        const { correo, password, nombre } = DatosFormulario;
+        try {
+            // Registro en la autenticación de Supabase
+            const { data: authData, error: authError } = await supabase.auth.signUp({
+                email: correo,
+                password: password,
+            });
+
+            if (authError) {
+                setMensaje(`Error: ${authError.message}`);
+                return;
+            }
+
+            // Generar un ID único de tipo bigint
+
+            // Inserción en la tabla 'usuarios'
+            const { error: dbError } = await supabase.from('usuarios').insert([
+                {
+
+                    email: correo,
+                    nombre: nombre,
+                },
+            ]);
+
+            if (dbError) {
+                setMensaje(`Error al guardar en la base de datos: ${dbError.message}`);
+                return;
+            }
+
+            setMensaje('Registro exitoso. Por favor, verifica tu correo electrónico.');
+        } catch (error) {
+            setMensaje(`Error inesperado: ${error.message}`);
+        }
+    };
+
     const manejarSubmit = (evento) => {
         evento.preventDefault();
-        console.log('Formulario enviado:', DatosFormulario);
+        registrarUsuario();
     };
 
     return (
@@ -86,6 +125,9 @@ const RegistroComponente = () => {
                         InputLabelProps={{
                             style: { color: "white", fontSize: "14px" },
                         }}
+                        InputProps={{
+                            style: { color: "white" }, // Cambiar el color del texto a blanco
+                        }}
                         sx={{
                             backgroundColor: "black",
                             color: "white",
@@ -102,16 +144,19 @@ const RegistroComponente = () => {
                 </Box>
 
                 <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                    <Typography sx={{ color: "white", marginBottom: 1 }}>Usuario</Typography>
+                    <Typography sx={{ color: "white", marginBottom: 1 }}>Nombre</Typography>
                     <TextField
                         variant="outlined"
                         fullWidth
                         required
-                        name="usuario"
-                        value={DatosFormulario.usuario}
+                        name="nombre"
+                        value={DatosFormulario.nombre}
                         onChange={manejarInputs}
                         InputLabelProps={{
                             style: { color: "white", fontSize: "14px" },
+                        }}
+                        InputProps={{
+                            style: { color: "white" }, // Cambiar el color del texto a blanco
                         }}
                         sx={{
                             backgroundColor: "black",
@@ -127,6 +172,7 @@ const RegistroComponente = () => {
                         }}
                     />
                 </Box>
+
 
                 <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
                     <Typography sx={{ color: "white", marginBottom: 1 }}>Contraseña</Typography>
@@ -140,6 +186,9 @@ const RegistroComponente = () => {
                         onChange={manejarInputs}
                         InputLabelProps={{
                             style: { color: "white", fontSize: "14px" },
+                        }}
+                        InputProps={{
+                            style: { color: "white" }, // Cambiar el color del texto a blanco
                         }}
                         sx={{
                             backgroundColor: "black",
@@ -174,6 +223,16 @@ const RegistroComponente = () => {
                 >
                     Registrarse
                 </Button>
+
+                {mensaje && (
+                    <Typography
+                        variant="body2"
+                        sx={{ color: mensaje.startsWith('Error') ? 'red' : 'green', marginTop: 2 }}
+                    >
+                        {mensaje}
+                    </Typography>
+                )}
+
                 <Box
                     sx={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 2 }}>
                     <Typography variant="body2" sx={{ color: "white", marginRight: 1 }}>

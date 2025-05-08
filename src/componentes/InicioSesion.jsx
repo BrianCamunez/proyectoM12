@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from "@mui/material";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { supabase } from '../supabase/supabase';
 
 const InicioSesion = () => {
     const [DatosFormulario, setDatosFormulario] = useState({
@@ -9,17 +10,34 @@ const InicioSesion = () => {
     });
 
     const manejarInputs = (eventos) => {
-        const { nombre, valor } = eventos.target;
+        const { name, value } = eventos.target; // Cambiar 'nombre' y 'valor' por 'name' y 'value'
         setDatosFormulario({
             ...DatosFormulario,
-            [nombre]: valor,
+            [name]: value,
         });
     };
 
-    const manejarSubmit = (evento) => {
+    const manejarSubmit = async (evento) => {
         evento.preventDefault();
-        // Aquí puedes manejar el envío de los datos del formulario
-        console.log('Formulario enviado:', DatosFormulario);
+        const { correo, password } = DatosFormulario;
+
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: correo,
+                password: password,
+            });
+
+            if (error) {
+                console.error('Error al iniciar sesión:', error.message);
+                alert(`Error: ${error.message}`);
+            } else {
+                console.log('Inicio de sesión exitoso:', data);
+                alert('Inicio de sesión exitoso');
+            }
+        } catch (error) {
+            console.error('Error inesperado:', error.message);
+            alert(`Error inesperado: ${error.message}`);
+        }
     };
 
     return (
@@ -83,6 +101,9 @@ const InicioSesion = () => {
                         InputLabelProps={{
                             style: { color: "white", fontSize: "14px" },
                         }}
+                        InputProps={{
+                            style: { color: "white" },
+                        }}
                         sx={{
                             backgroundColor: "black", // Fondo negro
                             color: "white", // Texto blanco
@@ -111,6 +132,9 @@ const InicioSesion = () => {
                         onChange={manejarInputs}
                         InputLabelProps={{
                             style: { color: "white", fontSize: "14px" },
+                        }}
+                        InputProps={{
+                            style: { color: "white" },
                         }}
                         sx={{
                             backgroundColor: "black", // Fondo negro
@@ -143,6 +167,7 @@ const InicioSesion = () => {
                             backgroundColor: "#E81D50",
                         },
                     }}
+                    onClick={manejarSubmit}
                 >
                     Iniciar sesión
                 </Button>
