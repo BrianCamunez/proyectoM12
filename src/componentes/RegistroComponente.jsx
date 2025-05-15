@@ -34,19 +34,6 @@ const RegistroComponente = () => {
                 return;
             }
 
-            // Crear un bucket único para el usuario
-            const userId = authData.user.id; // ID único del usuario
-            const bucketName = `user-${userId}`;
-
-            const { error: bucketError } = await supabase.storage.createBucket(bucketName, {
-                public: false, // Opcional: Hazlo privado si solo el usuario debe acceder
-            });
-
-            if (bucketError) {
-                setMensaje(`Error al crear el bucket: ${bucketError.message}`);
-                return;
-            }
-
             // Inserción en la tabla 'usuarios'
             const { error: dbError } = await supabase.from('usuarios').insert([
                 {

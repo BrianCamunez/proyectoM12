@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from "@mui/material";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabase';
 
 const InicioSesion = () => {
+
+    const cambiar = useNavigate();
+
     const [DatosFormulario, setDatosFormulario] = useState({
         correo: '',
         password: '',
@@ -30,10 +33,13 @@ const InicioSesion = () => {
             if (error) {
                 console.error('Error al iniciar sesión:', error.message);
                 alert(`Error: ${error.message}`);
-            } else {
-                console.log('Inicio de sesión exitoso:', data);
-                alert('Inicio de sesión exitoso');
+                return;
             }
+
+
+            console.log('Inicio de sesión exitoso');
+            cambiar('/'); // Redirigir al usuario a la página principal
+            
         } catch (error) {
             console.error('Error inesperado:', error.message);
             alert(`Error inesperado: ${error.message}`);
