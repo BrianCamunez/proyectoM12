@@ -21,37 +21,49 @@ const RegistroComponente = () => {
     };
 
     const registrarUsuario = async () => {
-        const { correo, password, nombre } = DatosFormulario;
-        try {
-            // Registro en la autenticación de Supabase
-            const { data: authData, error: authError } = await supabase.auth.signUp({
-                email: correo,
-                password: password,
-            });
+    const { correo, password, nombre } = DatosFormulario;
+    try {
+        // Primero creamos la carpeta
+        const folderPath = `${nombre}/.keep`;
+        const { error: storageError } = await supabase.storage
+            .from('users')
+            .upload(folderPath, new Blob([''], { type: 'text/plain' }));
 
-            if (authError) {
-                setMensaje(`Error: ${authError.message}`);
-                return;
-            }
-
-            // Inserción en la tabla 'usuarios'
-            const { error: dbError } = await supabase.from('usuarios').insert([
-                {
-                    email: correo,
-                    nombre: nombre,
-                },
-            ]);
-
-            if (dbError) {
-                setMensaje(`Error al guardar en la base de datos: ${dbError.message}`);
-                return;
-            }
-
-            setMensaje('Registro exitoso. Por favor, verifica tu correo electrónico.');
-        } catch (error) {
-            setMensaje(`Error inesperado: ${error.message}`);
+        if (storageError && !storageError.message.includes('already exists')) {
+            console.error('Error al crear la carpeta del usuario:', storageError.message);
+            setMensaje(`Error al crear la carpeta del usuario: ${storageError.message}`);
+            return;
         }
-    };
+
+        // Luego registramos el usuario
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: correo,
+            password: password,
+        });
+
+        if (authError) {
+            setMensaje(`Error: ${authError.message}`);
+            return;
+        }
+
+        // Finalmente insertamos en la tabla 'usuarios'
+        const { error: dbError } = await supabase.from('usuarios').insert([
+            {
+                email: correo,
+                nombre: nombre,
+            },
+        ]);
+
+        if (dbError) {
+            setMensaje(`Error al guardar en la base de datos: ${dbError.message}`);
+            return;
+        }
+
+        setMensaje('Registro exitoso. Por favor, verifica tu correo electrónico.');
+    } catch (error) {
+        setMensaje(`Error inesperado: ${error.message}`);
+    }
+};
 
     const manejarSubmit = (evento) => {
         evento.preventDefault();
