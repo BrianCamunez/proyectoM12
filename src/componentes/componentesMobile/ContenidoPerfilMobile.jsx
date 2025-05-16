@@ -1,10 +1,86 @@
+import { useEffect, useState } from 'react';
 import { Box, Button } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../supabase/supabase';
 
 const ContenidoPerfilMobile = () => {
+
+    const [userName, setUserName] = useState("");
+
+    const [avatarUrl, setAvatarUrl] = useState("");
+
+    useEffect(() => {
+
+        const getUserName = async () =>{
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                console.log("User data:", user);
+                if (user) {
+                    const { data, error } = await supabase
+                        .from("usuarios")
+                        .select("nombre")
+                        .eq("email", user.email) // Comparar por correo en lugar de ID
+                        .single();
+
+                    if (error) throw error;
+                    if (data) setUserName(data.nombre);
+                    console.log("Nombre de usuario:", data.nombre);
+                
+                }
+            } catch (error) {
+                console.error("Error fetching user name:", error.message);
+            }
+        }
+
+        getUserName();
+    }, []);
+
+    const mirarCambiarImagen = async (event) => {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            try {
+                // Crear un nombre único para la imagen
+                const fileExt = file.name.split('.').pop();
+                const fileName = `avatar.${fileExt}`;
+                const filePath = `${userName}/${fileName}`;
+
+                // Subir la imagen a Supabase Storage
+                const { error: uploadError } = await supabase.storage
+                    .from('users')
+                    .upload(filePath, file, {
+                        upsert: true // Sobrescribir si existe
+                    });
+
+                if (uploadError) throw uploadError;
+
+                // Obtener la URL pública de la imagen
+                const { data: { publicUrl } } = supabase.storage
+                    .from('users')
+                    .getPublicUrl(filePath);
+
+                // Actualizar el avatar en la tabla usuarios
+                const { error: updateError } = await supabase
+                    .from('usuarios')
+                    .update({ avatar: publicUrl })
+                    .eq('nombre', userName);
+
+                if (updateError) throw updateError;
+
+                console.log('Imagen subida exitosamente');
+                // Aquí podrías actualizar la UI para mostrar la nueva imagen
+                
+            } catch (error) {
+                console.error('Error al subir la imagen:', error.message);
+                alert('Error al subir la imagen');
+            }
+        } else {
+            alert("Por favor selecciona una imagen");
+        }
+    };
+
 
     const navigate = useNavigate();
 
@@ -18,15 +94,6 @@ const ContenidoPerfilMobile = () => {
 
     }
 
-    const mirarCambiarImagen = (event) => {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            console.log("Imagen seleccionada:", file);
-        } else {
-            alert("Por favor selecciona una imagen");
-        }
-    }
-
     return (
         <>
             <Box mx={2} rowGap={4} flexDirection={"column"} display={"flex"} mt={2}>
@@ -35,7 +102,7 @@ const ContenidoPerfilMobile = () => {
                 </Box>
                 <Box display={"flex"} alignItems="center" gap={3}>
                     <Box position="relative">
-                        <Box component={"img"}  src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"150px"} height={"150px"} borderRadius={"50%"} onClick={mirarImagenClick} sx={{ cursor: "pointer" }}/>
+                        <Box component={"img"}  src={avatarUrl || "https://definicion.com/wp-content/uploads/2022/09/imagen.jpg"} width={"150px"} height={"150px"} borderRadius={"50%"} onClick={mirarImagenClick} sx={{ cursor: "pointer" }}/>
                         <input type="file" id="imagenInput" hidden accept="image/*" onChange={mirarCambiarImagen}/>
                     </Box>
                     <Box>
