@@ -15,6 +15,7 @@ import ContenidoPlaylistMobile from "./componentes/componentesMobile/ContenidoPl
 import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCantanteMobile";
 import ContenidoBibliotecaMobile from "./componentes/componentesMobile/ContenidoBibliotecaMobile";
 import ContenidoExplorarMobile from "./componentes/componentesMobile/ContenidoExplorarMobile";
+import ContenidoPerfilMobile from "./componentes/componentesMobile/ContenidoPerfilMobile";
 
 function App() {
   const theme = useTheme();
@@ -99,6 +100,7 @@ function App() {
           }
         />
          <Route path="/explorarMobile" element={<ContenidoExplorarMobile />} />
+         <Route path="/perfilMobile" element={<ContenidoPerfilMobile />} />
       </Routes>
     </Box>
   );
