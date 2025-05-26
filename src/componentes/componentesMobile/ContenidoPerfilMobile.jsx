@@ -13,29 +13,31 @@ const ContenidoPerfilMobile = () => {
     const [avatarUrl, setAvatarUrl] = useState("");
 
     useEffect(() => {
-
-        const getUserName = async () =>{
+        const getUserData = async () => {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 console.log("User data:", user);
                 if (user) {
                     const { data, error } = await supabase
                         .from("usuarios")
-                        .select("nombre")
-                        .eq("email", user.email) // Comparar por correo en lugar de ID
+                        .select("nombre, avatar")
+                        .eq("email", user.email) // Comparar por correo
                         .single();
 
                     if (error) throw error;
-                    if (data) setUserName(data.nombre);
-                    console.log("Nombre de usuario:", data.nombre);
-                
+
+                    if (data) {
+                        setUserName(data.nombre);
+                        setAvatarUrl(data.avatar); // Aquí actualizas la imagen
+                        console.log("Nombre:", data.nombre, "Avatar:", data.avatar);
+                    }
                 }
             } catch (error) {
-                console.error("Error fetching user name:", error.message);
+                console.error("Error fetching user data:", error.message);
             }
         }
 
-        getUserName();
+        getUserData();
     }, []);
 
     const mirarCambiarImagen = async (event) => {
@@ -71,7 +73,7 @@ const ContenidoPerfilMobile = () => {
 
                 console.log('Imagen subida exitosamente');
                 // Aquí podrías actualizar la UI para mostrar la nueva imagen
-                
+
             } catch (error) {
                 console.error('Error al subir la imagen:', error.message);
                 alert('Error al subir la imagen');
@@ -102,8 +104,8 @@ const ContenidoPerfilMobile = () => {
                 </Box>
                 <Box display={"flex"} alignItems="center" gap={3}>
                     <Box position="relative">
-                        <Box component={"img"}  src={avatarUrl || "https://definicion.com/wp-content/uploads/2022/09/imagen.jpg"} width={"150px"} height={"150px"} borderRadius={"50%"} onClick={mirarImagenClick} sx={{ cursor: "pointer" }}/>
-                        <input type="file" id="imagenInput" hidden accept="image/*" onChange={mirarCambiarImagen}/>
+                        <Box component={"img"} src={avatarUrl} width={"150px"} height={"150px"} borderRadius={"50%"} onClick={mirarImagenClick} sx={{ cursor: "pointer" }} />
+                        <input type="file" id="imagenInput" hidden accept="image/*" onChange={mirarCambiarImagen} />
                     </Box>
                     <Box>
                         <Box>Shikanoko</Box>
