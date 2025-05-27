@@ -24,6 +24,8 @@ const ContenidoGeneroMobile = () => {
     const [openOptionsModal, setOpenOptionsModal] = useState(false);
     const [selectedSong, setSelectedSong] = useState(null);
     const [showOptionsContent, setShowOptionsContent] = useState(false);
+    const [selectedSongId, setSelectedSongId] = useState(null);
+
 
     const handleCloseOptionsModal = () => {
         setShowOptionsContent(false);
@@ -32,6 +34,33 @@ const ContenidoGeneroMobile = () => {
             setSelectedSong(null);
         }, 300); // tiempo para permitir que Slide se cierre con animación
     };
+
+    // Modal para seleccionar playlist
+    const [openSelectPlaylistModal, setOpenSelectPlaylistModal] = useState(false);
+    const [playlistsUsuario, setPlaylistsUsuario] = useState([]);
+
+    const fetchUserPlaylists = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        const { data: usuario } = await supabase
+            .from("usuarios")
+            .select("id")
+            .eq("email", user.email)
+            .single();
+
+        const { data, error } = await supabase
+            .from("playlist")
+            .select("id, nombre, imagen")
+            .eq("id_usuario", usuario.id);
+
+        if (!error) {
+            setPlaylistsUsuario(data);
+        } else {
+            console.error("Error cargando playlists:", error);
+        }
+    };
+
+
 
 
     const handleBackClick = () => navigate(-1);
@@ -63,6 +92,51 @@ const ContenidoGeneroMobile = () => {
             </Box>
         );
     }
+
+    const añadirCancionAPlaylist = async (playlistId, cancionId) => {
+        if (!cancionId) {
+            alert("No se pudo identificar la canción.");
+            return;
+        }
+
+        try {
+            const { data: existente, error: selectError } = await supabase
+                .from("canciones_playlist")
+                .select("id")
+                .eq("playlist_id", playlistId)
+                .eq("cancion_id", cancionId)
+                .maybeSingle();
+
+            if (selectError) {
+                alert("Error SELECT: " + selectError.message);
+                return;
+            }
+
+            if (existente) {
+                alert("La canción ya está en esta playlist.");
+                setOpenSelectPlaylistModal(false);
+                return;
+            }
+
+            const { error: insertError } = await supabase
+                .from("canciones_playlist")
+                .insert({
+                    playlist_id: playlistId,
+                    cancion_id: cancionId,
+                });
+
+            if (insertError) {
+                alert("Error INSERT: " + insertError.message);
+            } else {
+                alert("Canción añadida correctamente.");
+                setOpenSelectPlaylistModal(false);
+            }
+        } catch (err) {
+            console.error("ERROR inesperado:", err);
+            alert("Error inesperado: " + err.message);
+        }
+    };
+
 
     return (
         <>
@@ -175,7 +249,14 @@ const ContenidoGeneroMobile = () => {
                             gap={2}
                             py={1}
                             sx={{ cursor: "pointer" }}
-                            onClick={handleCloseOptionsModal}
+                            onClick={async () => {
+                                setSelectedSongId(selectedSong.id); // 💾 guardar solo el ID
+                                await fetchUserPlaylists();
+                                setOpenSelectPlaylistModal(true);
+                                handleCloseOptionsModal(); // esto sí puede limpiar selectedSong ahora
+                            }}
+
+
                         >
                             <AddCircleOutlineIcon sx={{ fontSize: 30 }} />
                             <Box>
@@ -235,6 +316,68 @@ const ContenidoGeneroMobile = () => {
                     </Box>
                 </Slide>
             </Modal>
+            <Modal
+                open={openSelectPlaylistModal}
+                onClose={() => setOpenSelectPlaylistModal(false)}
+                sx={{ zIndex: 1400 }}
+            >
+                <Box
+                    sx={{
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        bgcolor: "#121212",
+                        color: "white",
+                        p: 3,
+                        borderRadius: 2,
+                        width: "90%",
+                        maxWidth: 400,
+                    }}
+                >
+                    <Typography fontWeight="bold" fontSize={18} mb={2}>
+                        Selecciona una playlist
+                    </Typography>
+
+                    {playlistsUsuario.length === 0 ? (
+                        <Typography>No has creado playlists aún.</Typography>
+                    ) : (
+                        playlistsUsuario.map((playlist) => (
+                            <Box
+                                key={playlist.id}
+                                onClick={() => {
+                                    añadirCancionAPlaylist(playlist.id, selectedSongId);
+                                }}
+
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 2,
+                                    py: 1.5,
+                                    borderBottom: "1px solid #333",
+                                    cursor: "pointer",
+                                    "&:hover": { backgroundColor: "#1a1a1a" },
+                                }}
+                            >
+                                <Box
+                                    component="img"
+                                    src={playlist.imagen || "https://via.placeholder.com/50"}
+                                    alt="imagen"
+                                    sx={{
+                                        width: 50,
+                                        height: 50,
+                                        borderRadius: 1,
+                                        objectFit: "cover",
+                                    }}
+                                />
+                                <Typography fontWeight="500">{playlist.nombre}</Typography>
+                            </Box>
+                        ))
+
+                    )}
+                </Box>
+            </Modal>
+
 
         </>
     );

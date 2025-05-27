@@ -18,6 +18,8 @@ const ContenidoPlaylistMobile = () => {
     const navigate = useNavigate();
     const [playlist, setPlaylist] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [canciones, setCanciones] = useState([]);
+
 
     const handleBackClick = () => navigate(-1);
 
@@ -39,6 +41,24 @@ const ContenidoPlaylistMobile = () => {
         };
 
         fetchPlaylist();
+
+        const fetchCanciones = async () => {
+            const { data, error } = await supabase
+                .from("canciones_playlist")
+                .select("cancion_id, canciones ( id, nombre, imagen, usuarios ( nombre ) )")
+                .eq("playlist_id", id);
+
+            if (error) {
+                console.error("Error al obtener canciones de la playlist:", error);
+            } else {
+                const cancionesFormateadas = data.map((item) => item.canciones);
+                setCanciones(cancionesFormateadas);
+            }
+        };
+
+        fetchCanciones();
+
+
     }, [id]);
 
     if (loading || !playlist) {
@@ -75,7 +95,26 @@ const ContenidoPlaylistMobile = () => {
                             </Box>
                         </Box>
 
-                        {/* Aquí podés renderizar canciones si las tenés relacionadas */}
+                        <Box>
+                            {canciones.map((cancion) => (
+                                <Box key={cancion.id} display={"flex"} py={1} justifyContent={"space-between"} alignItems={"center"}>
+                                    <Box display={"flex"} alignItems={"center"}>
+                                        <Box component="img" src={cancion.imagen} width={"40px"} height={"40px"} borderRadius={2} />
+                                        <Box ml={1}>
+                                            <Typography>{cancion.nombre}</Typography>
+                                            <Typography variant="body2" color="#b3b3b3">
+                                                {cancion.usuarios?.nombre || "Artista desconocido"}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box>
+                                        <CheckCircleIcon sx={{ paddingRight: 2, fontSize: "16px" }} />
+                                        <MoreHorizIcon sx={{ fontSize: '16px' }} />
+                                    </Box>
+                                </Box>
+                            ))}
+                        </Box>
+
 
                         <Box py={2}>También puede que te gusten</Box>
                         <Box sx={{ flexGrow: 1, paddingTop: 1 }}>
