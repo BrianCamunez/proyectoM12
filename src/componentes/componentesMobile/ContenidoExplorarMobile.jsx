@@ -1,37 +1,30 @@
-import { Box, Grid, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Typography, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from "react";
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
+import { supabase } from "../../supabase/supabase"; // asegúrate que esté el import correcto
+import { useNavigate } from "react-router-dom";
 
 const ContenidoExplorarMobile = () => {
+    const [generos, setGeneros] = useState([]);
+    const navigate = useNavigate();
 
-    const cardData = [
-        { color: "#761212", text: "Musica 1" },
-        { color: "#767612", text: "Musica 2" },
-        { color: "#761276", text: "Musica 3" },
-        { color: "#161246", text: "Musica 4" },
-        { color: "#768912", text: "Musica 1" },
-        { color: "#767689", text: "Musica 2" },
-        { color: "#131970", text: "Musica 3" },
-        { color: "#168901", text: "Musica 4" },
-        { color: "#12a68f", text: "Musica 1" },
-        { color: "#98f", text: "Musica 2" },
-        { color: "#654a1a", text: "Musica 3" },
-        { color: "#4c190a", text: "Musica 4" },
-        { color: "#12a68f", text: "Musica 1" },
-        { color: "#98f", text: "Musica 2" },
-        { color: "#654a1a", text: "Musica 3" },
-        { color: "#4c190a", text: "Musica 4" },
-        { color: "#12a68f", text: "Musica 1" },
-        { color: "#98f", text: "Musica 2" },
-        { color: "#654a1a", text: "Musica 3" },
-        { color: "#4c190a", text: "Musica 4" },
-        { color: "#12a68f", text: "Musica 1" },
-        { color: "#98f", text: "Musica 2" },
-        { color: "#654a1a", text: "Musica 3" },
-        { color: "#4c190a", text: "Musica 4" },
-    ]
+    useEffect(() => {
+        const fetchGeneros = async () => {
+            const { data, error } = await supabase
+                .from("canciones")
+                .select("genero")
+                .neq("genero", null); // excluir los nulos
+
+            if (error) {
+                console.error("Error al obtener géneros:", error);
+            } else {
+                const generosUnicos = [...new Set(data.map(item => item.genero))];
+                setGeneros(generosUnicos);
+            }
+        };
+
+        fetchGeneros();
+    }, []);
 
     return (
         <>
@@ -39,60 +32,52 @@ const ContenidoExplorarMobile = () => {
                 <Box sx={{ backgroundColor: "white" }} mx={2} borderRadius={2} padding={1} display={"flex"} alignItems="center">
                     <TextField
                         fullWidth
-                        variant="standard"  // Sin borde
+                        variant="standard"
                         placeholder="¿Qué te apetece escuchar?"
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon sx={{ fontSize: 30 }} /> {/* Ícono más grande */}
+                                    <SearchIcon sx={{ fontSize: 30 }} />
                                 </InputAdornment>
                             ),
                         }}
                         sx={{
-                            input: {
-                                fontSize: 18,  // Texto más grande
-                            },
-                            "& .MuiInput-underline:before": {
-                                borderBottom: "none",  // Eliminar la línea de abajo del borde cuando no está enfocado
-                            },
-                            "& .MuiInput-underline:after": {
-                                borderBottom: "none",  // Eliminar la línea de abajo del borde cuando está enfocado
-                            },
-                            "& .Mui-focused .MuiInput-underline:after": {
-                                borderBottom: "none", // Asegura que no aparezca una línea cuando está enfocado
-                            },
-                            "& .MuiInputBase-root": {
-                                display: 'flex',
-                                alignItems: 'center', // Centra verticalmente el ícono y el texto
-                            },
+                            input: { fontSize: 18 },
+                            "& .MuiInput-underline:before": { borderBottom: "none" },
+                            "& .MuiInput-underline:after": { borderBottom: "none" },
+                            "& .Mui-focused .MuiInput-underline:after": { borderBottom: "none" },
+                            "& .MuiInputBase-root": { display: 'flex', alignItems: 'center' },
                         }}
                     />
                 </Box>
-                <Box>
-                    <Typography variant="h5" fontWeight={600} paddingTop={2} paddingBottom={1} color={"white"}>
-                        Explorar todo
-                    </Typography>
-                    <Box px={2} paddingTop={2}>
-      <Grid container spacing={2}>
-        {cardData.map((_, index) => (
-          <Grid item xs={4} key={index}>
-            <Box
-              sx={{
-                backgroundColor: 'blue', // Fondo de color
-                padding: 2,
-                display: 'flex',
-                height: '50px', // Altura fija
-                borderRadius: 2,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Typography sx={{ color: 'white' }}>Texto {index + 1}</Typography>
-            </Box>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+
+                <Typography variant="h5" fontWeight={600} paddingTop={2} paddingBottom={1} color={"white"} ml={2}>
+                    Explorar todo
+                </Typography>
+
+                <Box px={2} paddingTop={2}>
+                    <Grid container spacing={2}>
+                        {generos.map((genero, index) => (
+                            <Grid item xs={4} key={index}>
+                                <Box
+                                    sx={{
+                                        backgroundColor: '#1DB954',
+                                        padding: 2,
+                                        height: '50px',
+                                        borderRadius: 2,
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        textAlign: 'center',
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => navigate(`/genero/${encodeURIComponent(genero)}`)}
+                                >
+                                    <Typography sx={{ color: 'white', fontSize: 14 }}>{genero}</Typography>
+                                </Box>
+                            </Grid>
+                        ))}
+                    </Grid>
                 </Box>
             </Box>
         </>

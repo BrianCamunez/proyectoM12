@@ -16,6 +16,7 @@ import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCa
 import ContenidoBibliotecaMobile from "./componentes/componentesMobile/ContenidoBibliotecaMobile";
 import ContenidoExplorarMobile from "./componentes/componentesMobile/ContenidoExplorarMobile";
 import ContenidoPerfilMobile from "./componentes/componentesMobile/ContenidoPerfilMobile";
+import ContenidoGeneroMobile from "./componentes/componentesMobile/ContenidoGeneroMobile";
 
 function App() {
   const theme = useTheme();
@@ -78,7 +79,7 @@ function App() {
           }
         />
         <Route
-          path="/playlistMobile"
+          path="/playlistMobile/:id"
           element={
             <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={600}>
               <div style={{ width: "100%", height: "100%" }}>
@@ -101,6 +102,7 @@ function App() {
         />
          <Route path="/explorarMobile" element={<ContenidoExplorarMobile />} />
          <Route path="/perfilMobile" element={<ContenidoPerfilMobile />} />
+         <Route path="/genero/:nombre" element={<ContenidoGeneroMobile/>} />
       </Routes>
     </Box>
   );
