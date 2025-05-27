@@ -53,6 +53,14 @@ const MenuAbajoMobile = () => {
         mp3: null,
     });
 
+    const [openPlaylistModal, setOpenPlaylistModal] = useState(false);
+    const [playlistData, setPlaylistData] = useState({
+        nombre: "",
+        descripcion: "",
+        imagen: null,
+    });
+
+
     return (
         <>
             <Box display="flex" width="100%" justifyContent="space-around" bottom={0} position="absolute" paddingY={1} sx={{ backgroundColor: "black", opacity: 0.97 }}>
@@ -103,13 +111,24 @@ const MenuAbajoMobile = () => {
                     >
                         <Typography fontWeight="bold" fontSize={18} mb={2}>Crear nuevo</Typography>
 
-                        <Box display="flex" alignItems="center" gap={2} py={1}>
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            gap={2}
+                            py={1}
+                            sx={{ cursor: "pointer" }}
+                            onClick={() => {
+                                handleClose();
+                                setOpenPlaylistModal(true);
+                            }}
+                        >
                             <LibraryMusicIcon sx={{ fontSize: 30 }} />
                             <Box>
-                                <Typography fontWeight="bold">Lista</Typography>
-                                <Typography fontSize={13} color="#b3b3b3">Crea una lista con canciones o episodios</Typography>
+                                <Typography fontWeight="bold">Playlist</Typography>
+                                <Typography fontSize={13} color="#b3b3b3">Crea una playlist personalizada</Typography>
                             </Box>
                         </Box>
+
 
                         {userRole === "artista" && (
                             <Box display="flex" alignItems="center" gap={2} py={1} sx={{ cursor: "pointer" }} onClick={handleOpenSongModal}>
@@ -293,6 +312,168 @@ const MenuAbajoMobile = () => {
                     </Box>
                 </Box>
             </Modal>
+            <Modal open={openPlaylistModal} onClose={() => setOpenPlaylistModal(false)}>
+                <Box
+                    sx={{
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        bgcolor: "#121212",
+                        color: "white",
+                        p: 4,
+                        borderRadius: "16px",
+                        width: "90%",
+                        maxWidth: "400px",
+                        boxShadow: 24,
+                    }}
+                >
+                    <Typography fontWeight="bold" fontSize={18} mb={2}>Crear Playlist</Typography>
+
+                    <Box mb={2}>
+                        <Typography fontSize={14} mb={1}>Nombre</Typography>
+                        <input
+                            type="text"
+                            value={playlistData.nombre}
+                            onChange={(e) => setPlaylistData({ ...playlistData, nombre: e.target.value })}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                outline: "none",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                            }}
+                        />
+                    </Box>
+
+                    <Box mb={2}>
+                        <Typography fontSize={14} mb={1}>Descripción</Typography>
+                        <textarea
+                            value={playlistData.descripcion}
+                            onChange={(e) => setPlaylistData({ ...playlistData, descripcion: e.target.value })}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                borderRadius: "8px",
+                                border: "none",
+                                outline: "none",
+                                backgroundColor: "#2a2a2a",
+                                color: "white",
+                                height: "80px",
+                                resize: "none",
+                            }}
+                        />
+                    </Box>
+
+                    <Box mb={2}>
+                        <Typography fontSize={14} mb={1}>Imagen de portada (opcional)</Typography>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setPlaylistData({ ...playlistData, imagen: e.target.files[0] })}
+                            style={{ color: "white" }}
+                        />
+                    </Box>
+
+                    <Box mt={3} display="flex" justifyContent="space-between">
+                        <button
+                            onClick={() => setOpenPlaylistModal(false)}
+                            style={{
+                                padding: "10px 20px",
+                                backgroundColor: "#333",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "8px",
+                            }}
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            onClick={async () => {
+                                try {
+                                    const { nombre, descripcion, imagen } = playlistData;
+
+                                    if (!nombre.trim()) {
+                                        alert("El nombre es obligatorio.");
+                                        return;
+                                    }
+
+                                    const { data: { user } } = await supabase.auth.getUser();
+                                    const { data: usuarioData, error: usuarioError } = await supabase
+                                        .from("usuarios")
+                                        .select("id")
+                                        .eq("email", user.email)
+                                        .single();
+
+                                    if (usuarioError || !usuarioData) throw new Error("No se encontró el usuario.");
+
+                                    const usuarioId = usuarioData.id;
+
+                                    // Crear playlist sin imagen aún
+                                    const playlistPayload = {
+                                        nombre,
+                                        descripcion,
+                                            id_usuario: usuarioId,
+                                    };
+
+                                    const { data: nuevaPlaylist, error: insertError } = await supabase
+                                        .from("playlist")
+                                        .insert(playlistPayload)
+                                        .select()
+                                        .single();
+
+
+                                    if (insertError) throw insertError;
+
+                                    let imageUrl = "";
+
+                                    // Si hay imagen, subirla
+                                    if (imagen) {
+                                        const folder = `playlist_${nuevaPlaylist.id}`;
+                                        const { data: imgUpload, error: imgError } = await supabase.storage
+                                            .from("playlist")
+                                            .upload(`${folder}/portada.jpg`, imagen, {
+                                                cacheControl: "3600",
+                                                upsert: true,
+                                            });
+
+                                        if (imgError) throw imgError;
+
+                                        imageUrl = supabase.storage
+                                            .from("playlist")
+                                            .getPublicUrl(`${folder}/portada.jpg`).data.publicUrl;
+
+                                        // Actualizar imagen en playlist
+                                        await supabase
+                                            .from("playlist")
+                                            .update({ imagen: imageUrl })
+                                            .eq("id", nuevaPlaylist.id);
+                                    }
+
+                                    alert("¡Playlist creada con éxito!");
+                                    setPlaylistData({ nombre: "", descripcion: "", imagen: null });
+                                    setOpenPlaylistModal(false);
+                                } catch (err) {
+                                    console.error(err);
+                                    alert("Error al crear playlist: " + err.message);
+                                }
+                            }}
+                            style={{
+                                padding: "10px 20px",
+                                backgroundColor: "#1DB954",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "8px",
+                            }}
+                        >
+                            Crear
+                        </button>
+                    </Box>
+                </Box>
+            </Modal>
+
         </>
     );
 };
