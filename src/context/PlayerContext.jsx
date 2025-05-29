@@ -15,10 +15,11 @@ export const PlayerProvider = ({ children }) => {
 
   const reproducirCancion = (cancion, playlist = []) => {
     const index = playlist.findIndex((c) => c.id === cancion.id);
+    setIndiceActual(index >= 0 ? index : 0);
+
 
     setCancionActual(cancion);
     setPlaylistActual(playlist);
-    setIndiceActual(index >= 0 ? index : 0);
     setReproduciendo(true);
   };
 
@@ -31,6 +32,7 @@ export const PlayerProvider = ({ children }) => {
   };
 
   const siguiente = () => {
+
     const siguienteIndex = indiceActual + 1;
 
     if (siguienteIndex < playlistActual.length) {
@@ -94,16 +96,18 @@ export const PlayerProvider = ({ children }) => {
             autoPlay
             onEnded={() => {
               if (!audioRef.current) return;
-
               if (modoRepetir === "cancion") {
                 audioRef.current.currentTime = 0;
-                audioRef.current.play(); // 🔂 repetir la misma canción
+                audioRef.current.play();
               } else {
-                siguiente(); // va al siguiente según la lógica de arriba
+                siguiente();
               }
+
             }}
           />
         )}
+        {console.log(modoRepetir)}
+        {console.log(indiceActual)}
       </>
     </PlayerContext.Provider>
   );

@@ -1,45 +1,41 @@
 import { Box, Grid, Typography } from "@mui/material";
-import PushPinIcon from '@mui/icons-material/PushPin';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import PushPinIcon from "@mui/icons-material/PushPin";
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import { Link } from "react-router-dom";
 
-const ContenidoBibliotecaGridMobile = () => {
-
-    const canciones = Array.from({ length: 10 }, (_, index) => index);
-
+const ContenidoBibliotecaGridMobile = ({ playlists }) => {
     return (
-        <>
-            <Grid container spacing={1}>
-                <Grid item xs={4} key={0}>
-                    <Link to="/playlistMobile" style={{ textDecoration: "none", color: "white" }}>
+        <Grid container spacing={1}>
+            {/* Playlists reales del usuario */}
+            {playlists.map((playlist) => (
+                <Grid item xs={4} key={playlist.id}>
+                    <Link to={`/playlistMobile/${playlist.id}`} style={{ textDecoration: "none", color: "white" }}>
                         <Box>
-                            <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"100%"} height={"100%"} borderRadius={2} sx={{ objectFit: "cover" }} />
-                            <Box justifyContent={"center"} display={"flex"} flexDirection={"column"} paddingLeft={1}>
-                                <Box>Canciones que te gustan</Box>
-                                <Box display={"flex"} justifyContent={"center"}>
-                                    <PushPinIcon sx={{ fontSize: "18px"}}/>
-                                    <ArrowCircleDownIcon  sx={{ fontSize: "18px"}}/> Lista · 582 canciones
-                                </Box>
+                            <Box
+                                component="img"
+                                src={playlist.imagen}
+                                sx={{
+                                    width: "100%",           // toma el ancho del contenedor
+                                    aspectRatio: "1 / 1",    // asegura forma cuadrada
+                                    objectFit: "cover",      // recorta la imagen sin deformar
+                                    borderRadius: 2,
+                                }}
+                            />
+
+                            <Box mt={1} px={1}>
+                                <Typography fontWeight="bold" fontSize="14px" noWrap>
+                                    {playlist.nombre}
+                                </Typography>
+                                <Typography fontSize="12px" color="#b3b3b3" noWrap>
+                                    Lista · {playlist.usuarios?.nombre || "Tú"}
+                                </Typography>
                             </Box>
                         </Box>
                     </Link>
                 </Grid>
-                {canciones.map((_, index) => (
-                    <Grid item xs={4} key={index}>
-                        <Link to="/playlistMobile" style={{ textDecoration: "none", color: "white" }}>
-                            <Box>
-                                <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"100%"} height={"100%"} borderRadius={2} sx={{ objectFit: "cover" }} />
-                                <Box justifyContent={"center"} display={"flex"} flexDirection={"column"} paddingLeft={1}>
-                                    <Box>Canciones que te gustan</Box>
-                                    <Typography sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}> Lista · CreadorPlaylist</Typography>
-                                </Box>
-                            </Box>
-                        </Link>
-                    </Grid>
-                ))}
-            </Grid>
-        </>
-    )
-}
+            ))}
+        </Grid>
+    );
+};
 
-export default ContenidoBibliotecaGridMobile
+export default ContenidoBibliotecaGridMobile;

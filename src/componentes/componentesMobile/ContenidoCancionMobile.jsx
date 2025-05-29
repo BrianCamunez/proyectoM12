@@ -138,7 +138,6 @@ const ContenidoCancionMobile = () => {
               />
               <Box paddingLeft={1}>
                 <Box>{cancionActual.nombre}</Box>
-                {console.log("cancion actual: ", cancionActual)}
                 <Box>{cancionActual.artista}</Box>
               </Box>
             </Box>

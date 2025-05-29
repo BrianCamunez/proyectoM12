@@ -3,6 +3,8 @@ import { Box, Grid, Typography, TextField, InputAdornment } from "@mui/material"
 import SearchIcon from '@mui/icons-material/Search';
 import { supabase } from "../../supabase/supabase"; // asegúrate que esté el import correcto
 import { useNavigate } from "react-router-dom";
+import ReproductorMobile from "./ReproductorMobile";
+import MenuAbajoMobile from "./MenuAbajoMobile";
 
 const ContenidoExplorarMobile = () => {
     const [generos, setGeneros] = useState([]);
@@ -79,6 +81,8 @@ const ContenidoExplorarMobile = () => {
                         ))}
                     </Grid>
                 </Box>
+                <ReproductorMobile />
+                <MenuAbajoMobile />
             </Box>
         </>
     );
