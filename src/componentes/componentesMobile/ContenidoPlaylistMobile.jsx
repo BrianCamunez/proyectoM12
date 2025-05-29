@@ -15,7 +15,7 @@ import MenuAbajoMobile from "./MenuAbajoMobile";
 import { usePlayer } from "../../context/PlayerContext";
 
 const ContenidoPlaylistMobile = () => {
-  const { id } = useParams(); // 👈 obtenemos el ID desde la URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [playlist, setPlaylist] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -133,16 +133,25 @@ const ContenidoPlaylistMobile = () => {
                   justifyContent={"space-between"}
                   alignItems={"center"}
                   sx={{ cursor: "pointer" }}
-                  onClick={() => {
-                    reproducirCancion({
-                      id: cancion.id,
-                      nombre: cancion.nombre,
-                      artista:
-                        cancion.usuarios?.nombre || "Artista desconocido",
-                      imagen: cancion.imagen,
-                      url: cancion.cancion, // este campo contiene el enlace MP3
-                    });
-                  }}
+                  onClick={() =>
+                    reproducirCancion(
+                      {
+                        id: cancion.id,
+                        nombre: cancion.nombre,
+                        imagen: cancion.imagen,
+                        cancion: cancion.cancion,
+                        artista:
+                          cancion.usuarios?.nombre || "Artista desconocido",
+                      },
+                      canciones.map((c) => ({
+                        id: c.id,
+                        nombre: c.nombre,
+                        imagen: c.imagen,
+                        cancion: c.cancion,
+                        artista: c.usuarios?.nombre || "Artista desconocido",
+                      }))
+                    )
+                  }
                 >
                   {console.log(cancion)}
                   {console.log(cancion.cancion)}

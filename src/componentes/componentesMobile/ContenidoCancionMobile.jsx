@@ -28,6 +28,10 @@ const ContenidoCancionMobile = () => {
     reanudar,
     audioRef,
     reproducirCancion,
+    anterior,
+    siguiente,
+    modoRepetir,
+    toggleModoRepetir,
   } = usePlayer();
 
   const [artistaInfo, setArtistaInfo] = useState(null);
@@ -56,7 +60,7 @@ const ContenidoCancionMobile = () => {
   }
 
   const handleBackClick = () => {
-    navigate(-1); 
+    navigate(-1);
   };
 
   const formatSeconds = (s) => {
@@ -134,6 +138,7 @@ const ContenidoCancionMobile = () => {
               />
               <Box paddingLeft={1}>
                 <Box>{cancionActual.nombre}</Box>
+                {console.log("cancion actual: ", cancionActual)}
                 <Box>{cancionActual.artista}</Box>
               </Box>
             </Box>
@@ -143,18 +148,41 @@ const ContenidoCancionMobile = () => {
             </Box>
           </Box>
           <Box pt={1}>
-            <LinearProgress
-              variant="determinate"
-              value={(progreso / duracion) * 100 || 0}
+            <Box
               sx={{
-                height: 6,
+                position: "relative",
+                width: "100%",
+                height: 8,
                 borderRadius: 5,
                 backgroundColor: "#2a2a2a",
-                "& .MuiLinearProgress-bar": {
-                  backgroundColor: "#ff4081",
-                },
+                cursor: "pointer",
               }}
-            />
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                const ratio = clickX / width;
+
+                const newTime = ratio * duracion;
+                if (audioRef.current) {
+                  audioRef.current.currentTime = newTime;
+                  setProgreso(newTime);
+                }
+              }}
+            >
+              <LinearProgress
+                variant="determinate"
+                value={(progreso / duracion) * 100 || 0}
+                sx={{
+                  height: "100%",
+                  borderRadius: 5,
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: "#ff4081",
+                  },
+                  backgroundColor: "transparent",
+                }}
+              />
+            </Box>
 
             <Box
               display="flex"
@@ -173,7 +201,9 @@ const ContenidoCancionMobile = () => {
             sx={{ fontSize: "35px" }}
           >
             <ShuffleIcon fontSize="" />
-            <SkipPreviousIcon fontSize="" />
+            <IconButton onClick={anterior}>
+              <SkipPreviousIcon sx={{ fontSize: 30, color: "white" }} />
+            </IconButton>
             <IconButton onClick={reproduciendo ? pausar : reanudar}>
               {reproduciendo ? (
                 <PauseIcon sx={{ fontSize: 40, color: "white" }} />
@@ -182,8 +212,38 @@ const ContenidoCancionMobile = () => {
               )}
             </IconButton>
 
-            <SkipNextIcon fontSize="" />
-            <RepeatIcon fontSize="" />
+            <IconButton onClick={siguiente}>
+              <SkipNextIcon sx={{ fontSize: 30, color: "white" }} />
+            </IconButton>
+
+            <IconButton onClick={toggleModoRepetir}>
+              <RepeatIcon
+                sx={{
+                  color:
+                    modoRepetir === "off"
+                      ? "white"
+                      : modoRepetir === "playlist"
+                      ? "#ff4081"
+                      : "#ff4081",
+                  transform:
+                    modoRepetir === "cancion" ? "rotate(0deg)" : "none",
+                }}
+              />
+              {modoRepetir === "cancion" && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    fontSize: 10,
+                    top: 4,
+                    right: 4,
+                    fontWeight: "bold",
+                    color: "#ff4081",
+                  }}
+                >
+                  1
+                </Box>
+              )}
+            </IconButton>
           </Box>
           <Box display={"flex"} justifyContent={"space-between"} pt={1}>
             <Box display={"flex"}>
@@ -223,13 +283,16 @@ const ContenidoCancionMobile = () => {
               <Box
                 key={rel.id}
                 onClick={() =>
-                  reproducirCancion({
-                    id: rel.id,
-                    nombre: rel.nombre,
-                    artista: cancionActual.artista,
-                    imagen: rel.imagen,
-                    url: rel.cancion,
-                  })
+                  reproducirCancion(
+                    {
+                      id: rel.id,
+                      nombre: rel.nombre,
+                      artista: cancionActual.artista,
+                      imagen: rel.imagen,
+                      cancion: rel.cancion,
+                    },
+                    [...cancionesRelacionadas, cancionActual]
+                  )
                 }
                 sx={{
                   flexShrink: 0,

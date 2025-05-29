@@ -10,7 +10,7 @@ const ReproductorMobile = () => {
 
   const { cancionActual, reproduciendo, pausar, reanudar, audioRef } = usePlayer();
 
-  if (!cancionActual || !cancionActual.url) return null;
+  if (!cancionActual || !cancionActual.cancion) return null;
 
   return (
     <Box display="flex" width="100%" position="absolute" bottom={58} alignItems="center">
