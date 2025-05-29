@@ -5,17 +5,17 @@ const PlayerContext = createContext();
 export const usePlayer = () => useContext(PlayerContext);
 
 export const PlayerProvider = ({ children }) => {
-  const [cancionActual, setCancionActual] = useState(null); // { nombre, artista, imagen, url }
+  const [cancionActual, setCancionActual] = useState(null);
   const [reproduciendo, setReproduciendo] = useState(false);
 
   const audioRef = useRef(null);
 
-  // Cambia la canción y empieza a reproducir
+
   const reproducirCancion = (cancion) => {
-  console.log("Intentando reproducir:", cancion);
-  setCancionActual(cancion);
-  setReproduciendo(true);
-};
+    console.log("Intentando reproducir:", cancion);
+    setCancionActual(cancion);
+    setReproduciendo(true);
+  };
 
   const pausar = () => {
     setReproduciendo(false);
@@ -25,7 +25,6 @@ export const PlayerProvider = ({ children }) => {
     setReproduciendo(true);
   };
 
-  // Reacciona al estado `reproduciendo`
   useEffect(() => {
     if (audioRef.current) {
       if (reproduciendo) {
@@ -37,15 +36,27 @@ export const PlayerProvider = ({ children }) => {
   }, [reproduciendo, cancionActual]);
 
   return (
-    <PlayerContext.Provider value={{
-      cancionActual,
-      reproducirCancion,
-      reproduciendo,
-      pausar,
-      reanudar,
-      audioRef,
-    }}>
-      {children}
+    <PlayerContext.Provider
+      value={{
+        cancionActual,
+        reproducirCancion,
+        reproduciendo,
+        pausar,
+        reanudar,
+        audioRef,
+      }}
+    >
+      <>
+        {children}
+        {cancionActual?.url && (
+          <audio
+            ref={audioRef}
+            src={cancionActual.url}
+            autoPlay
+            onEnded={() => setReproduciendo(false)}
+          />
+        )}
+      </>
     </PlayerContext.Provider>
   );
 };

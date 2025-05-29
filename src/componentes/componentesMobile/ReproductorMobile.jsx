@@ -7,10 +7,9 @@ import { Link } from "react-router-dom";
 import { usePlayer } from "../../context/PlayerContext";
 
 const ReproductorMobile = () => {
-  // 👇 LOS HOOKS VAN SIEMPRE ARRIBA, SIN CONDICIONES
+
   const { cancionActual, reproduciendo, pausar, reanudar, audioRef } = usePlayer();
 
-  // 👇 LUEGO haces el chequeo condicional para no renderizar si no hay canción
   if (!cancionActual || !cancionActual.url) return null;
 
   return (
@@ -51,8 +50,6 @@ const ReproductorMobile = () => {
             )}
           </IconButton>
         </Box>
-        {/* Solo se monta si hay URL válida */}
-        <audio ref={audioRef} src={cancionActual.url} />
       </Box>
     </Box>
   );

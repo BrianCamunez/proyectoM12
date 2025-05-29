@@ -135,6 +135,7 @@ const ContenidoPlaylistMobile = () => {
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
                     reproducirCancion({
+                      id: cancion.id,
                       nombre: cancion.nombre,
                       artista:
                         cancion.usuarios?.nombre || "Artista desconocido",
@@ -143,8 +144,8 @@ const ContenidoPlaylistMobile = () => {
                     });
                   }}
                 >
-                    {console.log(cancion)}
-                    {console.log(cancion.cancion)}
+                  {console.log(cancion)}
+                  {console.log(cancion.cancion)}
                   <Box display={"flex"} alignItems={"center"}>
                     <Box
                       component="img"
