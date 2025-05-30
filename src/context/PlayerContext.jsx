@@ -33,6 +33,12 @@ export const PlayerProvider = ({ children }) => {
 
   const siguiente = () => {
 
+
+
+    if(modoRepetir == "cancion"){
+      setModoRepetir("playlist")
+    }
+
     const siguienteIndex = indiceActual + 1;
 
     if (siguienteIndex < playlistActual.length) {
@@ -96,7 +102,7 @@ export const PlayerProvider = ({ children }) => {
             autoPlay
             onEnded={() => {
               if (!audioRef.current) return;
-              if (modoRepetir === "cancion") {
+              if (modoRepetir == "cancion") {
                 audioRef.current.currentTime = 0;
                 audioRef.current.play();
               } else {

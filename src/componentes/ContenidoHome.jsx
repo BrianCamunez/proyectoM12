@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 
 const ContenidoHome = () => {
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#000", width: "100%", marginRight: 1 }}>
+    <Box sx={{ display: "flex", minHeight: "100%", backgroundColor: "#000", width: "100%", gap: 2 }}>
       {/* Sidebar Section */}
       <Box sx={{ width: 350, flexShrink: 0 }}>
         <Drawer
@@ -98,8 +98,8 @@ const ContenidoHome = () => {
         sx={{
           flexGrow: 1,
           paddingTop: 3,
-          marginLeft: 2,
-          marginRight: 1,
+          paddingLeft: 2,
+          paddingRight: 1,
           backgroundColor: "#121212",
           borderRadius: 2,
           height: "83.2vh",

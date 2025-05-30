@@ -7,7 +7,7 @@ const PaginaHome = () => {
   return (
     <>
       <Navbar />
-      <Box sx={{ display: "flex", height: { xs: "100%", md: "calc(100vh - 64px)" }, overflow: "hidden" }}>
+      <Box sx={{ display: "flex", width: "100vw", height: { xs: "100%", md: "calc(100vh - 64px - 56px)" }, overflow: "hidden" }}>
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
           <ContenidoTemporal />
         </Box>

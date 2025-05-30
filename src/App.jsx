@@ -17,95 +17,81 @@ import ContenidoBibliotecaMobile from "./componentes/componentesMobile/Contenido
 import ContenidoExplorarMobile from "./componentes/componentesMobile/ContenidoExplorarMobile";
 import ContenidoPerfilMobile from "./componentes/componentesMobile/ContenidoPerfilMobile";
 import ContenidoGeneroMobile from "./componentes/componentesMobile/ContenidoGeneroMobile";
+import LayoutConNavbarYPlayer from "./componentes/LayoutConNavbarYPlayer";
 
 function App() {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
-
   const location = useLocation();
-
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-
   return (
-    <Box sx={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "black", color: "white", overflow: "hidden" }}>
+    <Box sx={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "black", color: "white", overflow: "hidden", boxSizing: "border-box", }}>
       <Routes location={location}>
+
+        {/* Rutas públicas */}
         <Route path="/registro" element={<RegistroComponente />} />
         <Route path="/inicioSesion" element={<InicioSesion />} />
+
+        {/* Ruta home */}
         <Route
           path="/"
           element={
-            <Slide direction="right" in={true} mountOnEnter  timeout={300}>
-              <div style={{ width: "100%", height: "100%" }}>
+            <Slide direction="right" in mountOnEnter timeout={300}>
+              <Box width="100%" height="100%">
                 {isMdUp ? <PaginaHome /> : <ContenidoMobile />}
-              </div>
-             </Slide>
+              </Box>
+            </Slide>
           }
         />
+
+        {/* Ruta explorar */}
         <Route
           path="/contenido2"
           element={
             <Slide direction="right" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
-              <div style={{ width: "100%", height: "100%" }}>
+              <Box width="100%" height="100%">
                 {isMdUp ? <PaginaExplorar /> : <ContenidoMobile />}
-              </div>
-            </Slide>
-          }
-        />
-        <Route
-          path="/playlist"
-          element={
-            <>
-              <Navbar />
-              <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
-                <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
-                  <ContenidoPlaylist />
-                </Box>
               </Box>
-              <Player />
-            </>
-          }
-        />
-        <Route
-          path="/cancion"
-          element={
-            <>
-              {isMdUp ? <ContenidoCancion /> : <ContenidoCancionMobile />}
-            </>
-          }
-        />
-        <Route
-          path="/playlistMobile/:id"
-          element={
-            <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={600}>
-              <div style={{ width: "100%", height: "100%" }}>
-                <ContenidoPlaylistMobile />
-              </div>
             </Slide>
           }
         />
-        <Route path="/cantanteMobile" element={<ContenidoCantanteMobile />} />
-        {/* <Route path="/biblioteca" element={<ContenidoBibliotecaMobile />} /> */}
-        <Route
-          path="/biblioteca"
-          element={
-            <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={600}>
-              <div style={{ width: "100%", height: "100%" }}>
-              <ContenidoBibliotecaMobile />
-              </div>
-            </Slide>
-          }
-        />
-         <Route path="/explorarMobile" element={<ContenidoExplorarMobile />} />
-         <Route path="/perfilMobile" element={<ContenidoPerfilMobile />} />
-         <Route path="/genero/:nombre" element={<ContenidoGeneroMobile/>} />
+
+        {/* Desktop solo si md+ */}
+        {isMdUp && (
+          <>
+            <Route
+              path="/playlist"
+              element={
+                <LayoutConNavbarYPlayer>
+                  <ContenidoPlaylist />
+                </LayoutConNavbarYPlayer>
+              }
+            />
+            <Route path="/cancion" element={<ContenidoCancion />} />
+          </>
+        )}
+
+        {/* Mobile-only */}
+        {!isMdUp && (
+          <>
+            <Route path="/cancion" element={<ContenidoCancionMobile />} />
+            <Route path="/playlistMobile/:id" element={<ContenidoPlaylistMobile />} />
+            <Route path="/cantanteMobile" element={<ContenidoCantanteMobile />} />
+            <Route path="/biblioteca" element={<ContenidoBibliotecaMobile />} />
+            <Route path="/explorarMobile" element={<ContenidoExplorarMobile />} />
+            <Route path="/perfilMobile" element={<ContenidoPerfilMobile />} />
+            <Route path="/genero/:nombre" element={<ContenidoGeneroMobile />} />
+          </>
+        )}
       </Routes>
     </Box>
   );
 }
+
 
 export default App;
