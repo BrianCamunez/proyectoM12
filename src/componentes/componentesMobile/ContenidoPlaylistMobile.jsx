@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Box, Grid, Button, IconButton, Typography, Modal, Slide } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
+import { useEffect, useState } from "react";
+import { Box, Grid, Button, Typography, Modal, Slide } from "@mui/material";
+
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -27,6 +27,17 @@ const ContenidoPlaylistMobile = () => {
   const [openOptionsModal, setOpenOptionsModal] = useState(false);
   const [showOptionsContent, setShowOptionsContent] = useState(false);
   const [selectedSongId, setSelectedSongId] = useState(null);
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
+
   const handleCloseOptionsModal = () => {
     setShowOptionsContent(false);
     setTimeout(() => {

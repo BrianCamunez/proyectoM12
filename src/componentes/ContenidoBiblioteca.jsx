@@ -24,9 +24,21 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { supabase } from "../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 
 const ContenidoBiblioteca = () => {
   const [playlists, setPlaylists] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   useEffect(() => {
     const cargarPlaylists = async () => {

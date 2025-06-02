@@ -13,9 +13,11 @@ import {
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { supabase } from "../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 import { usePlayer } from "../context/PlayerContext"; // Ajusta la ruta si tu context está en otro lugar
 
 const ContenidoPlaylist = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [playlist, setPlaylist] = useState(null);
   const [canciones, setCanciones] = useState([]);
@@ -23,6 +25,16 @@ const ContenidoPlaylist = () => {
 
   // Desestructuramos funciones del context
   const { reproducirCancion } = usePlayer();
+
+   useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   useEffect(() => {
     const fetchPlaylist = async () => {

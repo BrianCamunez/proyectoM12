@@ -1,13 +1,28 @@
 // src/componentes/Contenido.jsx
-import React from "react";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabase/supabase";
 
 
 import ContenidoBiblioteca from "./ContenidoBiblioteca";
 import ContenidoCancionLateral from "./ContenidoCancionLateral";
 
 const Contenido = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      const validarSesion = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          navigate("/registro");
+        }
+      };
+      validarSesion();
+    }, []);
+
   return (
     <Box
       sx={{

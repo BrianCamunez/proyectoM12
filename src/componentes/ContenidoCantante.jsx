@@ -14,6 +14,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { supabase } from "../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 
 const ContenidoCantante = () => {
   const { id } = useParams(); // ID del artista
@@ -21,6 +22,17 @@ const ContenidoCantante = () => {
   const [canciones, setCanciones] = useState([]);
   const [loadingArtist, setLoadingArtist] = useState(true);
   const [loadingSongs, setLoadingSongs] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   useEffect(() => {
     const fetchArtist = async () => {

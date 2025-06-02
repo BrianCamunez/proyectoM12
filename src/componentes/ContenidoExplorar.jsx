@@ -12,6 +12,16 @@ const ContenidoExplorar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
+
+  useEffect(() => {
     const fetchGeneros = async () => {
       const { data, error } = await supabase.rpc("obtener_generos_enum");
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, Typography, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { supabase } from "../../supabase/supabase"; // asegúrate que esté el import correcto
@@ -9,6 +9,16 @@ import MenuAbajoMobile from "./MenuAbajoMobile";
 const ContenidoExplorarMobile = () => {
     const [generos, setGeneros] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const validarSesion = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                navigate("/registro");
+            }
+        };
+        validarSesion();
+    }, []);
 
     useEffect(() => {
         const fetchGeneros = async () => {

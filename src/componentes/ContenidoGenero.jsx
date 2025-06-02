@@ -1,5 +1,5 @@
 // src/componentes/ContenidoGenero.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -41,6 +41,16 @@ const ContenidoGenero = () => {
 
   const [openSelectPlaylistModal, setOpenSelectPlaylistModal] = useState(false);
   const [playlistsUsuario, setPlaylistsUsuario] = useState([]);
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   // Función para cerrar el modal de opciones
   const handleCloseOptionsModal = () => {

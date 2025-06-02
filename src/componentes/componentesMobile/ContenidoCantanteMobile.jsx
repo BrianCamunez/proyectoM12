@@ -1,12 +1,26 @@
-import React from "react";
-import { Box, Typography, Grid, Button } from "@mui/material";
+import { Box, Grid, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useEffect } from "react";
+import { supabase } from "../../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 
 const ContenidoCantanteMobile = () => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const validarSesion = async () => {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user) {
+            navigate("/registro");
+          }
+        };
+        validarSesion();
+      }, []);
 
     const items = Array.from({ length: 10 });
 
