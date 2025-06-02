@@ -1,37 +1,43 @@
 import { Box } from "@mui/material";
-import PushPinIcon from '@mui/icons-material/PushPin';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import PushPinIcon from "@mui/icons-material/PushPin";
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import { Link } from "react-router-dom";
 
+const ContenidoBibliotecaListaMobile = ({ playlists }) => {
+  return (
+    <>
+      {playlists.map((playlist) => (
+        <Link
+          to={`/playlistMobile/${playlist.id}`}
+          style={{ textDecoration: "none", color: "white" }}
+          key={playlist.id}
+        >
+          <Box display="flex" paddingY={1}>
+            <Box
+              component="img"
+              src={playlist.imagen}
+              width="100px"
+              height="100px"
+              sx={{ borderRadius: 2 }}
+            />
+            <Box
+              justifyContent="center"
+              display="flex"
+              flexDirection="column"
+              paddingLeft={1}
+            >
+              <Box fontWeight="bold">{playlist.nombre}</Box>
+              <Box display="flex" alignItems="center" gap={1} fontSize="14px" color="#b3b3b3">
+                <ArrowCircleDownIcon sx={{ fontSize: 16 }} />
+                Lista · {playlist.usuarios?.nombre || "Desconocido"}
+                {console.log(playlist.usuarios.nombre)}
+              </Box>
+            </Box>
+          </Box>
+        </Link>
+      ))}
+    </>
+  );
+};
 
-const ContenidoBibliotecaListaMobile = () => {
-
-    const canciones = Array.from({ length: 10 }, (_, index) => index);
-
-    return (
-        <>
-            <Link to="/playlistMobile" style={{ textDecoration: "none", color: "white" }}>
-                <Box display={"flex"}>
-                    <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"100px"} height={"100px"} />
-                    <Box justifyContent={"center"} display={"flex"} flexDirection={"column"} paddingLeft={1}>
-                        <Box>Canciones que te gustan</Box>
-                        <Box display={"flex"} justifyContent={"center"}><PushPinIcon /><ArrowCircleDownIcon /> Lista · 582 canciones</Box>
-                    </Box>
-                </Box>
-            </Link>
-            {canciones.map((_, index) => (
-                <Link to="/playlistMobile" style={{ textDecoration: "none", color: "white" }} key={index}>
-                    <Box display={"flex"} paddingY={1}>
-                        <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" width={"100px"} height={"100px"} />
-                        <Box justifyContent={"center"} display={"flex"} flexDirection={"column"} paddingLeft={1}>
-                            <Box>Canciones que te gustan</Box>
-                            <Box>Lista · CreadorDeLaPlaylist</Box>
-                        </Box>
-                    </Box>
-                </Link>
-            ))}
-        </>
-    )
-}
-
-export default ContenidoBibliotecaListaMobile
+export default ContenidoBibliotecaListaMobile;

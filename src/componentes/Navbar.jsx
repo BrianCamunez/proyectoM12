@@ -1,127 +1,154 @@
-"use client"
+// src/componentes/Navbar.jsx
+"use client";
 
-import React from "react"
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
   Box,
   IconButton,
   TextField,
-  Button,
   InputAdornment,
-  Typography,
-  useTheme,
-  useMediaQuery,
+  Button,
   Menu,
   MenuItem,
-} from "@mui/material"
-import SearchIcon from "@mui/icons-material/Search"
-import ExploreIcon from "@mui/icons-material/Explore"
-import HomeIcon from "@mui/icons-material/Home"
-import MenuIcon from "@mui/icons-material/Menu"
-import { Link } from "react-router-dom"
+  Avatar,
+} from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import SearchIcon from "@mui/icons-material/Search";
+import ExploreIcon from "@mui/icons-material/Explore";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "../supabase/supabase";
 
 const Navbar = () => {
-  const theme = useTheme()
-  const isMd = useMediaQuery(theme.breakpoints.up("md"))
-  const isLg = useMediaQuery(theme.breakpoints.up("lg"))
-  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [user, setUser] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const navigate = useNavigate();
+
+  // Obtener sesión inicial y suscribirse a cambios
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user) {
+        setUser(data.session.user);
+      }
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+      if (session?.user) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+        setAvatarUrl("");
+      }
+    });
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  // Obtener avatar cuando cambie el usuario
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      if (!user?.email) return;
+      try {
+        const { data, error } = await supabase
+          .from("usuarios")
+          .select("avatar")
+          .eq("email", user.email)
+          .single();
+        if (error) throw error;
+        setAvatarUrl(data.avatar);
+      } catch (error) {
+        console.error("Error fetching avatar:", error.message);
+      }
+    };
+    fetchAvatar();
+  }, [user]);
 
   const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+    handleClose();
+  };
 
   return (
-    <AppBar position="fixed" sx={{ width: "100%", backgroundColor: "#000000" }}>
-      <Toolbar sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        {/* Logo */}
-        <IconButton edge="start" color="inherit" aria-label="Logo">
-          <Box
-            component="img"
-            src="/src/images/LogoProyecto.jpeg"
-            alt="Logo"
-            sx={{ width: { sm: "40px", md: "50px" }, height: { sm: "40px", md: "50px" } }}
-          />
-        </IconButton>
-
-        {/* Buscador y botones de navegación */}
-        {isMd && (
-          <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, justifyContent: "center", mx: 2 }}>
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <IconButton sx={{ borderRadius: "50%", padding: "8px", backgroundColor: "#2C2C2C", mr: 1 }}>
-                <HomeIcon sx={{ color: "white", fontSize: { md: 24, lg: 30 } }} />
-              </IconButton>
-            </Link>
-            <TextField
-              variant="filled"
-              size="small"
-              placeholder="Buscar"
-              sx={{
-                backgroundColor: "#2C2C2C",
-                borderRadius: "30px",
-                width: { md: "300px", lg: "500px" },
-                "& .MuiFilledInput-root": {
-                  height: { md: "40px", lg: "50px" },
-                },
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "#B0B0B0", fontSize: { md: 24, lg: 35 } }} />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Link to="/contenido2" style={{ textDecoration: "none" }}>
-                      <IconButton>
-                        <ExploreIcon sx={{ color: "#B0B0B0", fontSize: { md: 24, lg: 35 } }} />
-                      </IconButton>
-                    </Link>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
-        )}
-
-        {/* Botones de acción */}
+    <AppBar position="fixed" sx={{ backgroundColor: "#000000" }}>
+      <Toolbar sx={{ display: "flex", alignItems: "center", px: 2 }}>
+        {/* === Left: Home Icon === */}
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {isLg && (
-            <>
-              <Button color="inherit">
-                <Typography
-                  variant="body2"
-                  fontWeight={"bold"}
-                  sx={{
-                    textTransform: "capitalize",
-                    transition: "transform 0.3s ease",
-                    "&:hover": { transform: "scale(1.1)" },
-                  }}
-                >
-                  Asistencia
-                </Typography>
-              </Button>
-              <Button color="inherit">
-                <Typography
-                  variant="body2"
-                  fontWeight={"bold"}
-                  sx={{
-                    textTransform: "capitalize",
-                    transition: "transform 0.3s ease",
-                    "&:hover": { transform: "scale(1.1)" },
-                  }}
-                >
-                  Descargar
-                </Typography>
-              </Button>
-              <Typography>|</Typography>
-            </>
-          )}
-          {isMd ? (
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <IconButton
+              sx={{
+                borderRadius: "50%",
+                padding: "8px",
+                backgroundColor: "#2C2C2C",
+              }}
+            >
+              <HomeIcon sx={{ color: "#FFFFFF", fontSize: 24 }} />
+            </IconButton>
+          </Link>
+        </Box>
+
+        {/* === Center: Search Bar, centered === */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            justifyContent: "center",
+            px: 2, // algo de espacio lateral
+          }}
+        >
+          <TextField
+            variant="filled"
+            size="medium"
+            placeholder="Buscar"
+            sx={{
+              backgroundColor: "#2C2C2C",
+              borderRadius: "30px",
+              width: "500px",
+              "& .MuiFilledInput-root": {
+                height: "40px",
+                borderRadius: "30px",
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: "#B0B0B0", fontSize: 24 }} />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Link to="/contenido2" style={{ textDecoration: "none" }}>
+                    <IconButton>
+                      <ExploreIcon sx={{ color: "#B0B0B0", fontSize: 24 }} />
+                    </IconButton>
+                  </Link>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+
+        {/* === Right: Either Avatar (if logged in) or Auth Buttons === */}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {user ? (
+            <IconButton onClick={handleMenu} sx={{ p: 0 }}>
+              <Avatar
+                src={avatarUrl || undefined}
+                alt="Avatar"
+                sx={{ width: 32, height: 32 }}
+              >
+                {user.email.charAt(0).toUpperCase()}
+              </Avatar>
+            </IconButton>
+          ) : (
             <>
               <Link to="/registro" style={{ textDecoration: "none", color: "#aeaeae" }}>
                 <Button
@@ -130,76 +157,61 @@ const Navbar = () => {
                     mr: 1,
                     textTransform: "capitalize",
                     fontWeight: "bold",
-                    transition: "transform 0.3s ease, color 0.3s ease",
-                    "&:hover": { transform: "scale(1.1)", color: "#fff" },
+                    "&:hover": { color: "#fff" },
                   }}
                 >
                   Registrarse
                 </Button>
               </Link>
-              <Link to="/inicioSesion">
+              <Link to="/inicioSesion" style={{ textDecoration: "none" }}>
                 <Button
                   color="inherit"
                   sx={{
-                    backgroundColor: "white",
+                    backgroundColor: "#FFFFFF",
                     color: "#000000",
-                    paddingX: { md: 2, lg: 3 },
+                    px: 2,
                     borderRadius: 10,
                     textTransform: "capitalize",
                     fontWeight: "bold",
-                    paddingY: { md: "8px", lg: "12px" },
-                    transition: "transform 0.3s ease",
-                    "&:hover": {
-                      transform: "scale(1.1)",
-                    },
+                    py: "8px",
+                    "&:hover": { transform: "scale(1.05)" },
                   }}
                 >
                   Iniciar sesión
                 </Button>
               </Link>
             </>
-          ) : (
-            <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={handleMenu}>
-              <MenuIcon />
-            </IconButton>
           )}
         </Box>
       </Toolbar>
 
-      {/* Menú desplegable para pantallas pequeñas */}
+      {/* Menú desplegable tras pulsar el avatar */}
       <Menu
-        id="menu-appbar"
         anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        sx={{
+          "& .MuiMenu-paper": {
+            backgroundColor: "#2C2C2C",
+            color: "#FFFFFF",
+            borderRadius: "10px",
+          },
+        }}
       >
-        <MenuItem onClick={handleClose} component={Link} to="/">
-          Inicio
+        <MenuItem
+          component={Link}
+          to="/perfil"
+          onClick={handleClose}
+          sx={{ color: "#FFFFFF", "&:hover": { backgroundColor: "#3C3C3C" } }}
+        >
+          Ver perfil
         </MenuItem>
-        <MenuItem onClick={handleClose} component={Link} to="/contenido2">
-          Explorar
-        </MenuItem>
-        <MenuItem onClick={handleClose}>Asistencia</MenuItem>
-        <MenuItem onClick={handleClose}>Descargar</MenuItem>
-        <MenuItem onClick={handleClose} component={Link} to="/registro">
-          Registrarse
-        </MenuItem>
-        <MenuItem onClick={handleClose} component={Link} to="/inicioSesion">
-          Iniciar sesión
-        </MenuItem>
+        <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
       </Menu>
     </AppBar>
-  )
-}
+  );
+};
 
-export default Navbar
-
+export default Navbar;

@@ -1,20 +1,70 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
+import { supabase } from "../../supabase/supabase";
+import { Link } from "react-router-dom";
 
+const NavbarMobile = () => {
+    const [avatarUrl, setAvatarUrl] = useState("");
 
-const NavbarMobile = () =>{
+    useEffect(() => {
+        const fetchAvatar = async () => {
+            console.log("Fetching avatar...");
+            try {
+                const {
+                    data: { user },
+                    error: userError,
+                } = await supabase.auth.getUser();
+
+                console.log("User data:", user);
+
+                if (userError) throw userError;
+
+                const { data, error } = await supabase
+                    .from("usuarios")
+                    .select("avatar")
+                    .eq("email", user.email) // Comparar por correo en lugar de ID
+                    .single();
+
+                console.log("Avatar data:", data);
+
+                if (error) throw error;
+
+                setAvatarUrl(data.avatar);
+
+                console.log("Avatar URL:", data.avatar);
+
+            } catch (error) {
+                console.error("Error fetching avatar:", error.message);
+            }
+        };
+
+        fetchAvatar();
+    }, []);
 
     return (
         <>
             <Box display={"flex"} gap={1} margin={1} mt={2} justifyContent={"left"} alignContent={"center"} py={1}>
-                <Box component="img" src="https://definicion.com/wp-content/uploads/2022/09/imagen.jpg" alt="Imagen Perfil" sx={{ width: "30px", height: "30px", borderRadius: "50%" }} />
-                <Button sx={{backgroundColor: "#3a3a3a", borderRadius: 30, textTransform: "none", color: "white", paddingX: 2}}>Todos</Button>
-                <Button sx={{backgroundColor: "#3a3a3a", borderRadius: 30, textTransform: "none", color: "white", paddingX: 2}}>Música</Button>
-                <Button sx={{backgroundColor: "#3a3a3a", borderRadius: 30, textTransform: "none", color: "white", paddingX: 2}}>Pódcasts</Button>
+                <Link to={"/perfilMobile"}>
+                    <Box
+                        component="img"
+                        src={avatarUrl}
+                        alt="Imagen Perfil"
+                        sx={{ width: "30px", height: "30px", borderRadius: "50%" }}
+                    />
+                </Link>
+
+                <Button sx={{ backgroundColor: "#3a3a3a", borderRadius: 30, textTransform: "none", color: "white", paddingX: 2 }}>
+                    Todos
+                </Button>
+                <Button sx={{ backgroundColor: "#3a3a3a", borderRadius: 30, textTransform: "none", color: "white", paddingX: 2 }}>
+                    Música
+                </Button>
+                <Button sx={{ backgroundColor: "#3a3a3a", borderRadius: 30, textTransform: "none", color: "white", paddingX: 2 }}>
+                    Pódcasts
+                </Button>
             </Box>
         </>
-    )
+    );
+};
 
-}
-
-export default NavbarMobile
+export default NavbarMobile;

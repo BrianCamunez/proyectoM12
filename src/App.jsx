@@ -1,104 +1,131 @@
-import React, { useState, useEffect } from "react";
+// src/App.jsx
+import { useState, useEffect } from "react";
 import { Box, useMediaQuery, useTheme, Slide } from "@mui/material";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Navbar from "./componentes/Navbar";
-import Player from "./componentes/Player";
+import { Routes, Route, useLocation } from "react-router-dom";
+
 import PaginaHome from "./componentes/PaginaHome";
-import RegistroComponente from "./componentes/RegistroComponente";
-import InicioSesion from "./componentes/InicioSesion";
+import Contenido from "./componentes/Contenido";
+import ContenidoHome from "./componentes/ContenidoHome";
 import ContenidoPlaylist from "./componentes/ContenidoPlaylist";
 import ContenidoCancion from "./componentes/ContenidoCancion";
-import ContenidoMobile from "./componentes/ContenidoMobile";
 import PaginaExplorar from "./componentes/PaginaExplorar";
+import ContenidoMobile from "./componentes/ContenidoMobile";
+
+import RegistroComponente from "./componentes/RegistroComponente";
+import InicioSesion from "./componentes/InicioSesion";
+
 import ContenidoCancionMobile from "./componentes/componentesMobile/ContenidoCancionMobile";
 import ContenidoPlaylistMobile from "./componentes/componentesMobile/ContenidoPlaylistMobile";
 import ContenidoCantanteMobile from "./componentes/componentesMobile/ContenidoCantanteMobile";
 import ContenidoBibliotecaMobile from "./componentes/componentesMobile/ContenidoBibliotecaMobile";
 import ContenidoExplorarMobile from "./componentes/componentesMobile/ContenidoExplorarMobile";
+import ContenidoPerfilMobile from "./componentes/componentesMobile/ContenidoPerfilMobile";
+import ContenidoGeneroMobile from "./componentes/componentesMobile/ContenidoGeneroMobile";
+import ContenidoCantante from "./componentes/ContenidoCantante";
+import ContenidoGenero from "./componentes/ContenidoGenero";
+import ContenidoPerfil from "./componentes/ContenidoPerfil";
 
 function App() {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
-
   const location = useLocation();
-
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-
   return (
-    <Box sx={{ minHeight: "100vh", minWidth: "100vw", backgroundColor: "black", color: "white", overflow: "hidden" }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        minWidth: "100vw",
+        backgroundColor: "black",
+        color: "white",
+        overflow: "hidden",
+        boxSizing: "border-box",
+
+        /* ===== Aquí van los estilos del scrollbar “global” ===== */
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "#2e2e2e",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#555555",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#777777",
+        },
+        /* Para Firefox */
+        "scrollbar-width": "thin",
+        "scrollbar-color": "#555555 #2e2e2e",
+      }}
+    >
       <Routes location={location}>
+        {/* Rutas públicas */}
         <Route path="/registro" element={<RegistroComponente />} />
         <Route path="/inicioSesion" element={<InicioSesion />} />
+
+        {/* Ruta principal "/" */}
         <Route
           path="/"
           element={
-            <Slide direction="right" in={true} mountOnEnter  timeout={300}>
-              <div style={{ width: "100%", height: "100%" }}>
-                {isMdUp ? <PaginaHome /> : <ContenidoMobile />}
-              </div>
-             </Slide>
-          }
-        />
-        <Route
-          path="/contenido2"
-          element={
-            <Slide direction="right" in={isMounted} mountOnEnter unmountOnExit timeout={300}>
-              <div style={{ width: "100%", height: "100%" }}>
-                {isMdUp ? <PaginaExplorar /> : <ContenidoMobile />}
-              </div>
-            </Slide>
-          }
-        />
-        <Route
-          path="/playlist"
-          element={
-            <>
-              <Navbar />
-              <Box sx={{ display: "flex", pt: "64px", height: "calc(100vh - 64px)", overflow: "hidden" }}>
-                <Box sx={{ flexGrow: 1, display: "flex", justifyContent: isMdUp ? "flex-start" : "center" }}>
-                  <ContenidoPlaylist />
-                </Box>
+            <Slide direction="right" in mountOnEnter timeout={300}>
+              <Box width="100%" height="100%">
+                <PaginaHome />
               </Box>
-              <Player />
-            </>
+            </Slide>
           }
-        />
-        <Route
-          path="/cancion"
-          element={
+        >
+          {isMdUp ? (
             <>
-              {isMdUp ? <ContenidoCancion /> : <ContenidoCancionMobile />}
+              {/* Layout de escritorio con sidebars */}
+              <Route element={<Contenido />}>
+                <Route index element={<ContenidoHome />} />
+                <Route path="playlist/:id" element={<ContenidoPlaylist />} />
+                <Route path="cancion" element={<ContenidoCancion />} />
+                <Route path="contenido2" element={<PaginaExplorar />} />
+                <Route path="cantante/:id" element={<ContenidoCantante />} />
+                <Route path="genero/:nombre" element={<ContenidoGenero />} />
+                <Route path="perfil" element={<ContenidoPerfil />} />
+              </Route>
             </>
-          }
-        />
-        <Route
-          path="/playlistMobile"
-          element={
-            <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={600}>
-              <div style={{ width: "100%", height: "100%" }}>
-                <ContenidoPlaylistMobile />
-              </div>
-            </Slide>
-          }
-        />
-        <Route path="/cantanteMobile" element={<ContenidoCantanteMobile />} />
-        {/* <Route path="/biblioteca" element={<ContenidoBibliotecaMobile />} /> */}
-        <Route
-          path="/biblioteca"
-          element={
-            <Slide direction="left" in={true} mountOnEnter unmountOnExit timeout={600}>
-              <div style={{ width: "100%", height: "100%" }}>
-              <ContenidoBibliotecaMobile />
-              </div>
-            </Slide>
-          }
-        />
-         <Route path="/explorarMobile" element={<ContenidoExplorarMobile />} />
+          ) : (
+            <>
+              {/* Rutas solo móvil (sin sidebars) */}
+              <Route index element={<ContenidoMobile />} />
+              <Route
+                path="playlistMobile/:id"
+                element={<ContenidoPlaylistMobile />}
+              />
+              <Route path="cancion" element={<ContenidoCancionMobile />} />
+              <Route
+                path="cantanteMobile"
+                element={<ContenidoCantanteMobile />}
+              />
+              <Route
+                path="biblioteca"
+                element={<ContenidoBibliotecaMobile />}
+              />
+              <Route
+                path="explorarMobile"
+                element={<ContenidoExplorarMobile />}
+              />
+              <Route
+                path="perfilMobile"
+                element={<ContenidoPerfilMobile />}
+              />
+              <Route
+                path="genero/:nombre"
+                element={<ContenidoGeneroMobile />}
+              />
+            </>
+          )}
+        </Route>
       </Routes>
     </Box>
   );

@@ -1,305 +1,252 @@
+// src/componentes/ContenidoHome.jsx
+import React, { useEffect, useState } from "react";
 import {
   Box,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Button,
   Typography,
   Card,
   CardContent,
   CardMedia,
-} from "@mui/material"
-import LibraryMusicIcon from "@mui/icons-material/LibraryMusic"
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import { Link } from 'react-router-dom'
+  Avatar,
+  CircularProgress,
+} from "@mui/material";
+import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
+import { Link } from "react-router-dom";
+import { supabase } from "../supabase/supabase";
 
 const ContenidoHome = () => {
-  return (
-    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#000", width: "100%", marginRight: 1 }}>
-      {/* Sidebar Section */}
-      <Box sx={{ width: 350, flexShrink: 0 }}>
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: 350,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: 350,
-              marginTop: "70px",
-              backgroundColor: "#121212",
-              color: "#aeaeae",
-              borderRadius: "6px",
-              height: "85.5vh",
-              overflow: "hidden",
-              marginLeft: 1,
-              position: "relative",
-            },
-          }}
-        >
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <LibraryMusicIcon sx={{ color: "#aeaeae" }} />
-              </ListItemIcon>
-              <ListItemText primary="Tu Biblioteca" />
-              <ListItemIcon sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <ArrowBackIcon sx={{ transform: "rotate(180deg)", color: "#aeaeae" }} />
-              </ListItemIcon>
-            </ListItem>
+  const [playlists, setPlaylists] = useState([]);
+  const [artistas, setArtistas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-            <ListItem
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                backgroundColor: "#2C2C2C",
-                margin: 1,
-                borderRadius: "10px",
-                boxSizing: "border-box",
-                width: "auto",
-              }}
-            >
-              <ListItemText sx={{ boxSizing: "border-box", color: "white" }}>Crear tu primera lista</ListItemText>
-              <ListItemText sx={{ boxSizing: "border-box", color: "white" }}>
-                Es muy fácil, te echaremos una mano
-              </ListItemText>
-              <ListItemButton
-                sx={{
-                  boxSizing: "border-box",
-                  color: "black",
-                  backgroundColor: "white",
-                  borderRadius: 50,
-                  marginTop: 1,
-                }}
-              >
-                Crear lista
-              </ListItemButton>
-            </ListItem>
-          </List>
-          <Box sx={{ marginTop: "auto", padding: 2 }}>
-            <List>
-              <ListItem>
-                <Button sx={{ color: "white" }}>Cambiar idioma</Button>
-              </ListItem>
-              <ListItem>
-                <Button sx={{ color: "white" }}>Política de cookies</Button>
-              </ListItem>
-            </List>
-          </Box>
-        </Drawer>
-      </Box>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 1) Obtener hasta 5 playlists aleatorias
+        const { data: playlistsData, error: playlistsError } = await supabase
+          .from("playlist")
+          .select("id, nombre, imagen")
+          //.order("random()", { ascending: true }) // muestra en orden aleatorio si PostgREST lo permite
+          .limit(5);
+        if (playlistsError) throw playlistsError;
+        setPlaylists(playlistsData || []);
 
-      {/* Content Section */}
+        // 2) Obtener todos los usuarios con role = "artista"
+        const { data: artistasData, error: artistasError } = await supabase
+          .from("usuarios")
+          .select("id, nombre, avatar")
+          .eq("role", "artista");
+        if (artistasError) throw artistasError;
+        setArtistas(artistasData || []);
+      } catch (err) {
+        console.error("Error cargando datos de Home:", err.message);
+        setPlaylists([]);
+        setArtistas([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
       <Box
         sx={{
           flexGrow: 1,
-          paddingTop: 3,
-          marginLeft: 2,
-          marginRight: 1,
+          px: 2,
+          py: 2,
           backgroundColor: "#121212",
           borderRadius: 2,
-          height: "83.2vh",
-          marginTop: "70px",
-          overflowY: "auto",
-          "&::-webkit-scrollbar": {
-            width: "8px", // El tamaño del scroll
-          },
-          "&::-webkit-scrollbar-track": {
-            background: "#2a2a2a", // Color de la pista del scroll
-            borderRadius: "10px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            background: "#767612", // Color del pulgar del scroll
-            borderRadius: "10px",
-            border: "2px solid #161246", // Color del borde del pulgar
-          },
-          "&::-webkit-scrollbar-thumb:hover": {
-            background: "#561234", // Color al pasar el ratón sobre el pulgar
-          },
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Box paddingX={{ md: 2 }} marginBottom={20}>
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6">Artistas populares</Typography>
-            <Typography variant="body1">Mostrar todos</Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                sm: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
-                xl: "repeat(6, 1fr)",
-              },
-              gap: 2,
-              marginTop: 3,
-            }}
-          >
-            {[...Array(6)].map((_, index) => (
-              <Link href={`/playlist`} key={index} style={{ textDecoration: "none" }}>
-                <Card
-                  sx={{
-                    backgroundColor: "transparent",
-                    borderRadius: 2,
-                    padding: 2,
-                    boxShadow: "none",
-                    position: "relative",
-                    "&:hover": {
-                      backgroundColor: "#1c1c1c",
-                      transition: "all 0.3s",
-                    },
-                    "&:hover .hover-content": {
-                      opacity: 1,
-                      transform: "translateY(0)",
-                    },
-                  }}
-                >
+        <CircularProgress color="inherit" />
+      </Box>
+    );
+  }
+
+  return (
+    <Box
+      sx={{
+        flexGrow: 1,
+        px: 2,
+        py: 2,
+        backgroundColor: "#121212",
+        borderRadius: 2,
+        overflowY: "auto",
+        height: "100%",
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "#2e2e2e",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#555555",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#777777",
+        },
+        scrollbarWidth: "thin",
+        scrollbarColor: "#555555 #2e2e2e",
+      }}
+    >
+      {/* === Sección: Playlists aleatorias === */}
+      <Box mb={4}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={1}
+        >
+          <Typography variant="h6" color="white">
+            Playlists aleatorias
+          </Typography>
+          <Typography variant="body2" color="#b3b3b3">
+            Ver todas
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: 2,
+          }}
+        >
+          {playlists.length === 0 && (
+            <Typography color="#b3b3b3">No hay playlists disponibles.</Typography>
+          )}
+          {playlists.map((pl) => (
+            <Link
+              to={`/playlist/${pl.id}`}
+              key={pl.id}
+              style={{ textDecoration: "none" }}
+            >
+              <Card
+                sx={{
+                  backgroundColor: "#1e1e1e",
+                  borderRadius: 2,
+                  boxShadow: "none",
+                  cursor: "pointer",
+                  height: 180,
+                  display: "flex",
+                  flexDirection: "column",
+                  "&:hover": { transform: "scale(1.02)", transition: "0.2s" },
+                }}
+              >
+                {pl.imagen ? (
                   <CardMedia
                     component="img"
-                    image={`https://definicion.com/wp-content/uploads/2022/09/imagen.jpg`}
-                    alt={`Artista ${index + 1}`}
+                    image={pl.imagen}
+                    alt={pl.nombre}
                     sx={{
-                      borderRadius: "50%",
-                      width: { md: "180px", lg: "200px" },
-                      height: { md: "180px", lg: "200px" },
-                      margin: "0 auto",
+                      width: "100%",
+                      height: 120,
+                      objectFit: "cover",
+                      borderTopLeftRadius: 8,
+                      borderTopRightRadius: 8,
                     }}
                   />
-                  <CardContent>
-                    <Typography variant="body1" color="white">
-                      {`Artista ${index + 1}`}
-                    </Typography>
-                    <Typography variant="body1" color="white">
-                      Artista
-                    </Typography>
-                  </CardContent>
-
+                ) : (
                   <Box
-                    className="hover-content"
                     sx={{
-                      position: "absolute",
-                      bottom: { md: "100px" },
-                      right: { md: "40px" },
-                      padding: 2,
-                      backgroundColor: "#E91E63",
-                      borderRadius: "50%",
-                      width: "25px",
-                      height: "25px",
-                      color: "black",
-                      alignContent: "center",
-                      alignItems: "center",
+                      width: "100%",
+                      height: 120,
+                      backgroundColor: "#2e2e2e",
+                      borderTopLeftRadius: 8,
+                      borderTopRightRadius: 8,
                       display: "flex",
-                      opacity: 0,
-                      transform: "translateY(10px)",
-                      transition: "all 0.3s ease-in-out",
-                      "&:hover": {
-                        backgroundColor: "#ff4081",
-                        color: "black",
-                        scale: 1.1,
-                        transition: "all 0.3s",
-                      },
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    <PlayArrowIcon fontSize="large" />
+                    <LibraryMusicIcon sx={{ color: "#555", fontSize: 40 }} />
                   </Box>
-                </Card>
-              </Link>
-            ))}
-          </Box>
-          <Typography variant="h5">Álbumes y sencillos populares</Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                sm: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
-                xl: "repeat(6, 1fr)",
-              },
-              gap: 2,
-              marginTop: 3,
-            }}
-          >
-            {[...Array(6)].map((_, index) => (
-              <Card
-                key={index}
-                sx={{
-                  backgroundColor: "transparent",
-                  borderRadius: 2,
-                  padding: 2,
-                  boxShadow: "none",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image={`https://definicion.com/wp-content/uploads/2022/09/imagen.jpg`}
-                  alt={`Artista ${index + 1}`}
-                  sx={{
-                    borderRadius: 2,
-                    width: { md: "180px", lg: "200px" },
-                    height: { md: "180px", lg: "200px" },
-                    margin: "0 auto",
-                  }}
-                />
-                <CardContent>
-                  <Typography variant="body1" color="white">{`Artista ${index + 1}`}</Typography>
-                  <Typography variant="body1" color="white">
-                    Artista
+                )}
+                <CardContent sx={{ p: 1, textAlign: "center", flexGrow: 1 }}>
+                  <Typography
+                    variant="body2"
+                    color="white"
+                    fontWeight="bold"
+                    noWrap
+                  >
+                    {pl.nombre}
                   </Typography>
                 </CardContent>
               </Card>
-            ))}
-          </Box>
-          <Typography variant="h5">Emisoras populares</Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                sm: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
-                xl: "repeat(6, 1fr)",
-              },
-              gap: 2,
-              marginTop: 3,
-            }}
-          >
-            {[...Array(6)].map((_, index) => (
-              <Card
-                key={index}
+            </Link>
+          ))}
+        </Box>
+      </Box>
+
+      {/* === Sección: Artistas disponibles === */}
+      <Box mb={4}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={1}
+        >
+          <Typography variant="h6" color="white">
+            Artistas
+          </Typography>
+          <Typography variant="body2" color="#b3b3b3">
+            Ver todos
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: 2,
+          }}
+        >
+          {artistas.length === 0 && (
+            <Typography color="#b3b3b3">No hay artistas registrados.</Typography>
+          )}
+          {artistas.map((art) => (
+            <Link
+              to={`/cantante/${art.id}`}
+              key={art.id}
+              style={{ textDecoration: "none" }}
+            >
+              <Box
                 sx={{
-                  backgroundColor: "transparent",
-                  borderRadius: 2,
-                  padding: 2,
-                  boxShadow: "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  "&:hover": { transform: "scale(1.02)", transition: "0.2s" },
                 }}
               >
-                <CardMedia
-                  component="img"
-                  image={`https://cdn0.uncomo.com/es/posts/5/4/2/como_conocer_los_colores_exactos_de_una_imagen_10245_600_square.jpg`}
-                  alt={`Artista ${index + 1}`}
+                <Avatar
+                  src={art.avatar || ""}
                   sx={{
-                    borderRadius: 2,
-                    width: { md: "180px", lg: "200px" },
-                    height: { md: "180px", lg: "200px" },
-                    margin: "0 auto",
+                    width: 80,
+                    height: 80,
+                    bgcolor: art.avatar ? "transparent" : "#333333",
+                    fontSize: 24,
+                    mb: 1,
                   }}
-                />
-                <CardContent>
-                  <Typography variant="body1" color="white">
-                    Varios artistas.
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
+                >
+                  {!art.avatar && art.nombre.slice(0, 1).toUpperCase()}
+                </Avatar>
+                <Typography variant="body2" color="white" noWrap>
+                  {art.nombre}
+                </Typography>
+              </Box>
+            </Link>
+          ))}
         </Box>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default ContenidoHome
-
+export default ContenidoHome;

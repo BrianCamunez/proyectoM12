@@ -1,21 +1,35 @@
-import { Box } from "@mui/material"
-import Navbar from "./Navbar"
-import ContenidoTemporal from "./ContenidoHome"
-import Player from "./Player"
+// src/componentes/PaginaHome.jsx
+import React from "react";
+import { Slide, useMediaQuery, useTheme } from "@mui/material";
+import { Outlet } from "react-router-dom";
+
+import Navbar from "./Navbar";
+import Player from "./Player";
 
 const PaginaHome = () => {
+
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+
   return (
     <>
-      <Navbar />
-      <Box sx={{ display: "flex", height: { xs: "100%", md: "calc(100vh - 64px)" }, overflow: "hidden" }}>
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
-          <ContenidoTemporal />
-        </Box>
-      </Box>
-      <Player/>
+      {/* HEADER fijo */}
+      {isMdUp && (
+        <Navbar/>
+      )}
+      {/* Aquí se inyectará el layout de 3 columnas o cualquier otro Outlet */}
+      <Slide direction="right" in mountOnEnter timeout={300}>
+        <div style={{ width: "100%", height: "100%" }}>
+          <Outlet />
+        </div>
+      </Slide>
+
+      {/* PLAYER fijo abajo */}
+      {isMdUp && (
+        <Player />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default PaginaHome
-
+export default PaginaHome;
