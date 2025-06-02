@@ -1,5 +1,5 @@
 // src/componentes/InfoCancionSidebar.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -9,7 +9,6 @@ import {
   CardContent,
   CircularProgress,
 } from "@mui/material";
-import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import { usePlayer } from "../context/PlayerContext";
 import { supabase } from "../supabase/supabase";
 
@@ -36,7 +35,7 @@ const ContenidoCancionLateral = () => {
           .eq("usuarios.nombre", cancionActual.artista)
           .neq("id", cancionActual.id)
           .limit(5);
-
+        console.log("Canciones relacionadas:", data);
         if (error) throw error;
         setRelatedSongs(data || []);
       } catch (err) {

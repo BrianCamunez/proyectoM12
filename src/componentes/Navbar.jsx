@@ -1,7 +1,7 @@
 // src/componentes/Navbar.jsx
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -10,7 +10,6 @@ import {
   TextField,
   InputAdornment,
   Button,
-  Typography,
   Menu,
   MenuItem,
   Avatar,
