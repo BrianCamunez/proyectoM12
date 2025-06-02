@@ -1,305 +1,222 @@
+// src/componentes/MainContent.jsx
+import React from "react";
 import {
   Box,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Button,
   Typography,
   Card,
-  CardContent,
   CardMedia,
-} from "@mui/material"
-import LibraryMusicIcon from "@mui/icons-material/LibraryMusic"
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import { Link } from 'react-router-dom'
+  CardContent,
+  Avatar,
+  IconButton,
+} from "@mui/material";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { Link } from "react-router-dom";
 
 const ContenidoHome = () => {
+
+  const artistas = [
+    { id: 1, nombre: "Sän-Z" },
+    { id: 2, nombre: "K/DA" },
+    { id: 3, nombre: "League of Legends" },
+    { id: 4, nombre: "Odetari" },
+    { id: 5, nombre: "TheFatRat" },
+  ];
+
+  const descubrimientos = [
+    {
+      id: 1,
+      titulo: "Concentración Perfecta",
+      descripcion: "Concéntrate al máximo, sin distracciones.",
+    },
+    {
+      id: 2,
+      titulo: "Viral España 2025",
+      descripcion: "Así suena internet, con Luck Ra.",
+    },
+    {
+      id: 3,
+      titulo: "Chill Lofi Study Beats",
+      descripcion: "The perfect study beats. Find your focus.",
+    },
+    {
+      id: 4,
+      titulo: "Los 2000 España",
+      descripcion: "Lo mejor de la primera década del milenio.",
+    },
+    {
+      id: 5,
+      titulo: "House Focus",
+      descripcion: "Instrumental house for when you need to focus.",
+    },
+  ];
+
   return (
-    <Box sx={{ display: "flex", minHeight: "100%", backgroundColor: "#000", width: "100%", gap: 2 }}>
-      {/* Sidebar Section */}
-      <Box sx={{ width: 350, flexShrink: 0 }}>
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: 350,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              width: 350,
-              marginTop: "70px",
-              backgroundColor: "#121212",
-              color: "#aeaeae",
-              borderRadius: "6px",
-              height: "85.5vh",
-              overflow: "hidden",
-              marginLeft: 1,
-              position: "relative",
-            },
-          }}
-        >
-          <List>
-            <ListItem button>
-              <ListItemIcon>
-                <LibraryMusicIcon sx={{ color: "#aeaeae" }} />
-              </ListItemIcon>
-              <ListItemText primary="Tu Biblioteca" />
-              <ListItemIcon sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <ArrowBackIcon sx={{ transform: "rotate(180deg)", color: "#aeaeae" }} />
-              </ListItemIcon>
-            </ListItem>
-
-            <ListItem
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                backgroundColor: "#2C2C2C",
-                margin: 1,
-                borderRadius: "10px",
-                boxSizing: "border-box",
-                width: "auto",
-              }}
-            >
-              <ListItemText sx={{ boxSizing: "border-box", color: "white" }}>Crear tu primera lista</ListItemText>
-              <ListItemText sx={{ boxSizing: "border-box", color: "white" }}>
-                Es muy fácil, te echaremos una mano
-              </ListItemText>
-              <ListItemButton
-                sx={{
-                  boxSizing: "border-box",
-                  color: "black",
-                  backgroundColor: "white",
-                  borderRadius: 50,
-                  marginTop: 1,
-                }}
-              >
-                Crear lista
-              </ListItemButton>
-            </ListItem>
-          </List>
-          <Box sx={{ marginTop: "auto", padding: 2 }}>
-            <List>
-              <ListItem>
-                <Button sx={{ color: "white" }}>Cambiar idioma</Button>
-              </ListItem>
-              <ListItem>
-                <Button sx={{ color: "white" }}>Política de cookies</Button>
-              </ListItem>
-            </List>
-          </Box>
-        </Drawer>
-      </Box>
-
-      {/* Content Section */}
+    <Box
+      sx={{
+        flexGrow: 1,
+        pt: 3,              // 24px
+        pl: 2,              // 16px
+        pr: 1,              // 8px
+        backgroundColor: "#121212",
+        borderRadius: 2,
+        height: "100%",
+        overflowY: "auto",
+        // ----- SCROLL VERTICAL PERSONALIZADO -----
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "#1e1e1e",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#333",       // gris en lugar de verde
+          borderRadius: "10px",
+          border: "2px solid #121212",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#555",
+        },
+      }}
+    >
+      {/* === Sección: Artistas populares (fila horizontal) === */}
       <Box
         sx={{
-          flexGrow: 1,
-          paddingTop: 3,
-          paddingLeft: 2,
-          paddingRight: 1,
-          backgroundColor: "#121212",
-          borderRadius: 2,
-          height: "83.2vh",
-          marginTop: "70px",
-          overflowY: "auto",
+          display: "flex",
+          overflowX: "auto",
+          gap: 3,   // 3 * 8px = 24px
+          py: 2,
+          mb: 4,
+          // ----- SCROLL HORIZONTAL PERSONALIZADO -----
           "&::-webkit-scrollbar": {
-            width: "8px", // El tamaño del scroll
-          },
-          "&::-webkit-scrollbar-track": {
-            background: "#2a2a2a", // Color de la pista del scroll
-            borderRadius: "10px",
+            height: "6px",
           },
           "&::-webkit-scrollbar-thumb": {
-            background: "#767612", // Color del pulgar del scroll
-            borderRadius: "10px",
-            border: "2px solid #161246", // Color del borde del pulgar
+            backgroundColor: "#333",   // gris en lugar de verde
+            borderRadius: "3px",
           },
-          "&::-webkit-scrollbar-thumb:hover": {
-            background: "#561234", // Color al pasar el ratón sobre el pulgar
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#1e1e1e",
           },
         }}
       >
-        <Box paddingX={{ md: 2 }} marginBottom={20}>
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="h6">Artistas populares</Typography>
-            <Typography variant="body1">Mostrar todos</Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                sm: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
-                xl: "repeat(6, 1fr)",
-              },
-              gap: 2,
-              marginTop: 3,
-            }}
-          >
-            {[...Array(6)].map((_, index) => (
-              <Link href={`/playlist`} key={index} style={{ textDecoration: "none" }}>
-                <Card
-                  sx={{
-                    backgroundColor: "transparent",
-                    borderRadius: 2,
-                    padding: 2,
-                    boxShadow: "none",
-                    position: "relative",
-                    "&:hover": {
-                      backgroundColor: "#1c1c1c",
-                      transition: "all 0.3s",
-                    },
-                    "&:hover .hover-content": {
-                      opacity: 1,
-                      transform: "translateY(0)",
-                    },
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    image={`https://definicion.com/wp-content/uploads/2022/09/imagen.jpg`}
-                    alt={`Artista ${index + 1}`}
-                    sx={{
-                      borderRadius: "50%",
-                      width: { md: "180px", lg: "200px" },
-                      height: { md: "180px", lg: "200px" },
-                      margin: "0 auto",
-                    }}
-                  />
-                  <CardContent>
-                    <Typography variant="body1" color="white">
-                      {`Artista ${index + 1}`}
-                    </Typography>
-                    <Typography variant="body1" color="white">
-                      Artista
-                    </Typography>
-                  </CardContent>
+        {artistas.map((artista) => {
+          // usamos las siglas para el avatar (primera letra)
+          const letra = artista.nombre.charAt(0).toUpperCase();
+          return (
+            <Box
+              key={artista.id}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                minWidth: 120,
+              }}
+            >
+              <Avatar
+                sx={{
+                  width: 120,
+                  height: 120,
+                  mb: 1,
+                  bgcolor: "#2a2a2a", // fondo gris oscuro
+                  color: "#fff",
+                  fontSize: 32,
+                }}
+              >
+                {letra}
+              </Avatar>
+              <Typography
+                variant="body2"
+                color="white"
+                noWrap
+                sx={{ textAlign: "center", maxWidth: 120 }}
+              >
+                {artista.nombre}
+              </Typography>
+              <Typography variant="caption" color="#b3b3b3">
+                Artista
+              </Typography>
+            </Box>
+          );
+        })}
+      </Box>
 
-                  <Box
-                    className="hover-content"
-                    sx={{
-                      position: "absolute",
-                      bottom: { md: "100px" },
-                      right: { md: "40px" },
-                      padding: 2,
-                      backgroundColor: "#E91E63",
-                      borderRadius: "50%",
-                      width: "25px",
-                      height: "25px",
-                      color: "black",
-                      alignContent: "center",
-                      alignItems: "center",
-                      display: "flex",
-                      opacity: 0,
-                      transform: "translateY(10px)",
-                      transition: "all 0.3s ease-in-out",
-                      "&:hover": {
-                        backgroundColor: "#ff4081",
-                        color: "black",
-                        scale: 1.1,
-                        transition: "all 0.3s",
-                      },
-                    }}
-                  >
-                    <PlayArrowIcon fontSize="large" />
-                  </Box>
-                </Card>
-              </Link>
-            ))}
-          </Box>
-          <Typography variant="h5">Álbumes y sencillos populares</Typography>
-          <Box
+      {/* === Sección: “Lo que no te puedes perder” === */}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Typography variant="h5" color="white">
+          Lo que no te puedes perder
+        </Typography>
+        <Typography variant="body2" color="#b3b3b3">
+          Mostrar todos
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          overflowX: "auto",
+          gap: 3, // 24px
+          pb: 2,
+          "&::-webkit-scrollbar": {
+            height: "6px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#333",   // gris
+            borderRadius: "3px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#1e1e1e",
+          },
+        }}
+      >
+        {descubrimientos.map((item) => (
+          <Card
+            key={item.id}
             sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                sm: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
-                xl: "repeat(6, 1fr)",
-              },
-              gap: 2,
-              marginTop: 3,
+              width: 150,
+              backgroundColor: "transparent",
+              borderRadius: 2,
+              boxShadow: "none",
+              "&:hover": { backgroundColor: "#1e1e1e", transition: "0.3s" },
             }}
           >
-            {[...Array(6)].map((_, index) => (
-              <Card
-                key={index}
-                sx={{
-                  backgroundColor: "transparent",
-                  borderRadius: 2,
-                  padding: 2,
-                  boxShadow: "none",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image={`https://definicion.com/wp-content/uploads/2022/09/imagen.jpg`}
-                  alt={`Artista ${index + 1}`}
-                  sx={{
-                    borderRadius: 2,
-                    width: { md: "180px", lg: "200px" },
-                    height: { md: "180px", lg: "200px" },
-                    margin: "0 auto",
-                  }}
-                />
-                <CardContent>
-                  <Typography variant="body1" color="white">{`Artista ${index + 1}`}</Typography>
-                  <Typography variant="body1" color="white">
-                    Artista
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
-          <Typography variant="h5">Emisoras populares</Typography>
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                sm: "repeat(3, 1fr)",
-                lg: "repeat(4, 1fr)",
-                xl: "repeat(6, 1fr)",
-              },
-              gap: 2,
-              marginTop: 3,
-            }}
-          >
-            {[...Array(6)].map((_, index) => (
-              <Card
-                key={index}
-                sx={{
-                  backgroundColor: "transparent",
-                  borderRadius: 2,
-                  padding: 2,
-                  boxShadow: "none",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image={`https://cdn0.uncomo.com/es/posts/5/4/2/como_conocer_los_colores_exactos_de_una_imagen_10245_600_square.jpg`}
-                  alt={`Artista ${index + 1}`}
-                  sx={{
-                    borderRadius: 2,
-                    width: { md: "180px", lg: "200px" },
-                    height: { md: "180px", lg: "200px" },
-                    margin: "0 auto",
-                  }}
-                />
-                <CardContent>
-                  <Typography variant="body1" color="white">
-                    Varios artistas.
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
-        </Box>
+            {/* En lugar de imagen rotas, dejamos un placeholder gris */}
+            <Box
+              sx={{
+                width: "100%",
+                height: 150,
+                borderRadius: 2,
+                backgroundColor: "#2a2a2a",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mb: 1,
+              }}
+            >
+              <Typography variant="h6" color="#555">
+                🎵
+              </Typography>
+            </Box>
+            <CardContent sx={{ p: 1 }}>
+              <Typography variant="body2" color="white" noWrap>
+                {item.titulo}
+              </Typography>
+              <Typography variant="caption" color="#b3b3b3" noWrap>
+                {item.descripcion}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
       </Box>
     </Box>
-  )
-}
+  );
 
-export default ContenidoHome
 
+};
+
+export default ContenidoHome;
