@@ -239,7 +239,7 @@ const ContenidoGeneroMobile = () => {
                         }}
                     >
                         <Typography fontWeight="bold" fontSize={18} mb={2}>
-                            Opciones para "{selectedSong?.nombre}"
+                            Opciones para {selectedSong?.nombre}
                         </Typography>
 
                         {/* Guardar en playlist */}

@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, useMediaQuery, useTheme, Slide } from "@mui/material";
 import { Routes, Route, useLocation } from "react-router-dom";
 
@@ -21,6 +21,9 @@ import ContenidoBibliotecaMobile from "./componentes/componentesMobile/Contenido
 import ContenidoExplorarMobile from "./componentes/componentesMobile/ContenidoExplorarMobile";
 import ContenidoPerfilMobile from "./componentes/componentesMobile/ContenidoPerfilMobile";
 import ContenidoGeneroMobile from "./componentes/componentesMobile/ContenidoGeneroMobile";
+import ContenidoCantante from "./componentes/ContenidoCantante";
+import ContenidoGenero from "./componentes/ContenidoGenero";
+import ContenidoPerfil from "./componentes/ContenidoPerfil";
 
 function App() {
   const theme = useTheme();
@@ -41,6 +44,25 @@ function App() {
         color: "white",
         overflow: "hidden",
         boxSizing: "border-box",
+
+        /* ===== Aquí van los estilos del scrollbar “global” ===== */
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "#2e2e2e",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#555555",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#777777",
+        },
+        /* Para Firefox */
+        "scrollbar-width": "thin",
+        "scrollbar-color": "#555555 #2e2e2e",
       }}
     >
       <Routes location={location}>
@@ -67,19 +89,40 @@ function App() {
                 <Route path="playlist/:id" element={<ContenidoPlaylist />} />
                 <Route path="cancion" element={<ContenidoCancion />} />
                 <Route path="contenido2" element={<PaginaExplorar />} />
+                <Route path="cantante/:id" element={<ContenidoCantante />} />
+                <Route path="genero/:nombre" element={<ContenidoGenero />} />
+                <Route path="perfil" element={<ContenidoPerfil />} />
               </Route>
             </>
           ) : (
             <>
               {/* Rutas solo móvil (sin sidebars) */}
               <Route index element={<ContenidoMobile />} />
-              <Route path="playlistMobile/:id" element={<ContenidoPlaylistMobile />} />
+              <Route
+                path="playlistMobile/:id"
+                element={<ContenidoPlaylistMobile />}
+              />
               <Route path="cancion" element={<ContenidoCancionMobile />} />
-              <Route path="cantanteMobile" element={<ContenidoCantanteMobile />} />
-              <Route path="biblioteca" element={<ContenidoBibliotecaMobile />} />
-              <Route path="explorarMobile" element={<ContenidoExplorarMobile />} />
-              <Route path="perfilMobile" element={<ContenidoPerfilMobile />} />
-              <Route path="genero/:nombre" element={<ContenidoGeneroMobile />} />
+              <Route
+                path="cantanteMobile"
+                element={<ContenidoCantanteMobile />}
+              />
+              <Route
+                path="biblioteca"
+                element={<ContenidoBibliotecaMobile />}
+              />
+              <Route
+                path="explorarMobile"
+                element={<ContenidoExplorarMobile />}
+              />
+              <Route
+                path="perfilMobile"
+                element={<ContenidoPerfilMobile />}
+              />
+              <Route
+                path="genero/:nombre"
+                element={<ContenidoGeneroMobile />}
+              />
             </>
           )}
         </Route>

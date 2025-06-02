@@ -1,222 +1,252 @@
-// src/componentes/MainContent.jsx
-import React from "react";
+// src/componentes/ContenidoHome.jsx
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
   Card,
-  CardMedia,
   CardContent,
+  CardMedia,
   Avatar,
-  IconButton,
+  CircularProgress,
 } from "@mui/material";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import { Link } from "react-router-dom";
+import { supabase } from "../supabase/supabase";
 
 const ContenidoHome = () => {
+  const [playlists, setPlaylists] = useState([]);
+  const [artistas, setArtistas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const artistas = [
-    { id: 1, nombre: "Sän-Z" },
-    { id: 2, nombre: "K/DA" },
-    { id: 3, nombre: "League of Legends" },
-    { id: 4, nombre: "Odetari" },
-    { id: 5, nombre: "TheFatRat" },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // 1) Obtener hasta 5 playlists aleatorias
+        const { data: playlistsData, error: playlistsError } = await supabase
+          .from("playlist")
+          .select("id, nombre, imagen")
+          //.order("random()", { ascending: true }) // muestra en orden aleatorio si PostgREST lo permite
+          .limit(5);
+        if (playlistsError) throw playlistsError;
+        setPlaylists(playlistsData || []);
 
-  const descubrimientos = [
-    {
-      id: 1,
-      titulo: "Concentración Perfecta",
-      descripcion: "Concéntrate al máximo, sin distracciones.",
-    },
-    {
-      id: 2,
-      titulo: "Viral España 2025",
-      descripcion: "Así suena internet, con Luck Ra.",
-    },
-    {
-      id: 3,
-      titulo: "Chill Lofi Study Beats",
-      descripcion: "The perfect study beats. Find your focus.",
-    },
-    {
-      id: 4,
-      titulo: "Los 2000 España",
-      descripcion: "Lo mejor de la primera década del milenio.",
-    },
-    {
-      id: 5,
-      titulo: "House Focus",
-      descripcion: "Instrumental house for when you need to focus.",
-    },
-  ];
+        // 2) Obtener todos los usuarios con role = "artista"
+        const { data: artistasData, error: artistasError } = await supabase
+          .from("usuarios")
+          .select("id, nombre, avatar")
+          .eq("role", "artista");
+        if (artistasError) throw artistasError;
+        setArtistas(artistasData || []);
+      } catch (err) {
+        console.error("Error cargando datos de Home:", err.message);
+        setPlaylists([]);
+        setArtistas([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          flexGrow: 1,
+          px: 2,
+          py: 2,
+          backgroundColor: "#121212",
+          borderRadius: 2,
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress color="inherit" />
+      </Box>
+    );
+  }
 
   return (
     <Box
       sx={{
         flexGrow: 1,
-        pt: 3,              // 24px
-        pl: 2,              // 16px
-        pr: 1,              // 8px
+        px: 2,
+        py: 2,
         backgroundColor: "#121212",
         borderRadius: 2,
-        height: "100%",
         overflowY: "auto",
-        // ----- SCROLL VERTICAL PERSONALIZADO -----
+        height: "100%",
         "&::-webkit-scrollbar": {
           width: "8px",
         },
         "&::-webkit-scrollbar-track": {
-          background: "#1e1e1e",
+          background: "#2e2e2e",
           borderRadius: "10px",
         },
         "&::-webkit-scrollbar-thumb": {
-          background: "#333",       // gris en lugar de verde
+          background: "#555555",
           borderRadius: "10px",
-          border: "2px solid #121212",
         },
         "&::-webkit-scrollbar-thumb:hover": {
-          background: "#555",
+          background: "#777777",
         },
+        scrollbarWidth: "thin",
+        scrollbarColor: "#555555 #2e2e2e",
       }}
     >
-      {/* === Sección: Artistas populares (fila horizontal) === */}
-      <Box
-        sx={{
-          display: "flex",
-          overflowX: "auto",
-          gap: 3,   // 3 * 8px = 24px
-          py: 2,
-          mb: 4,
-          // ----- SCROLL HORIZONTAL PERSONALIZADO -----
-          "&::-webkit-scrollbar": {
-            height: "6px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#333",   // gris en lugar de verde
-            borderRadius: "3px",
-          },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: "#1e1e1e",
-          },
-        }}
-      >
-        {artistas.map((artista) => {
-          // usamos las siglas para el avatar (primera letra)
-          const letra = artista.nombre.charAt(0).toUpperCase();
-          return (
-            <Box
-              key={artista.id}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                minWidth: 120,
-              }}
+      {/* === Sección: Playlists aleatorias === */}
+      <Box mb={4}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={1}
+        >
+          <Typography variant="h6" color="white">
+            Playlists aleatorias
+          </Typography>
+          <Typography variant="body2" color="#b3b3b3">
+            Ver todas
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: 2,
+          }}
+        >
+          {playlists.length === 0 && (
+            <Typography color="#b3b3b3">No hay playlists disponibles.</Typography>
+          )}
+          {playlists.map((pl) => (
+            <Link
+              to={`/playlist/${pl.id}`}
+              key={pl.id}
+              style={{ textDecoration: "none" }}
             >
-              <Avatar
+              <Card
                 sx={{
-                  width: 120,
-                  height: 120,
-                  mb: 1,
-                  bgcolor: "#2a2a2a", // fondo gris oscuro
-                  color: "#fff",
-                  fontSize: 32,
+                  backgroundColor: "#1e1e1e",
+                  borderRadius: 2,
+                  boxShadow: "none",
+                  cursor: "pointer",
+                  height: 180,
+                  display: "flex",
+                  flexDirection: "column",
+                  "&:hover": { transform: "scale(1.02)", transition: "0.2s" },
                 }}
               >
-                {letra}
-              </Avatar>
-              <Typography
-                variant="body2"
-                color="white"
-                noWrap
-                sx={{ textAlign: "center", maxWidth: 120 }}
-              >
-                {artista.nombre}
-              </Typography>
-              <Typography variant="caption" color="#b3b3b3">
-                Artista
-              </Typography>
-            </Box>
-          );
-        })}
+                {pl.imagen ? (
+                  <CardMedia
+                    component="img"
+                    image={pl.imagen}
+                    alt={pl.nombre}
+                    sx={{
+                      width: "100%",
+                      height: 120,
+                      objectFit: "cover",
+                      borderTopLeftRadius: 8,
+                      borderTopRightRadius: 8,
+                    }}
+                  />
+                ) : (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      height: 120,
+                      backgroundColor: "#2e2e2e",
+                      borderTopLeftRadius: 8,
+                      borderTopRightRadius: 8,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <LibraryMusicIcon sx={{ color: "#555", fontSize: 40 }} />
+                  </Box>
+                )}
+                <CardContent sx={{ p: 1, textAlign: "center", flexGrow: 1 }}>
+                  <Typography
+                    variant="body2"
+                    color="white"
+                    fontWeight="bold"
+                    noWrap
+                  >
+                    {pl.nombre}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </Box>
       </Box>
 
-      {/* === Sección: “Lo que no te puedes perder” === */}
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <Typography variant="h5" color="white">
-          Lo que no te puedes perder
-        </Typography>
-        <Typography variant="body2" color="#b3b3b3">
-          Mostrar todos
-        </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          overflowX: "auto",
-          gap: 3, // 24px
-          pb: 2,
-          "&::-webkit-scrollbar": {
-            height: "6px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#333",   // gris
-            borderRadius: "3px",
-          },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: "#1e1e1e",
-          },
-        }}
-      >
-        {descubrimientos.map((item) => (
-          <Card
-            key={item.id}
-            sx={{
-              width: 150,
-              backgroundColor: "transparent",
-              borderRadius: 2,
-              boxShadow: "none",
-              "&:hover": { backgroundColor: "#1e1e1e", transition: "0.3s" },
-            }}
-          >
-            {/* En lugar de imagen rotas, dejamos un placeholder gris */}
-            <Box
-              sx={{
-                width: "100%",
-                height: 150,
-                borderRadius: 2,
-                backgroundColor: "#2a2a2a",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mb: 1,
-              }}
+      {/* === Sección: Artistas disponibles === */}
+      <Box mb={4}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={1}
+        >
+          <Typography variant="h6" color="white">
+            Artistas
+          </Typography>
+          <Typography variant="body2" color="#b3b3b3">
+            Ver todos
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: 2,
+          }}
+        >
+          {artistas.length === 0 && (
+            <Typography color="#b3b3b3">No hay artistas registrados.</Typography>
+          )}
+          {artistas.map((art) => (
+            <Link
+              to={`/cantante/${art.id}`}
+              key={art.id}
+              style={{ textDecoration: "none" }}
             >
-              <Typography variant="h6" color="#555">
-                🎵
-              </Typography>
-            </Box>
-            <CardContent sx={{ p: 1 }}>
-              <Typography variant="body2" color="white" noWrap>
-                {item.titulo}
-              </Typography>
-              <Typography variant="caption" color="#b3b3b3" noWrap>
-                {item.descripcion}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  "&:hover": { transform: "scale(1.02)", transition: "0.2s" },
+                }}
+              >
+                <Avatar
+                  src={art.avatar || ""}
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    bgcolor: art.avatar ? "transparent" : "#333333",
+                    fontSize: 24,
+                    mb: 1,
+                  }}
+                >
+                  {!art.avatar && art.nombre.slice(0, 1).toUpperCase()}
+                </Avatar>
+                <Typography variant="body2" color="white" noWrap>
+                  {art.nombre}
+                </Typography>
+              </Box>
+            </Link>
+          ))}
+        </Box>
       </Box>
     </Box>
   );
-
-
 };
 
 export default ContenidoHome;

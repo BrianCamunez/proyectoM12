@@ -192,12 +192,19 @@ const Navbar = () => {
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        sx={{
+          "& .MuiMenu-paper": {
+            backgroundColor: "#2C2C2C",
+            color: "#FFFFFF",
+            borderRadius: "10px",
+          },
+        }}
       >
         <MenuItem
-          onClick={() => {
-            handleClose();
-            // Aquí puedes navegar a la página de perfil
-          }}
+          component={Link}
+          to="/perfil"
+          onClick={handleClose}
+          sx={{ color: "#FFFFFF", "&:hover": { backgroundColor: "#3C3C3C" } }}
         >
           Ver perfil
         </MenuItem>
