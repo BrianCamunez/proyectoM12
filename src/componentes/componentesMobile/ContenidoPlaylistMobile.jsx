@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Button, Typography, Modal, Slide } from "@mui/material";
+import { Link } from "react-router-dom";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
@@ -13,8 +14,8 @@ import { supabase } from "../../supabase/supabase";
 import ReproductorMobile from "./ReproductorMobile";
 import MenuAbajoMobile from "./MenuAbajoMobile";
 import { usePlayer } from "../../context/PlayerContext";
-import QueueMusicIcon from '@mui/icons-material/QueueMusic';
-import IosShareIcon from '@mui/icons-material/IosShare';
+import QueueMusicIcon from "@mui/icons-material/QueueMusic";
+import IosShareIcon from "@mui/icons-material/IosShare";
 
 const ContenidoPlaylistMobile = () => {
   const { id } = useParams();
@@ -30,7 +31,9 @@ const ContenidoPlaylistMobile = () => {
 
   useEffect(() => {
     const validarSesion = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         navigate("/registro");
       }
@@ -119,7 +122,6 @@ const ContenidoPlaylistMobile = () => {
     }
   }, [playlist]);
 
-
   if (loading || !playlist) {
     return (
       <Box
@@ -164,15 +166,16 @@ const ContenidoPlaylistMobile = () => {
             </Box>
             <Box py={2}>
               <Typography fontWeight="bold">{playlist.nombre}</Typography>
-              <Box py={2}>
-                {playlist.descripcion || "Sin descripción"}
-              </Box>
+              <Box py={2}>{playlist.descripcion || "Sin descripción"}</Box>
+              <Link to={`/cantanteMobile/${playlist.id_usuario}`}>
+                <Box py={2}>Aritsta</Box>
+              </Link>
             </Box>
             <Box py={2} display={"flex"} justifyContent={"space-between"}>
               <Box display={"flex"} gap={2}>
                 <AddCircleOutlineIcon />
                 <ArrowCircleDownIcon />
-                <MoreHorizIcon/>
+                <MoreHorizIcon />
               </Box>
               <Box>
                 <ShuffleIcon sx={{ paddingRight: 2 }} />
@@ -189,7 +192,9 @@ const ContenidoPlaylistMobile = () => {
                   justifyContent={"space-between"}
                   alignItems={"center"}
                 >
-                  <Box display={"flex"} alignItems={"center"}
+                  <Box
+                    display={"flex"}
+                    alignItems={"center"}
                     sx={{ cursor: "pointer" }}
                     onClick={() =>
                       reproducirCancion(
@@ -259,7 +264,16 @@ const ContenidoPlaylistMobile = () => {
                         sx={{ objectFit: "cover", borderRadius: 2 }}
                       />
                     </Button>
-                    <Box mt={1} fontSize="14px" fontWeight="bold" sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    <Box
+                      mt={1}
+                      fontSize="14px"
+                      fontWeight="bold"
+                      sx={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
                       {pl.nombre}
                     </Box>
                     <Box fontSize="12px" color="#b3b3b3">
@@ -267,7 +281,6 @@ const ContenidoPlaylistMobile = () => {
                     </Box>
                   </Grid>
                 ))}
-
               </Grid>
             </Box>
           </Box>
@@ -275,14 +288,23 @@ const ContenidoPlaylistMobile = () => {
         <ReproductorMobile />
         <MenuAbajoMobile />
       </Box>
-      <Modal open={openOptionsModal} onClose={() => {
-        setShowOptionsContent(false);
-        setTimeout(() => {
-          setOpenOptionsModal(false);
-          setSelectedSong(null);
-        }, 300);
-      }} sx={{ zIndex: 1300 }}>
-        <Slide direction="up" in={showOptionsContent} mountOnEnter unmountOnExit>
+      <Modal
+        open={openOptionsModal}
+        onClose={() => {
+          setShowOptionsContent(false);
+          setTimeout(() => {
+            setOpenOptionsModal(false);
+            setSelectedSong(null);
+          }, 300);
+        }}
+        sx={{ zIndex: 1300 }}
+      >
+        <Slide
+          direction="up"
+          in={showOptionsContent}
+          mountOnEnter
+          unmountOnExit
+        >
           <Box
             sx={{
               position: "fixed",
@@ -299,7 +321,7 @@ const ContenidoPlaylistMobile = () => {
               width: "100%",
               maxHeight: "90vh",
               overflowY: "auto",
-              boxSizing: "border-box"
+              boxSizing: "border-box",
             }}
           >
             <Typography fontWeight="bold" fontSize={18} mb={2}>
@@ -319,13 +341,13 @@ const ContenidoPlaylistMobile = () => {
                 setOpenSelectPlaylistModal(true);
                 handleCloseOptionsModal(); // esto sí puede limpiar selectedSong ahora
               }}
-
-
             >
               <AddCircleOutlineIcon sx={{ fontSize: 30 }} />
               <Box>
                 <Typography fontWeight="bold">Guardar en playlist</Typography>
-                <Typography fontSize={13} color="#b3b3b3">Añade esta canción a una playlist</Typography>
+                <Typography fontSize={13} color="#b3b3b3">
+                  Añade esta canción a una playlist
+                </Typography>
               </Box>
             </Box>
 
@@ -340,8 +362,12 @@ const ContenidoPlaylistMobile = () => {
             >
               <CheckCircleIcon sx={{ fontSize: 30 }} />
               <Box>
-                <Typography fontWeight="bold">Añadir a tu biblioteca</Typography>
-                <Typography fontSize={13} color="#b3b3b3">Guarda esta canción en tu perfil</Typography>
+                <Typography fontWeight="bold">
+                  Añadir a tu biblioteca
+                </Typography>
+                <Typography fontSize={13} color="#b3b3b3">
+                  Guarda esta canción en tu perfil
+                </Typography>
               </Box>
             </Box>
 
@@ -357,7 +383,9 @@ const ContenidoPlaylistMobile = () => {
               <QueueMusicIcon sx={{ fontSize: 30 }} />
               <Box>
                 <Typography fontWeight="bold">Añadir a la cola</Typography>
-                <Typography fontSize={13} color="#b3b3b3">Se reproducirá después</Typography>
+                <Typography fontSize={13} color="#b3b3b3">
+                  Se reproducirá después
+                </Typography>
               </Box>
             </Box>
 
@@ -373,10 +401,11 @@ const ContenidoPlaylistMobile = () => {
               <IosShareIcon sx={{ fontSize: 30 }} />
               <Box>
                 <Typography fontWeight="bold">Compartir</Typography>
-                <Typography fontSize={13} color="#b3b3b3">Envía esta canción a tus amigos</Typography>
+                <Typography fontSize={13} color="#b3b3b3">
+                  Envía esta canción a tus amigos
+                </Typography>
               </Box>
             </Box>
-
           </Box>
         </Slide>
       </Modal>
@@ -412,7 +441,6 @@ const ContenidoPlaylistMobile = () => {
                 onClick={() => {
                   añadirCancionAPlaylist(playlist.id, selectedSongId);
                 }}
-
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -437,7 +465,6 @@ const ContenidoPlaylistMobile = () => {
                 <Typography fontWeight="500">{playlist.nombre}</Typography>
               </Box>
             ))
-
           )}
         </Box>
       </Modal>
