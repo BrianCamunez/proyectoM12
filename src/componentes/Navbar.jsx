@@ -96,7 +96,7 @@ const Navbar = () => {
         </Box>
 
         {/* === Center: Search Bar, centered === */}
-        <Box
+        {/* <Box
           sx={{
             flexGrow: 1,
             display: "flex",
@@ -134,7 +134,7 @@ const Navbar = () => {
               ),
             }}
           />
-        </Box>
+        </Box> */}
 
         {/* === Right: Either Avatar (if logged in) or Auth Buttons === */}
         <Box sx={{ display: "flex", alignItems: "center" }}>

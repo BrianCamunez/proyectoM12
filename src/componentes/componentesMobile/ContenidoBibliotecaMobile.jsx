@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import NavbarMobile from "./NavbarMobile";
@@ -8,11 +8,23 @@ import ContenidoBibliotecaListaMobile from "./ContenidoBibliotecaListaMobile";
 import ContenidoBibliotecaGridMobile from "./ContenidoBibliotecaGridMobile";
 import ReproductorMobile from "./ReproductorMobile";
 import MenuAbajoMobile from "./MenuAbajoMobile";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/supabase";
 
 const ContenidoBibliotecaMobile = () => {
   const [tipoVision, setTipoVision] = useState("lista");
   const [playlists, setPlaylists] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   const cambiarVista = () => {
     setTipoVision((prev) => (prev === "lista" ? "grid" : "lista"));

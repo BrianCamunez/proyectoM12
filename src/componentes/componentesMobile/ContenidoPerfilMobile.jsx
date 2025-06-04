@@ -16,6 +16,16 @@ const ContenidoPerfilMobile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
+
+  useEffect(() => {
     const getUserData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;

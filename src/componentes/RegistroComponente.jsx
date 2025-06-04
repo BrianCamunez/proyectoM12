@@ -86,7 +86,7 @@ const RegistroComponente = () => {
             <Link to="/">
                 <Box
                     component="img"
-                    src="/src/images/LogoProyecto.jpeg"
+                    src="/images/LogoProyecto.jpeg"
                     alt="Logo"
                     sx={{
                         width: { xs: "80px", sm: "100px" },

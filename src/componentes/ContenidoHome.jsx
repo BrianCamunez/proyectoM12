@@ -1,5 +1,5 @@
 // src/componentes/ContenidoHome.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -12,11 +12,23 @@ import {
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import { Link } from "react-router-dom";
 import { supabase } from "../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 
 const ContenidoHome = () => {
+  const navigate = useNavigate();
   const [playlists, setPlaylists] = useState([]);
   const [artistas, setArtistas] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +46,8 @@ const ContenidoHome = () => {
         const { data: artistasData, error: artistasError } = await supabase
           .from("usuarios")
           .select("id, nombre, avatar")
-          .eq("role", "artista");
+          .eq("role", "artista")
+          .limit(6);
         if (artistasError) throw artistasError;
         setArtistas(artistasData || []);
       } catch (err) {

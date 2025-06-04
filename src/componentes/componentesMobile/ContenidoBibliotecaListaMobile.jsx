@@ -30,7 +30,6 @@ const ContenidoBibliotecaListaMobile = ({ playlists }) => {
               <Box display="flex" alignItems="center" gap={1} fontSize="14px" color="#b3b3b3">
                 <ArrowCircleDownIcon sx={{ fontSize: 16 }} />
                 Lista · {playlist.usuarios?.nombre || "Desconocido"}
-                {console.log(playlist.usuarios.nombre)}
               </Box>
             </Box>
           </Box>

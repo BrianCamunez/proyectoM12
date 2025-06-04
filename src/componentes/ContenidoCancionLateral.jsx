@@ -64,7 +64,6 @@ const ContenidoCancionLateral = () => {
           .neq("id", cancionActual.id)
           .limit(3);
 
-        console.log("Canciones relacionadas (Supabase):", data, "Error:", error);
 
         if (error) throw error;
         setCancionesRelacionadas(data || []);

@@ -2,8 +2,24 @@ import { Box } from "@mui/material"
 import Navbar from "./Navbar"
 import Player from "./Player"
 import ContenidoExplorar from "./ContenidoExplorar"
+import { useEffect } from "react";
+import { supabase } from "../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 
 const PaginaExplorar = () => {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      const validarSesion = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          navigate("/registro");
+        }
+      };
+      validarSesion();
+    }, []);
+
   return (
     <>
       <Navbar />

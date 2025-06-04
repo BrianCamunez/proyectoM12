@@ -1,35 +1,43 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, Typography, TextField, InputAdornment } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { supabase } from "../../supabase/supabase"; // asegúrate que esté el import correcto
 import { useNavigate } from "react-router-dom";
 import ReproductorMobile from "./ReproductorMobile";
 import MenuAbajoMobile from "./MenuAbajoMobile";
+import NavbarMobile from "./NavbarMobile"; // Asegúrate de que este componente exista y esté correctamente importado
 
 const ContenidoExplorarMobile = () => {
     const [generos, setGeneros] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchGeneros = async () => {
-            const { data, error } = await supabase
-                .from("canciones")
-                .select("genero")
-                .neq("genero", null); // excluir los nulos
-
-            if (error) {
-                console.error("Error al obtener géneros:", error);
-            } else {
-                const generosUnicos = [...new Set(data.map(item => item.genero))];
-                setGeneros(generosUnicos);
+        const validarSesion = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                navigate("/registro");
             }
         };
-
-        fetchGeneros();
+        validarSesion();
     }, []);
+
+     useEffect(() => {
+    const fetchGeneros = async () => {
+      const { data, error } = await supabase.rpc("obtener_generos_enum");
+
+      if (error) {
+        console.error("Error al obtener géneros:", error);
+      } else {
+        setGeneros(data);
+      }
+    };
+
+    fetchGeneros();
+  }, []);
 
     return (
         <>
+            <NavbarMobile />
             <Box px={2} paddingTop={2}>
                 <Box sx={{ backgroundColor: "white" }} mx={2} borderRadius={2} padding={1} display={"flex"} alignItems="center">
                     <TextField
@@ -63,7 +71,7 @@ const ContenidoExplorarMobile = () => {
                             <Grid item xs={4} key={index}>
                                 <Box
                                     sx={{
-                                        backgroundColor: '#1DB954',
+                                        backgroundColor: '#ff3f7f',
                                         padding: 2,
                                         height: '50px',
                                         borderRadius: 2,
@@ -81,9 +89,9 @@ const ContenidoExplorarMobile = () => {
                         ))}
                     </Grid>
                 </Box>
-                <ReproductorMobile />
-                <MenuAbajoMobile />
             </Box>
+            <ReproductorMobile />
+                <MenuAbajoMobile />
         </>
     );
 };

@@ -1,7 +1,9 @@
 // src/componentes/PaginaHome.jsx
-import React from "react";
+import { useEffect } from "react";
 import { Slide, useMediaQuery, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabase/supabase"; 
 
 import Navbar from "./Navbar";
 import Player from "./Player";
@@ -10,6 +12,17 @@ const PaginaHome = () => {
 
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      const validarSesion = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          navigate("/registro");
+        }
+      };
+      validarSesion();
+    }, []);
 
   return (
     <>

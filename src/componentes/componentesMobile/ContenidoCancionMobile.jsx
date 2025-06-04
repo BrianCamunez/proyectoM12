@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Grid, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -39,6 +39,16 @@ const ContenidoCancionMobile = () => {
 
   const [progreso, setProgreso] = useState(0);
   const [duracion, setDuracion] = useState(0);
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;

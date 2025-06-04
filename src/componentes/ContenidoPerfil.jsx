@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import {
     Box,
     Typography,
-    Avatar,
     Card,
     CardMedia,
     CardContent,
@@ -11,13 +10,25 @@ import {
 } from "@mui/material";
 import { supabase } from "../supabase/supabase";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ContenidoPerfil = () => {
+    const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [avatarUrl, setAvatarUrl] = useState("");
     const [playlists, setPlaylists] = useState([]);
     const [loading, setLoading] = useState(true);
     const [emailUsuario, setEmailUsuario] = useState("");
+
+    useEffect(() => {
+        const validarSesion = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                navigate("/registro");
+            }
+        };
+        validarSesion();
+    }, []);
 
     useEffect(() => {
         const fetchPerfil = async () => {
@@ -102,7 +113,6 @@ const ContenidoPerfil = () => {
             if (updateError) throw updateError;
 
             setAvatarUrl(publicUrl);
-            console.log("Imagen actualizada correctamente");
         } catch (error) {
             console.error("Error al subir la imagen:", error.message);
             alert("Hubo un problema al subir la imagen");

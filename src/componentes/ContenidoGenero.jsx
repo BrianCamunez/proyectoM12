@@ -1,5 +1,5 @@
 // src/componentes/ContenidoGenero.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -41,6 +41,16 @@ const ContenidoGenero = () => {
 
   const [openSelectPlaylistModal, setOpenSelectPlaylistModal] = useState(false);
   const [playlistsUsuario, setPlaylistsUsuario] = useState([]);
+
+  useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
 
   // Función para cerrar el modal de opciones
   const handleCloseOptionsModal = () => {
@@ -188,23 +198,6 @@ const ContenidoGenero = () => {
             {canciones.length} canciones encontradas
           </Typography>
         </Box>
-
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mt={2}
-        >
-          <Box display="flex" gap={2}>
-            <AddCircleOutlineIcon sx={{ color: "white", fontSize: 24 }} />
-            <ArrowCircleDownIcon sx={{ color: "white", fontSize: 24 }} />
-            <MoreHorizIcon sx={{ color: "white", fontSize: 24 }} />
-          </Box>
-          <Box display="flex" gap={1} alignItems="center">
-            <ShuffleIcon sx={{ color: "#b3b3b3", fontSize: 24 }} />
-            <PlayCircleIcon sx={{ color: "#b3b3b3", fontSize: 28 }} />
-          </Box>
-        </Box>
       </Box>
 
       {/*** Lista de canciones ***/}
@@ -283,7 +276,8 @@ const ContenidoGenero = () => {
       </Box>
 
       {/*** Sección “También puede que te gusten” ***/}
-      <Box mt={4}>
+      { canciones.length > 0 && (
+        <Box mt={4}>
         <Typography variant="h6" color="white" mb={2}>
           También puede que te gusten
         </Typography>
@@ -333,6 +327,8 @@ const ContenidoGenero = () => {
           ))}
         </Grid>
       </Box>
+      )}
+          
 
       {/*** Modales (Opciones / Seleccionar playlist) ***/}
       <Modal

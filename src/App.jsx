@@ -104,7 +104,7 @@ function App() {
               />
               <Route path="cancion" element={<ContenidoCancionMobile />} />
               <Route
-                path="cantanteMobile"
+                path="cantanteMobile/:id"
                 element={<ContenidoCantanteMobile />}
               />
               <Route

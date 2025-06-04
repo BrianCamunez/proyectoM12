@@ -1,10 +1,25 @@
-import React from "react";
 import { Box, Typography, Grid, Button } from "@mui/material";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useEffect } from "react";
+import { supabase } from "../supabase/supabase";
+import { useNavigate } from "react-router-dom";
 
 const ContenidoPlaylist = () => {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+    const validarSesion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/registro");
+      }
+    };
+    validarSesion();
+  }, []);
+
     return (
         <Box
             sx={{
