@@ -14,9 +14,12 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { supabase } from "../supabase/supabase";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useNavigate } from "react-router-dom";
+import { usePlayer } from "../context/PlayerContext";
 
 const ContenidoCantante = () => {
+  const { reproducirCancion } = usePlayer();
   const { id } = useParams(); // ID del artista
   const [artista, setArtista] = useState(null);
   const [canciones, setCanciones] = useState([]);
@@ -24,9 +27,17 @@ const ContenidoCantante = () => {
   const [loadingSongs, setLoadingSongs] = useState(true);
   const navigate = useNavigate();
 
+  // --- Estados para la lógica de “Seguir” ---
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [following, setFollowing] = useState(false);
+  const [loadingUserId, setLoadingUserId] = useState(true);
+  const [loadingFollowState, setLoadingFollowState] = useState(false);
+
   useEffect(() => {
     const validarSesion = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         navigate("/registro");
       }
@@ -58,7 +69,17 @@ const ContenidoCantante = () => {
       try {
         const { data, error } = await supabase
           .from("canciones")
-          .select("id, nombre, imagen")
+          .select(
+            `
+            id,
+            nombre,
+            imagen,
+            cancion,
+            usuarios (
+              nombre
+            )
+          `
+          )
           .eq("artista", id)
           .limit(10);
         if (error) throw error;
@@ -74,6 +95,94 @@ const ContenidoCantante = () => {
     fetchArtist();
     fetchSongs();
   }, [id]);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      setLoadingUserId(true);
+      const {
+        data: { user },
+        error: authErr,
+      } = await supabase.auth.getUser();
+      if (authErr || !user) {
+        console.error("Error en getUser():", authErr);
+        setLoadingUserId(false);
+        return;
+      }
+      const { data: usuario, error: usrErr } = await supabase
+        .from("usuarios")
+        .select("id")
+        .eq("email", user.email)
+        .single();
+      if (usrErr || !usuario) {
+        console.error("No se encontró registro en 'usuarios':", usrErr);
+        setLoadingUserId(false);
+        return;
+      }
+      setCurrentUserId(usuario.id);
+      setLoadingUserId(false);
+    };
+
+    fetchUserId();
+  }, []);
+
+  // 2) Consultar si el usuario ya sigue a este artista
+  useEffect(() => {
+    if (loadingUserId) return;
+    if (!currentUserId) return;
+    if (!id) return;
+
+    const checkFollowing = async () => {
+      setLoadingFollowState(true);
+      const { data, error } = await supabase
+        .from("artista_seguido")
+        .select("id")
+        .eq("id_usuario", currentUserId)
+        .eq("id_artista", Number(id))
+        .maybeSingle();
+      if (error) {
+        console.error("Error en consulta artista_seguido:", error);
+        setLoadingFollowState(false);
+        return;
+      }
+      setFollowing(!!data);
+      setLoadingFollowState(false);
+    };
+
+    checkFollowing();
+  }, [currentUserId, loadingUserId, id]);
+
+  const toggleFollow = async () => {
+    if (loadingUserId) return;
+    if (!currentUserId) return;
+    if (!id) return;
+
+    if (!following) {
+      // Insertar nuevo seguimiento
+      const { error: insertErr } = await supabase
+        .from("artista_seguido")
+        .insert({
+          id_usuario: currentUserId,
+          id_artista: Number(id),
+        });
+      if (insertErr) {
+        console.error("Error insertando en artista_seguido:", insertErr);
+      } else {
+        setFollowing(true);
+      }
+    } else {
+      // Eliminar seguimiento
+      const { error: deleteErr } = await supabase
+        .from("artista_seguido")
+        .delete()
+        .eq("id_usuario", currentUserId)
+        .eq("id_artista", Number(id));
+      if (deleteErr) {
+        console.error("Error borrando en artista_seguido:", deleteErr);
+      } else {
+        setFollowing(false);
+      }
+    }
+  };
 
   // Formatea segundos a "m:ss"
   const formatDuration = (secs) => {
@@ -127,24 +236,7 @@ const ContenidoCantante = () => {
       sx={{
         flexGrow: 1,
         backgroundColor: "#121212",
-        overflowY: "auto",
         height: "100%",
-        "&::-webkit-scrollbar": {
-          width: "8px",
-        },
-        "&::-webkit-scrollbar-track": {
-          background: "#2e2e2e",
-          borderRadius: "10px",
-        },
-        "&::-webkit-scrollbar-thumb": {
-          background: "#555555",
-          borderRadius: "10px",
-        },
-        "&::-webkit-scrollbar-thumb:hover": {
-          background: "#777777",
-        },
-        scrollbarWidth: "thin",
-        scrollbarColor: "#555555 #2e2e2e",
       }}
     >
       {/* === Cabecera del artista === */}
@@ -152,9 +244,7 @@ const ContenidoCantante = () => {
         sx={{
           position: "relative",
           height: 300,
-          backgroundImage: artista.avatar
-            ? `url(${artista.avatar})`
-            : "none",
+          backgroundImage: artista.avatar ? `url(${artista.avatar})` : "none",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -199,14 +289,10 @@ const ContenidoCantante = () => {
                 {artista.nombre}
               </Typography>
             </Box>
-            <Typography
-              variant="subtitle1"
-              color="#b3b3b3"
-              sx={{ mt: 0.5 }}
-            >
+            <Typography variant="subtitle1" color="#b3b3b3" sx={{ mt: 0.5 }}>
               {formatStreams(artista.oyentes)} oyentes mensuales
             </Typography>
-            <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
+            <Box sx={{ mt: 1, display: "flex", alignItems: "center", gap: 1 }}>
               <Button
                 variant="contained"
                 startIcon={<PlayArrowIcon />}
@@ -215,26 +301,45 @@ const ContenidoCantante = () => {
                   bgcolor: "#1db954",
                   "&:hover": { bgcolor: "#1ed760" },
                 }}
+                onClick={() => {
+                  /* aquí va la lógica de reproducir, si la tienes */
+                }}
               >
                 Reproducir
               </Button>
-              <Button
-                variant="outlined"
-                sx={{
-                  textTransform: "none",
-                  borderColor: "#b3b3b3",
-                  color: "white",
-                  "&:hover": { borderColor: "#fff" },
-                }}
-              >
-                Seguir
-              </Button>
+
+              {/* --- Botón Seguir / Siguiendo --- */}
+              {!loadingUserId && (
+                <Button
+                  variant={following ? "contained" : "outlined"}
+                  onClick={toggleFollow}
+                  sx={{
+                    textTransform: "none",
+                    borderColor: "#b3b3b3",
+                    color: following ? "black" : "white",
+                    backgroundColor: following ? "#b3b3b3" : "transparent",
+                    "&:hover": {
+                      borderColor: following ? "#999" : "#fff",
+                      backgroundColor: following
+                        ? "#999"
+                        : "rgba(255,255,255,0.1)",
+                    },
+                  }}
+                >
+                  {following ? "Siguiendo" : "Seguir"}
+                </Button>
+              )}
+
+              {/* Spinner si está cargando ID de usuario o estado de seguimiento */}
+              {(loadingUserId || loadingFollowState) && (
+                <CircularProgress size={24} sx={{ color: "white", ml: 1 }} />
+              )}
             </Box>
           </Box>
         </Box>
       </Box>
 
-      {/* === Sección: Canciones populares === */}
+      {/* === Sección: Canciones === */}
       <Box sx={{ px: 3, py: 2 }}>
         <Typography variant="h6" color="white" sx={{ mb: 2 }}>
           Populares
@@ -250,12 +355,10 @@ const ContenidoCantante = () => {
             <CircularProgress color="inherit" />
           </Box>
         ) : canciones.length === 0 ? (
-          <Typography color="#b3b3b3">
-            No hay canciones disponibles.
-          </Typography>
+          <Typography color="#b3b3b3">No hay canciones disponibles.</Typography>
         ) : (
           canciones.map((song, index) => (
-            <Box key={song.id} sx={{ mb: 1 }}>
+            <Box key={song.id}>
               <Box
                 display="flex"
                 alignItems="center"
@@ -265,82 +368,99 @@ const ContenidoCantante = () => {
                   "&:hover": { backgroundColor: "#2c2c2c" },
                 }}
               >
-                <Box display="flex" alignItems="center" sx={{ gap: 2 }}>
-                  <Typography
-                    variant="body2"
-                    color="#b3b3b3"
-                    sx={{ width: 24, textAlign: "right" }}
-                  >
-                    {index + 1}
-                  </Typography>
-
-                  <Box
+                {/* — 1) Carátula y título (clicables)— */}
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Avatar
+                    src={song.imagen}
+                    variant="square"
                     sx={{
-                      position: "relative",
-                      width: 40,
-                      height: 40,
-                      "&:hover .play-icon": {
-                        opacity: 1,
-                      },
+                      width: 56,
+                      height: 56,
+                      borderRadius: 1,
+                      cursor: "pointer",
                     }}
+                    onClick={() =>
+                      reproducirCancion(
+                        {
+                          id: song.id,
+                          nombre: song.nombre,
+                          artista: song.usuarios?.nombre || "Desconocido",
+                          imagen: song.imagen,
+                          cancion: song.cancion,
+                        },
+                        canciones.map((c) => ({
+                          id: c.id,
+                          nombre: c.nombre,
+                          artista: c.usuarios?.nombre || "Desconocido",
+                          imagen: c.imagen,
+                          cancion: c.cancion,
+                        }))
+                      )
+                    }
+                  />
+                  <Box
+                    onClick={() =>
+                      reproducirCancion(
+                        {
+                          id: song.id,
+                          nombre: song.nombre,
+                          artista: song.usuarios?.nombre || "Desconocido",
+                          imagen: song.imagen,
+                          cancion: song.cancion,
+                        },
+                        canciones.map((c) => ({
+                          id: c.id,
+                          nombre: c.nombre,
+                          artista: c.usuarios?.nombre || "Desconocido",
+                          imagen: c.imagen,
+                          cancion: c.cancion,
+                        }))
+                      )
+                    }
+                    sx={{ cursor: "pointer" }}
                   >
-                    <Box
-                      component="img"
-                      src={song.imagen}
-                      alt={song.nombre}
-                      sx={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        borderRadius: 1,
-                      }}
-                    />
-                    <IconButton
-                      className="play-icon"
-                      sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        bgcolor: "rgba(0,0,0,0.6)",
-                        color: "white",
-                        width: 28,
-                        height: 28,
-                        opacity: 0,
-                        transition: "opacity 0.2s",
-                        "&:hover": { bgcolor: "rgba(0,0,0,0.8)" },
-                      }}
-                    >
-                      <PlayArrowIcon sx={{ fontSize: 18 }} />
-                    </IconButton>
-                  </Box>
-
-                  <Box>
-                    <Typography
-                      variant="body1"
-                      color="white"
-                      noWrap
-                      sx={{ fontWeight: 500 }}
-                    >
+                    <Typography color="white" fontSize="16px">
                       {song.nombre}
                     </Typography>
-                    <Typography variant="caption" color="#b3b3b3">
-                      {artista.nombre}
+                    <Typography color="#aeaeae" fontSize="14px">
+                      {song.usuarios?.nombre || "Artista desconocido"}
                     </Typography>
                   </Box>
                 </Box>
 
-                <Box display="flex" alignItems="center" sx={{ gap: 2 }}>
-                  <Box textAlign="right">
-                    <Typography variant="body2" color="#b3b3b3">
-                      {formatStreams(song.reproducciones)}
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2" color="#b3b3b3" sx={{ width: 40 }}>
-                    {formatDuration(song.duracion)}
-                  </Typography>
-                  <IconButton>
-                    <MoreHorizIcon sx={{ color: "#b3b3b3" }} />
+                {/* — 2) Iconos de acciones — */}
+                <Box display="flex" alignItems="center" gap={1}>
+                  <IconButton
+                    onClick={() =>
+                      reproducirCancion(
+                        {
+                          id: song.id,
+                          nombre: song.nombre,
+                          artista: song.usuarios?.nombre || "Desconocido",
+                          imagen: song.imagen,
+                          cancion: song.cancion,
+                        },
+                        canciones.map((c) => ({
+                          id: c.id,
+                          nombre: c.nombre,
+                          artista: c.usuarios?.nombre || "Desconocido",
+                          imagen: c.imagen,
+                          cancion: c.cancion,
+                        }))
+                      )
+                    }
+                    sx={{ color: "#1db954" }}
+                  >
+                    <PlayArrowIcon />
+                  </IconButton>
+                  <CheckCircleIcon sx={{ color: "#aeaeae", fontSize: 20 }} />
+                  <IconButton
+                    onClick={() => {
+                      // aquí tu lógica de “Más opciones” si la tienes
+                    }}
+                    sx={{ color: "#aeaeae", fontSize: 24 }}
+                  >
+                    <MoreHorizIcon />
                   </IconButton>
                 </Box>
               </Box>
