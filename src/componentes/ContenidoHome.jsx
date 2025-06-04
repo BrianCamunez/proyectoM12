@@ -46,7 +46,8 @@ const ContenidoHome = () => {
         const { data: artistasData, error: artistasError } = await supabase
           .from("usuarios")
           .select("id, nombre, avatar")
-          .eq("role", "artista");
+          .eq("role", "artista")
+          .limit(6);
         if (artistasError) throw artistasError;
         setArtistas(artistasData || []);
       } catch (err) {

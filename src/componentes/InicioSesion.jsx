@@ -37,7 +37,6 @@ const InicioSesion = () => {
             }
 
 
-            console.log('Inicio de sesión exitoso');
             cambiar('/'); // Redirigir al usuario a la página principal
             
         } catch (error) {
@@ -79,7 +78,7 @@ const InicioSesion = () => {
                 <Link to="/">
                     <Box
                         component="img"
-                        src="/src/images/LogoProyecto.jpeg"
+                        src="/LogoProyecto.jpeg"
                         alt="Logo"
                         sx={{
                             width: "100px", // Ajusta el tamaño según sea necesario

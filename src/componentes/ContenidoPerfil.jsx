@@ -113,7 +113,6 @@ const ContenidoPerfil = () => {
             if (updateError) throw updateError;
 
             setAvatarUrl(publicUrl);
-            console.log("Imagen actualizada correctamente");
         } catch (error) {
             console.error("Error al subir la imagen:", error.message);
             alert("Hubo un problema al subir la imagen");

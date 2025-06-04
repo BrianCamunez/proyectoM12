@@ -44,91 +44,82 @@ const ContenidoBiblioteca = () => {
   }, []);
 
   useEffect(() => {
-  const cargarPlaylists = async () => {
-    try {
-      // 1) Obtener usuario autenticado
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (userError) {
-        console.error("Error obteniendo usuario:", userError);
-        return;
-      }
-      if (!user) {
-        console.log("No hay usuario autenticado");
-        return;
-      }
-      console.log("Usuario autenticado:", user);
-
-      // 2) Obtener id de usuario
-      const { data: usuario, error: usuarioError } = await supabase
-        .from("usuarios")
-        .select("id")
-        .eq("email", user.email)
-        .single();
-      if (usuarioError) {
-        console.error("Error obteniendo registro de usuario:", usuarioError);
-        return;
-      }
-      if (!usuario) {
-        console.log("No se encontró el registro de usuario en la tabla usuarios");
-        return;
-      }
-      console.log("ID de usuario obtenido:", usuario.id);
-
-      // 3) Obtener playlists de ese usuario
-      const { data: playlistsData, error: playlistError } = await supabase
-        .from("playlist")
-        .select("id, nombre, imagen")
-        .eq("id_usuario", usuario.id);
-      if (playlistError) {
-        console.error("Error cargando playlists:", playlistError);
-      } else {
-        console.log("Playlists obtenidas:", playlistsData);
-        setPlaylists(playlistsData);
-      }
-
-      // 4) Obtener artistas seguidos por el usuario
-      const { data: seguidosData, error: seguidosError } = await supabase
-        .from("artista_seguido")
-        .select("id_artista")
-        .eq("id_usuario", usuario.id);
-
-      if (seguidosError) {
-        console.error("Error cargando artistas seguidos:", seguidosError);
-      } else {
-        console.log("IDs de artistas seguidos:", seguidosData);
-        const artistIds = seguidosData.map(item => item.id_artista);
-        console.log("Array de artistIds:", artistIds);
-
-        // 5) Si hay IDs, cargar los datos completos de cada artista
-        console.log("Cargando datos de artistas con IDs:", artistIds);
-        if (artistIds.length > 0) {
-          const { data: artistasData, error: artistasError } = await supabase
-            .from("usuarios")
-            .select("id, nombre, avatar")
-            .eq("role", "artista")
-            .in("id", artistIds);
-
-          if (artistasError) {
-            console.error("Error cargando datos de artistas:", artistasError);
-          } else {
-            console.log("Datos de artistas obtenidos:", artistasData);
-            setFollowedArtists(artistasData);
-          }
-        } else {
-          console.log("El usuario no sigue a ningún artista");
+    const cargarPlaylists = async () => {
+      try {
+        // 1) Obtener usuario autenticado
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+        if (userError) {
+          console.error("Error obteniendo usuario:", userError);
+          return;
         }
+        if (!user) {
+          return;
+        }
+
+        // 2) Obtener id de usuario
+        const { data: usuario, error: usuarioError } = await supabase
+          .from("usuarios")
+          .select("id")
+          .eq("email", user.email)
+          .single();
+        if (usuarioError) {
+          console.error("Error obteniendo registro de usuario:", usuarioError);
+          return;
+        }
+        if (!usuario) {
+          return;
+        }
+
+        // 3) Obtener playlists de ese usuario
+        const { data: playlistsData, error: playlistError } = await supabase
+          .from("playlist")
+          .select("id, nombre, imagen")
+          .eq("id_usuario", usuario.id);
+        if (playlistError) {
+          console.error("Error cargando playlists:", playlistError);
+        } else {
+          setPlaylists(playlistsData);
+        }
+
+        // 4) Obtener artistas seguidos por el usuario
+        const { data: seguidosData, error: seguidosError } = await supabase
+          .from("artista_seguido")
+          .select("id_artista")
+          .eq("id_usuario", usuario.id);
+
+        if (seguidosError) {
+          console.error("Error cargando artistas seguidos:", seguidosError);
+        } else {
+          const artistIds = seguidosData.map((item) => item.id_artista);
+
+          // 5) Si hay IDs, cargar los datos completos de cada artista
+
+          if (artistIds.length > 0) {
+            const { data: artistasData, error: artistasError } = await supabase
+              .from("usuarios")
+              .select("id, nombre, avatar")
+              .eq("role", "artista")
+              .in("id", artistIds);
+
+            if (artistasError) {
+              console.error("Error cargando datos de artistas:", artistasError);
+            } else {
+              setFollowedArtists(artistasData);
+            }
+          } else {
+            console.log("El usuario no sigue a ningún artista");
+          }
+        }
+      } catch (error) {
+        console.error("Error en cargarPlaylists:", error.message);
       }
-    } catch (error) {
-      console.error("Error en cargarPlaylists:", error.message);
-    }
-  };
+    };
 
-  cargarPlaylists();
-}, []);
-
+    cargarPlaylists();
+  }, []);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -264,108 +255,6 @@ const ContenidoBiblioteca = () => {
         />
       </Box>
 
-      {/* 4. Recientes */}
-      <Box
-        sx={{
-          px: 2,
-          py: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography variant="subtitle2" color="#b3b3b3">
-          Recientes
-        </Typography>
-        <IconButton size="small" sx={{ color: "white" }}>
-          <MoreHorizIcon fontSize="small" />
-        </IconButton>
-      </Box>
-      <Divider sx={{ bgcolor: "#333", mx: 2, mb: 1 }} />
-
-      {/* 4. Artistas seguidos */}
-
-      {followedArtists.length > 0 && (
-        <>
-          <Box sx={{ px: 2, py: 1 }}>
-            <Typography variant="subtitle2" color="#b3b3b3">
-              Artistas que sigues
-            </Typography>
-          </Box>
-          <Divider sx={{ bgcolor: "#333", mx: 2, mb: 1 }} />
-          <Box
-            sx={{
-              flexGrow: 0,
-              overflowY: "auto",
-              maxHeight: "200px",
-              "&::-webkit-scrollbar": { width: 6 },
-              "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "#333",
-                borderRadius: 3,
-              },
-              "&::-webkit-scrollbar-track": { backgroundColor: "#0d0d0d" },
-            }}
-          >
-            <List disablePadding>
-              {followedArtists.map((artist, idx) => (
-                <React.Fragment key={artist.id}>
-                  <Link
-                    to={`/cantante/${artist.id}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItem
-                      sx={{
-                        px: 2,
-                        py: 1,
-                        cursor: "pointer",
-                        "&:hover": { backgroundColor: "#212121" },
-                      }}
-                    >
-                      <ListItemAvatar>
-                        {artist.avatar ? (
-                          <Avatar
-                            src={artist.avatar}
-                            sx={{ width: 40, height: 40 }}
-                          />
-                        ) : (
-                          <Avatar
-                            sx={{
-                              width: 40,
-                              height: 40,
-                              bgcolor: "#1e1e1e",
-                              color: "#b3b3b3",
-                              fontSize: 20,
-                            }}
-                          >
-                            🎤
-                          </Avatar>
-                        )}
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          <Typography
-                            variant="body1"
-                            sx={{ color: "white", fontWeight: 500 }}
-                          >
-                            {artist.nombre}
-                          </Typography>
-                        }
-                      />
-                    </ListItem>
-                  </Link>
-                  {idx < followedArtists.length - 1 && (
-                    <Divider
-                      variant="fullWidth"
-                      component="li"
-                      sx={{ bgcolor: "#333", mx: 2 }}
-                    />
-                  )}
-                </React.Fragment>
-              ))}
-            </List>
-          </Box>
-        </>
-      )}
 
       {/* 5. Lista de playlists */}
       <Box
@@ -435,6 +324,63 @@ const ContenidoBiblioteca = () => {
                 </ListItem>
               </Link>
               {idx < playlists.length - 1 && (
+                <Divider
+                  variant="fullWidth"
+                  component="li"
+                  sx={{ bgcolor: "#333", mx: 2 }}
+                />
+              )}
+            </React.Fragment>
+          ))}
+        </List>
+        <List disablePadding>
+          {followedArtists.map((artist, idx) => (
+            <React.Fragment key={artist.id}>
+              <Link
+                to={`/cantante/${artist.id}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <ListItem
+                  sx={{
+                    px: 2,
+                    py: 1,
+                    cursor: "pointer",
+                    "&:hover": { backgroundColor: "#212121" },
+                  }}
+                >
+                  <ListItemAvatar>
+                    {artist.avatar ? (
+                      <Avatar
+                        src={artist.avatar}
+                        sx={{ width: 40, height: 40 }}
+                      />
+                    ) : (
+                      <Avatar
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          bgcolor: "#1e1e1e",
+                          color: "#b3b3b3",
+                          fontSize: 20,
+                        }}
+                      >
+                        🎤
+                      </Avatar>
+                    )}
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        variant="body1"
+                        sx={{ color: "white", fontWeight: 500 }}
+                      >
+                        {artist.nombre}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              </Link>
+              {idx < followedArtists.length - 1 && (
                 <Divider
                   variant="fullWidth"
                   component="li"

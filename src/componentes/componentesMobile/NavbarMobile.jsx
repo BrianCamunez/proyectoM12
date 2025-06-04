@@ -8,14 +8,12 @@ const NavbarMobile = () => {
 
     useEffect(() => {
         const fetchAvatar = async () => {
-            console.log("Fetching avatar...");
             try {
                 const {
                     data: { user },
                     error: userError,
                 } = await supabase.auth.getUser();
 
-                console.log("User data:", user);
 
                 if (userError) throw userError;
 
@@ -25,13 +23,11 @@ const NavbarMobile = () => {
                     .eq("email", user.email) // Comparar por correo en lugar de ID
                     .single();
 
-                console.log("Avatar data:", data);
 
                 if (error) throw error;
 
                 setAvatarUrl(data.avatar);
 
-                console.log("Avatar URL:", data.avatar);
 
             } catch (error) {
                 console.error("Error fetching avatar:", error.message);
