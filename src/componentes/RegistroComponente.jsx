@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabase/supabase';
-import logo from '../images/LogoProyecto.jpeg'; // Asegúrate de que la ruta sea correcta
 
 const RegistroComponente = () => {
     const [DatosFormulario, setDatosFormulario] = useState({
@@ -87,7 +86,7 @@ const RegistroComponente = () => {
             <Link to="/">
                 <Box
                     component="img"
-                    src={logo}
+                    src="/images/LogoProyecto.jpeg"
                     alt="Logo"
                     sx={{
                         width: { xs: "80px", sm: "100px" },
