@@ -95,6 +95,14 @@ const Navbar = () => {
           </Link>
         </Box>
 
+          <Box sx={{
+            flexGrow: 1,
+            display: "flex",
+            justifyContent: "center",
+            px: 2, // algo de espacio lateral
+          }}>
+
+          </Box>
         {/* === Center: Search Bar, centered === */}
         {/* <Box
           sx={{
